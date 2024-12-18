@@ -7,6 +7,7 @@ import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
 
 export default function Login({ status, canResetPassword }) {
+
     const { data, setData, post, processing, errors, reset } = useForm({
         email: '',
         password: '',
@@ -19,6 +20,10 @@ export default function Login({ status, canResetPassword }) {
         post(route('login'), {
             onFinish: () => reset('password'),
         });
+    };
+
+    const handleSocialLogin = (provider) => {
+        window.location.href = route('socialite.redirect', provider); // Use window.location.href for GET request
     };
 
     return (
@@ -93,6 +98,22 @@ export default function Login({ status, canResetPassword }) {
                     <PrimaryButton className="ms-4" disabled={processing}>
                         Log in
                     </PrimaryButton>
+
+                    {/* Social login buttons */}
+                    <button
+                        type="button"
+                        onClick={() => handleSocialLogin('google')}
+                        className="ms-4 p-2 bg-blue-500 text-white rounded"
+                    >
+                        Connect with Google
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => handleSocialLogin('github')}
+                        className="ms-4 p-2 bg-gray-800 text-white rounded"
+                    >
+                        Connect with GitHub
+                    </button>
                 </div>
             </form>
         </GuestLayout>
