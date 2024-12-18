@@ -1,3 +1,4 @@
+import ApplicationAiLogo from "@/Components/ApplicationAiLogo";
 import ApplicationLogo from "@/Components/ApplicationLogo";
 import Dropdown from "@/Components/Dropdown";
 import NavLink from "@/Components/NavLink";
@@ -28,7 +29,7 @@ export default function AuthenticatedLayout({ header, children }) {
                         <div className="flex">
                             <div className="flex shrink-0 items-center">
                                 <Link href="/">
-                                    <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" />
+                                    <ApplicationAiLogo className="block h-9 w-auto fill-current text-gray-800" />
                                 </Link>
                             </div>
 
@@ -43,6 +44,38 @@ export default function AuthenticatedLayout({ header, children }) {
                         </div>
 
                         <div className="hidden sm:ms-6 sm:flex sm:items-center">
+                            {/* --------------------------------------------- */}
+                            <div className="relative ms-3">
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button variant="outline" size="icon">
+                                            <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                                            <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                                            <span className="sr-only">
+                                                Toggle theme
+                                            </span>
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent align="end">
+                                        <DropdownMenuItem
+                                            onClick={() => setTheme("light")}
+                                        >
+                                            Light
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem
+                                            onClick={() => setTheme("dark")}
+                                        >
+                                            Dark
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem
+                                            onClick={() => setTheme("system")}
+                                        >
+                                            System
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </div>
+                            {/* --------------------------------------------- */}
                             <div className="relative ms-3">
                                 <Dropdown>
                                     <Dropdown.Trigger>
@@ -84,37 +117,6 @@ export default function AuthenticatedLayout({ header, children }) {
                                         </Dropdown.Link>
                                     </Dropdown.Content>
                                 </Dropdown>
-                            </div>
-                            {/* --------------------------------------------- */}
-                            <div className="relative ms-3">
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button variant="outline" size="icon">
-                                            <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                                            <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-                                            <span className="sr-only">
-                                                Toggle theme
-                                            </span>
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="end">
-                                        <DropdownMenuItem
-                                            onClick={() => setTheme("light")}
-                                        >
-                                            Light
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem
-                                            onClick={() => setTheme("dark")}
-                                        >
-                                            Dark
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem
-                                            onClick={() => setTheme("system")}
-                                        >
-                                            System
-                                        </DropdownMenuItem>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
                             </div>
                         </div>
 
