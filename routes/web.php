@@ -18,7 +18,13 @@ Route::get('/', function () {
 });
 
 Route::post('documents', [DocumentController::class, 'store'])->name('documents.store');
+
+Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
+
 Route::get('documents/{document_id}/edit', [DocumentController::class, 'edit'])->name('documents.edit');
+
+Route::put('/documents/{document_id}', [DocumentController::class, 'update'])->name('documents.update');
+
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');

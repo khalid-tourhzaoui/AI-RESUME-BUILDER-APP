@@ -22,6 +22,7 @@ class Document extends Model
         'status',
         'author_name',
         'author_email',
+        
     ];
 
     public function education()

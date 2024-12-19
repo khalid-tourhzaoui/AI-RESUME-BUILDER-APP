@@ -14,7 +14,8 @@ class DocumentController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(Document::where('user_id', auth()->id())->get());
+        
     }
 
     /**
@@ -59,19 +60,25 @@ class DocumentController extends Controller
     public function edit(string $document_id)
     {
         $document = Document::where('document_id', $document_id)->firstOrFail();
-
-        // return Inertia::render('Documents/Edit', [
-        //     'document' => $document,
-        // ]);
-        return $document;
+        return Inertia::render('components/EditResume', [
+            'document' => $document,
+        ]);
     }
+
+    
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $document_id)
     {
-        //
+        $document = Document::where('document_id', $document_id)->firstOrFail();
+        $document->update([
+            'title' => $request->input('title'),
+        ]);
+
+        return redirect()->route('documents.edit', $document->document_id)
+            ->with('success', 'Document title updated successfully');
     }
 
     /**
