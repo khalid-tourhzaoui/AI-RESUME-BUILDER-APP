@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import useSWR from "swr";
 import { Loader, RotateCw } from "lucide-react";
-import ResumeItem from "./ResumeItem";
+import ResumeItem from "./common/ResumeItem";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 

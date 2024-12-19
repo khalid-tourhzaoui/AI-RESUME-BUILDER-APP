@@ -3,7 +3,7 @@ import { Head, usePage } from "@inertiajs/react";
 import React from "react";
 import TopSection from "./common/TopSection";
 import ResumeForm from "./ResumeForm";
-import ResumePreview from "./common/ResumePreview";
+import ResumePreview from "./ResumePreview";
 
 function EditResume() {
     const { document } = usePage().props;
@@ -31,7 +31,7 @@ function EditResume() {
                                             {/* {Form Section} */}
                                             <ResumeForm document={document} />
                                             {/* {Preview Section} */}
-                                            <ResumePreview />
+                                            <ResumePreview document={document} />
                                         </div>
                                     </div>
                                 </div>

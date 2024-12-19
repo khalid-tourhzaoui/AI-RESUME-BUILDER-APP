@@ -3,7 +3,7 @@ import { AlertCircle } from "lucide-react";
 import { useForm } from "@inertiajs/react";
 import ResumeTitle from "./ResumeTitle";
 import ThemeColor from "./ThemeColor";
-import PreviewModal from "./PreviewModal";
+import PreviewModal from "../PreviewModal";
 import Download from "./Download";
 import Share from "./Share";
 import MoreOption from "./MoreOption";
