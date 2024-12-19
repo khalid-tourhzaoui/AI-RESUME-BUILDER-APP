@@ -83,6 +83,18 @@ class DocumentController extends Controller
             ->with('success', 'Document title updated successfully');
     }
 
+    public function UpdateSummary(Request $request, $document_id)
+    {
+        $document = Document::where('document_id', $document_id)->firstOrFail();
+        // return $request->all();
+        $document->update([
+            'summary' => $request->input('summary'),
+        ]);
+
+        return redirect()->route('documents.edit', $document->document_id)
+            ->with('success', 'Document title updated successfully');
+    }
+
     /**
      * Remove the specified resource from storage.
      */

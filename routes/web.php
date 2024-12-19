@@ -25,6 +25,8 @@ Route::get('documents/{document_id}/edit', [DocumentController::class, 'edit'])-
 
 Route::put('/documents/{document_id}', [DocumentController::class, 'update'])->name('documents.update');
 
+Route::patch('/documents/{document_id}', [DocumentController::class, 'UpdateSummary'])->name('documents.UpdateSummary');
+
 Route::post('/personals/{document_id}', [PersonalInfoController::class, 'store'])->name('personals.store');
 
 Route::put('/personals/{document_id}', [PersonalInfoController::class, 'update'])->name('personals.update');

@@ -72,21 +72,21 @@ function ResumeForm({document}) {
                     )}
 
                     {activeFormIndex === 2 && (
-                        <SummaryForm handleNext={handleNext} />
+                        <SummaryForm handleNext={handleNext} document={document} />
                     )}
 
                     {/* {Professional Exp.} */}
                     {activeFormIndex === 3 && (
-                        <ExperienceForm handleNext={handleNext} />
+                        <ExperienceForm handleNext={handleNext} document={document} />
                     )}
 
                     {/* {Eduncational Info} */}
                     {activeFormIndex === 4 && (
-                        <EducationForm handleNext={handleNext} />
+                        <EducationForm handleNext={handleNext} document={document} />
                     )}
 
                     {/* {Skills} */}
-                    {activeFormIndex === 5 && <SkillsForm />}
+                    {activeFormIndex === 5 && <SkillsForm document={document} />}
                 </div>
             </div>
         </div>
