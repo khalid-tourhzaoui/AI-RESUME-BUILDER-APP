@@ -7,7 +7,7 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\DocumentController;
-
+use App\Http\Controllers\PersonalInfoController;
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
@@ -24,6 +24,10 @@ Route::get('/documents', [DocumentController::class, 'index'])->name('documents.
 Route::get('documents/{document_id}/edit', [DocumentController::class, 'edit'])->name('documents.edit');
 
 Route::put('/documents/{document_id}', [DocumentController::class, 'update'])->name('documents.update');
+
+Route::post('/personals/{document_id}', [PersonalInfoController::class, 'store'])->name('personals.store');
+
+Route::put('/personals/{document_id}', [PersonalInfoController::class, 'update'])->name('personals.update');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');

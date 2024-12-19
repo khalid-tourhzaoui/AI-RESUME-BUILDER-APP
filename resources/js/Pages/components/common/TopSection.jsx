@@ -11,7 +11,7 @@ import { toast } from "@/hooks/use-toast";
 import { Button } from "@/Components/ui/button";
 
 const TopSection = ({ document }) => {
-    const { data, setData, put, processing, errors, reset } = useForm({
+    const { data, setData, put, processing } = useForm({
         title: document.title,
         status: document.status,
     });

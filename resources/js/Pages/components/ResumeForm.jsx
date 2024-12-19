@@ -9,6 +9,7 @@ import SkillsForm from "./forms/SkillsForm";
 
 function ResumeForm({document}) {
     const [activeFormIndex, setActiveFormIndex] = useState(1);
+    // console.log(document)
 
   const handleNext = () => {
     const newIndex = activeFormIndex + 1;
@@ -67,7 +68,7 @@ function ResumeForm({document}) {
                 <div className="px-5 py-3 pb-5">
                     {/* {PersonalInfo Form} */}
                     {activeFormIndex === 1 && (
-                        <PersonalInfoForm handleNext={handleNext} />
+                        <PersonalInfoForm handleNext={handleNext} document={document}   />
                     )}
 
                     {activeFormIndex === 2 && (

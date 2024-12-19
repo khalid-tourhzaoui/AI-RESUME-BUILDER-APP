@@ -7,7 +7,8 @@ import ResumePreview from "./common/ResumePreview";
 
 function EditResume() {
     const { document } = usePage().props;
-    console.log(document)
+    
+    // console.log(document)
     return (
         <AuthenticatedLayout
             header={

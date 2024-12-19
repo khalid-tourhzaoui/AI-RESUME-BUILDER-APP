@@ -62,7 +62,9 @@ class DocumentController extends Controller
         $document = Document::where('document_id', $document_id)->firstOrFail();
         return Inertia::render('components/EditResume', [
             'document' => $document,
+            'personalInfo'  =>  $document->personalInfo
         ]);
+        // return $document->personalInfo;
     }
 
     
