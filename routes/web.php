@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\SocialiteController;
+use App\Http\Controllers\DocumentController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -16,6 +17,8 @@ Route::get('/', function () {
     ]);
 });
 
+Route::post('documents', [DocumentController::class, 'store'])->name('documents.store');
+Route::get('documents/{document_id}/edit', [DocumentController::class, 'edit'])->name('documents.edit');
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
