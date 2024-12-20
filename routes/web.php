@@ -9,7 +9,7 @@ use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\PersonalInfoController;
 use App\Http\Controllers\EducationController;
-
+use App\Http\Controllers\SkillController;
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
@@ -19,18 +19,24 @@ Route::get('/', function () {
     ]);
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth','verified'])->group(function () {
     Route::post('documents', [DocumentController::class, 'store'])->name('documents.store');
     Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
     Route::get('documents/{document_id}/edit', [DocumentController::class, 'edit'])->name('documents.edit');
     Route::put('/documents/{document_id}', [DocumentController::class, 'update'])->name('documents.update');
     Route::patch('/documents/{document_id}', [DocumentController::class, 'UpdateSummary'])->name('documents.UpdateSummary');
+    // ----------------------------------------------------------------------------------------------------------------------
     Route::post('/personals/{document_id}', [PersonalInfoController::class, 'store'])->name('personals.store');
     Route::put('/personals/{document_id}', [PersonalInfoController::class, 'update'])->name('personals.update');
+    // ----------------------------------------------------------------------------------------------------------------------
     Route::post('/education/{document_id}', [EducationController ::class, 'store'])->name('education.store');
     Route::put('/education/{document_id}', [EducationController ::class, 'update'])->name('education.update');
-    // Route::post('/education/{document_id}', [EducationController ::class, 'delete'])->name('education.delete');
     Route::delete('/education/{document_id}', [EducationController::class, 'delete'])->name('education.delete');
+    // ----------------------------------------------------------------------------------------------------------------------
+    Route::post('/skill/{document_id}', [SkillController::class, 'store'])->name('skill.store');
+    Route::put('/skill/{document_id}', [SkillController::class, 'update'])->name('skill.update');
+    Route::delete('/skill/{document_id}', [SkillController::class, 'delete'])->name('skill.delete');
+
 
 });
 

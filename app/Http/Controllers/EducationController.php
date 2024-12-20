@@ -66,18 +66,15 @@ class EducationController extends Controller
             ->with('success', 'Personal information updated successfully.');
     }
 
+
     public function delete(Request $request,$id)
     {
         $education=Education::find($id);
+        $documentData=Document::find($education->document_id)->first();
         $education->delete();
-        // Return a successful response
-        $EducationData=Education::where('document_id',$document_id)->first();
-        $documentData = $EducationData->document;
-
         return redirect()->route('documents.edit', $documentData->document_id)
             ->with('success', 'Personal information updated successfully.');
     }
-
 
 
 

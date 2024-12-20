@@ -67,6 +67,7 @@ class DocumentController extends Controller
             'document' => $document,
             'personalInfo'  =>  $document->personalInfo,
             'education'  =>  $document->education,
+            'skills'  =>  $document->skills,
         ]);
         // return $document->personalInfo;
     }
