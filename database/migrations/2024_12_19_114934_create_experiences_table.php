@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('title', 255)->nullable();
             $table->string('company_name', 255)->nullable();
             $table->string('city', 255)->nullable();
+            $table->string('country', 255)->nullable();
             $table->boolean('currently_working')->default(false);
             $table->text('work_summary')->nullable();
             $table->date('start_date')->nullable();

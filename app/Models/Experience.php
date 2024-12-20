@@ -16,6 +16,7 @@ class Experience extends Model
         'title',
         'company_name',
         'city',
+        'country',
         'currently_working',
         'work_summary',
         'start_date',

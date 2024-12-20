@@ -10,6 +10,8 @@ use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\PersonalInfoController;
 use App\Http\Controllers\EducationController;
 use App\Http\Controllers\SkillController;
+use App\Http\Controllers\ExperienceController;
+
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
@@ -36,6 +38,10 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::post('/skill/{document_id}', [SkillController::class, 'store'])->name('skill.store');
     Route::put('/skill/{document_id}', [SkillController::class, 'update'])->name('skill.update');
     Route::delete('/skill/{document_id}', [SkillController::class, 'delete'])->name('skill.delete');
+    // ----------------------------------------------------------------------------------------------------------------------
+    Route::post('/experience/{document_id}', [ExperienceController::class, 'store'])->name('experience.store');
+    Route::put('/experience/{document_id}', [ExperienceController::class, 'update'])->name('experience.update');
+    Route::delete('/experience/{document_id}', [ExperienceController::class, 'delete'])->name('experience.delete');
 
 
 });
