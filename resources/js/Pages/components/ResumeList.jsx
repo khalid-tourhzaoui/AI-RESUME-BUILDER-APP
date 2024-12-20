@@ -3,11 +3,23 @@ import useSWR from "swr";
 import { Loader, RotateCw } from "lucide-react";
 import ResumeItem from "./common/ResumeItem";
 
-const fetcher = (url) => fetch(url).then((res) => res.json());
+const fetcher = (url) =>
+    fetch(url, {
+        method: "GET",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }).then((res) => {
+        if (!res.ok) {
+            throw new Error("Failed to fetch");
+        }
+        return res.json();
+    });
 
 export default function ResumeList() {
-    const {
-        data: documents,error,isLoading,mutate} = useSWR("http://localhost:8000/documents", fetcher);
+    const {data: documents,error,isLoading,mutate} = useSWR("http://127.0.0.1:8000/documents", fetcher);
+
     return (
         <Fragment>
             {isLoading ? (
