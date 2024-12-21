@@ -4,9 +4,8 @@ import ResumeList from "./ResumeList";
 import TrashListBox from "./TrashListBox";
 import { usePage } from "@inertiajs/react";
 
-function Page() {
-    const {document} = usePage().props;
-    console.log(document)
+function Page(props) {
+    const { document } = props;
     return (
         <div className="w-full">
             <div className="w-full mx-auto max-w-7xl py-5 px-5">

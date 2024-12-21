@@ -140,6 +140,7 @@ public function updateThemeColor(Request $request, $id)
             'document' => $document
         ]);
     }
+    //---------------------------------------------------------------------------
     /**
      * Remove the specified resource from storage.
      */
