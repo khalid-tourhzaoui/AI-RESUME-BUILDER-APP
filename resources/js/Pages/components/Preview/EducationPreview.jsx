@@ -3,7 +3,7 @@ import SkeletonLoader from "../skeleton-loader";
 import { INITIAL_THEME_COLOR } from "@/lib/helper";
 
 function EducationPreview({document, isLoading}) {
-    const themeColor = document?.themeColor || INITIAL_THEME_COLOR;
+    const themeColor = document?.theme_color || INITIAL_THEME_COLOR;
 
     if (isLoading) {
         return <SkeletonLoader />;

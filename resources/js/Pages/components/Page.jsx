@@ -2,8 +2,11 @@ import React from "react";
 import AddResume from "./AddResume";
 import ResumeList from "./ResumeList";
 import TrashListBox from "./TrashListBox";
+import { usePage } from "@inertiajs/react";
 
 function Page() {
+    const {document} = usePage().props;
+    console.log(document)
     return (
         <div className="w-full">
             <div className="w-full mx-auto max-w-7xl py-5 px-5">
@@ -17,7 +20,7 @@ function Page() {
                     </div>
                     <div className="shrink-0 flex items-center gap-3">
                         {/* {Trash List} */}
-                        <TrashListBox />
+                        <TrashListBox document={document} />
                     </div>
                 </div>
 

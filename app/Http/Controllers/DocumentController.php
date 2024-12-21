@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Inertia\Inertia;
 use App\Models\Document;
+use Inertia\Inertia;
 
 class DocumentController extends Controller
 {
@@ -49,13 +49,31 @@ class DocumentController extends Controller
     }
 
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
 
+// Méthode updateThemeColor dans le contrôleur
+public function updateThemeColor(Request $request, $id)
+{
+    $document = Document::findOrFail($id);
+
+    $themeColor = $request->input('themeColor');
+    // Ajoute un log pour vérifier la couleur reçue
+    \Log::info("Couleur reçue : " . $themeColor);
+
+    if ($themeColor) {
+        $document->theme_color = $themeColor;
+        $document->save();
+
+        return response()->json([
+            'request'   => $themeColor,
+            'document'  => $document
+        ]);
     }
+
+    return response()->json(['error' => 'Couleur du thème non fournie'], 400);
+}
+
+
+
 
     /**
      * Show the form for editing the specified resource.
@@ -100,12 +118,39 @@ class DocumentController extends Controller
         return redirect()->route('documents.edit', $document->document_id)
             ->with('success', 'Document title updated successfully');
     }
+    //---------------------------------------------------------------------------
+    public function ArchivedDocument($id){
+        $document = Document::findOrFail($id);
+        $document->status="archived";
+        $document->save();
 
+        return response()->json([
+            'message' => 'Document updated',
+            'document' => $document
+        ]);
+    }
+    //---------------------------------------------------------------------------
+    public function RestoreDocument($id){
+        $document = Document::findOrFail($id);
+        $document->status="private";
+        $document->save();
+
+        return response()->json([
+            'message' => 'Document updated',
+            'document' => $document
+        ]);
+    }
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $document = Document::findOrFail($id);
+        $document->delete();
+
+        return response()->json([
+            'message' => 'Document deleted',
+            'document' => $document
+        ]);
     }
 }

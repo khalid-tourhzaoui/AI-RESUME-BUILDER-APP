@@ -11,6 +11,7 @@ use App\Http\Controllers\PersonalInfoController;
 use App\Http\Controllers\EducationController;
 use App\Http\Controllers\SkillController;
 use App\Http\Controllers\ExperienceController;
+use App\Models\Document;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -27,6 +28,11 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::get('documents/{document_id}/edit', [DocumentController::class, 'edit'])->name('documents.edit');
     Route::put('/documents/{document_id}', [DocumentController::class, 'update'])->name('documents.update');
     Route::patch('/documents/{document_id}', [DocumentController::class, 'UpdateSummary'])->name('documents.UpdateSummary');
+    Route::post('/documents/{document_id}', [DocumentController::class, 'UpdateThemeColor'])->name('documents.UpdateThemeColor');
+    Route::delete('/documents/{document_id}', [DocumentController::class, 'destroy'])->name('documents.delete');
+
+    Route::patch('/documents/archive/{id}', [DocumentController::class, 'ArchivedDocument'])->name('documents.archive');
+    Route::patch('/documents/restore/{id}', [DocumentController::class, 'RestoreDocument'])->name('documents.restore');
     // ----------------------------------------------------------------------------------------------------------------------
     Route::post('/personals/{document_id}', [PersonalInfoController::class, 'store'])->name('personals.store');
     Route::put('/personals/{document_id}', [PersonalInfoController::class, 'update'])->name('personals.update');
@@ -48,7 +54,8 @@ Route::middleware(['auth','verified'])->group(function () {
 
 
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+    $document=Document::where('user_id', Auth::id())->get();
+    return Inertia::render('Dashboard')->with('document', $document);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

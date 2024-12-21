@@ -3,7 +3,7 @@ import React from "react";
 import SkeletonLoader from "../skeleton-loader";
 
 function ExperiencePreview({document, isLoading}) {
-    const themeColor = document?.themeColor || INITIAL_THEME_COLOR;
+    const themeColor = document?.theme_color || INITIAL_THEME_COLOR;
 
   if (isLoading) {
     return <SkeletonLoader />;

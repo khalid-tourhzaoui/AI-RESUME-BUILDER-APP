@@ -6,8 +6,8 @@ import SummaryPreview from "./Preview/SummaryPreview";
 import PersonalInfoPreview from "./Preview/PersonalInfoPreview";
 import { cn } from './../../lib/utils';
 
-function ResumePreview({document}) {
-    const isLoading = !document;
+function ResumePreview({document,isLoading}) {
+    
     return (
         <div id="resume-preview-id" className={cn(` shadow-lg bg-white w-full flex-[1.02] h-full p-10 !font-open-sansdark:border
              dark:bg-card dark:border-b-gray-800  dark:border-x-gray-800`)}

@@ -60,21 +60,21 @@ const TopSection = ({ document }) => {
                     />
                 </div>
                 <div className="flex items-center gap-2">
-                    <ThemeColor />
-                    <PreviewModal />
+                    <ThemeColor document={document} isLoading={processing} />
+                    <PreviewModal document={document} isLoading={processing} />
                     <Download
                         title={data.title}
                         status={data.status}
                         isLoading={processing}
                     />
                     <Share />
-                    <MoreOption />
+                    <MoreOption document={document} isLoading={processing} />
                 </div>
             </div>
             <div>
-                {/* <Button 
-          onClick={handleSave} 
-          disabled={processing} 
+                {/* <Button
+          onClick={handleSave}
+          disabled={processing}
           className="btn btn-primary"
         >
           Save Changes

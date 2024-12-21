@@ -49,7 +49,7 @@ export default function ResumeList() {
                             title={resume.title}
                             status={resume.status}
                             updatedAt={resume.updated_at}
-                            themeColor={resume.themeColor}
+                            themeColor={resume.theme_color}
                             thumbnail={resume.thumbnail}
                         />
                     ))}
