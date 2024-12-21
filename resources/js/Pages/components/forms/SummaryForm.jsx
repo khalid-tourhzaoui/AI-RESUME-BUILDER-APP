@@ -7,8 +7,7 @@ import { AIChatSession } from "@/lib/google-ai-model";
 import { useForm } from "@inertiajs/react";
 import { Loader, Sparkles } from "lucide-react";
 import React, { useCallback, useEffect, useState } from "react";
-import { da } from './../../../../../node_modules/date-fns/locale/da';
-const prompt = `Job Title: {jobTitle}. Based on the job title, please generate concise 
+const prompt = `Job Title: {jobTitle}. Based on the job title, please generate concise
   and complete summaries for my resume in JSON format, incorporating the following experience
   levels: fresher, mid, and experienced. Each summary should be limited to 3 to 4 lines,
   reflecting a personal tone and showcasing specific relevant programming languages, technologies,
@@ -23,7 +22,7 @@ function SummaryForm({ document, handleNext }) {
     const { data, setData, patch } = useForm({
         summary: document?.summary || "",
     });
-   
+
     const GenerateSummaryFromAI = async () => {
         try {
             const jobTitle = document?.personal_info?.job_title;
@@ -75,7 +74,7 @@ function SummaryForm({ document, handleNext }) {
         }
     };
 
-    
+
     return (
         <div>
             <div className="w-full">

@@ -2,6 +2,7 @@ import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
 import { Textarea } from "@/Components/ui/textarea";
+import { generateThumbnail } from "@/lib/helper";
 import { useForm } from "@inertiajs/react";
 import { Loader, Plus, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
@@ -13,6 +14,7 @@ const initialState = {
     description: "",
     start_date: "",
     end_date: "",
+
 };
 
 function EducationForm({ handleNext, document }) {
@@ -33,7 +35,11 @@ function EducationForm({ handleNext, document }) {
 
     // Synchronize educationList with data
     useEffect(() => {
-        setData({ education: educationList });
+        const fetchThumbnail = async () => {
+            const thumbnail = await generateThumbnail();
+            setData({ education: educationList, thumbnail });
+        };
+        fetchThumbnail();
     }, [educationList]);
 
     const handleChange = (index, field, value) => {
@@ -50,9 +56,7 @@ function EducationForm({ handleNext, document }) {
 
     // Only delete the specific item by its ID
     const removeEducation = (index, id) => {
-        // Remove the item from the local state
         setEducationList((prev) => prev.filter((_, i) => i !== index));
-        // Call the function to delete it from the server
         removeEducationBack(id);
     };
 
@@ -115,6 +119,7 @@ function EducationForm({ handleNext, document }) {
             if (toAdd.length > 0) {
                 await post(route("education.store", document.id), {
                     education: toAdd,
+
                 });
             }
 

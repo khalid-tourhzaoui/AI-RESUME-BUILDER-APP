@@ -50,11 +50,11 @@ function ResumeItem({title, status, themeColor, thumbnail, updatedAt,documentId}
                                 <div className="w-full flex flex-1 bg-white dark:bg-gray-700 rounded-t-lg justify-center items-center">
                                     {thumbnail ? (
                                         <div className=" relative w-full h-full rounded-t-lg overflow-hidden">
-                                            <Image
+                                            <img
                                                 fill
                                                 src={thumbnail}
                                                 alt={title}
-                                                className="w-full h-full object-cover object-top rounded-t-lg"/>
+                                                className="w-full h-12 object-cover object-top rounded-t-lg"/>
                                         </div>
                                     ) : (
                                         <FileText size="30px" />

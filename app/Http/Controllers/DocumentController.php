@@ -50,27 +50,16 @@ class DocumentController extends Controller
 
 
 
-// Méthode updateThemeColor dans le contrôleur
-public function updateThemeColor(Request $request, $id)
-{
-    $document = Document::findOrFail($id);
-
-    $themeColor = $request->input('themeColor');
-    // Ajoute un log pour vérifier la couleur reçue
-    \Log::info("Couleur reçue : " . $themeColor);
-
-    if ($themeColor) {
-        $document->theme_color = $themeColor;
-        $document->save();
-
-        return response()->json([
-            'request'   => $themeColor,
-            'document'  => $document
+    public function updateThemeColor(Request $request, $id)
+    {
+        $document = Document::findOrFail($id);
+        $document->update([
+            'theme_color' => $request->input('themeColor')
         ]);
+
+        return response()->json(['message' => 'Theme color updated successfully']);
     }
 
-    return response()->json(['error' => 'Couleur du thème non fournie'], 400);
-}
 
 
 

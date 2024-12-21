@@ -6,6 +6,7 @@ import { useForm } from "@inertiajs/react";
 import { Rating } from "@smastrom/react-rating";
 import { Loader, Plus, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import { generateThumbnail } from '@/lib/helper';
 
 const initialState = {
     name: "",
@@ -22,7 +23,12 @@ function SkillsForm({ document }) {
     });
     //---------------------------------------------------------------------
     useEffect(() => {
-        setData({ skills: skillList });
+        const fetchThumbnail = async () => {
+            const thumbnail = await generateThumbnail();
+            setData({ skills: skillList ,thumbnail});
+            };
+            fetchThumbnail();
+
     }, [skillList]);
     //---------------------------------------------------------------------
     const handleChange = (index, field, value) => {
@@ -45,7 +51,7 @@ function SkillsForm({ document }) {
     const removeSkillBack = async (id) => {
         try {
             await destroy(route("skill.delete", id), {
-                data: { skill: [{ id }] }, 
+                data: { skill: [{ id }] },
             });
         } catch (error) {
             console.error("Failed to delete education", error);

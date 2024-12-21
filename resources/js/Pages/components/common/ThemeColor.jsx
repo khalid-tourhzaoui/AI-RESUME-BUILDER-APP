@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "@inertiajs/react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Palette, ChevronDown } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
-import useDebounce from "@/hooks/use-debounce"; // Assuming you have this custom hook
 
 const ThemeColor = ({ document }) => {
   const colors = [
@@ -14,32 +13,23 @@ const ThemeColor = ({ document }) => {
   ];
 
   const { data, setData, post, processing } = useForm({
-    themeColor: document?.theme_color || colors[0],
+    themeColor: document?.theme_color || colors[0], // Initial theme color
   });
 
   const [selectedColor, setSelectedColor] = useState(data.themeColor);
 
-  const debouncedColor = useDebounce(selectedColor, 1000); // Debouncing for 1 second
+  const onColorSelect = (color) => {
+    setSelectedColor(color); // Update the color in the local state
+    setData("themeColor", color); // Update the form data with the new color
+    onSave(color); // Call the save function to send the update
+  };
 
-  useEffect(() => {
-    if (debouncedColor !== data.themeColor) {
-      onSave();
-    }
-  }, [debouncedColor, data.themeColor]);
-
-  const onColorSelect = useCallback((color) => {
-    setSelectedColor(color);
-    setData("themeColor", color); // Update form data
-  }, [setData]);
-
-  const onSave = useCallback(async () => {
-    if (selectedColor === data.themeColor) return; // No change in color, skip
-
+  const onSave = async (color) => {
     try {
       // Trigger the POST request to update the theme color
       await post(route("documents.UpdateThemeColor", { id: document.id }), {
         data: {
-          themeColor: selectedColor,
+          themeColor: color,
         },
       });
 
@@ -48,14 +38,14 @@ const ThemeColor = ({ document }) => {
         description: "La couleur du thème a été mise à jour avec succès.",
       });
     } catch (error) {
-      console.error("Échec de la mise à jour de la couleur du thème", error);
+      console.error("Échec de la mise à jour de la couleur du thème:", error);
       toast({
         title: "Erreur",
         description: "La mise à jour de la couleur du thème a échoué.",
         variant: "destructive",
       });
     }
-  }, [selectedColor, data.themeColor, document.id, post]);
+  };
 
   return (
     <Popover>
@@ -79,7 +69,7 @@ const ThemeColor = ({ document }) => {
             <div
               key={index}
               role="button"
-             
+              onClick={() => onColorSelect(color)} // Call onColorSelect when a color is clicked
               className={`h-5 w-8 rounded-[5px] hover:border-black border ${selectedColor === color && "border-black"}`}
               style={{ background: color }}
             />

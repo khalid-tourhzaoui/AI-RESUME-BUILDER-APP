@@ -10,7 +10,7 @@ class EducationController extends Controller
     public function update(Request $request, $document_id)
     {
         $educationData = $request->education;
-
+        // return $request->all();
         // Mettre à jour les éléments existants
         foreach ($educationData as $education) {
             if (isset($education['id'])) {
@@ -28,7 +28,8 @@ class EducationController extends Controller
         }
         $EducationData=Education::where('document_id',$document_id)->first();
         $documentData = $EducationData->document;
-
+        $documentData->thumbnail=$request->thumbnail;
+        $documentData->save();
         return redirect()->route('documents.edit', $documentData->document_id)
             ->with('success', 'Personal information updated successfully.');
     }
@@ -55,6 +56,7 @@ class EducationController extends Controller
                     'description' => $education['description'],
                     'start_date' => $education['start_date'],
                     'end_date' => $education['end_date'],
+
                 ]);
             }
         }

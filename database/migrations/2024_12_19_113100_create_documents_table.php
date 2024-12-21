@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('title', 255)->nullable();
             $table->text('summary')->nullable();
             $table->string('theme_color', 255)->default('#7c3aed');
-            $table->text('thumbnail')->nullable();
+            $table->longText('thumbnail')->nullable();
             $table->integer('current_position')->default(1);
             $table->enum('status', ['archived', 'private', 'public'])->default('private');
             $table->string('author_name', 255)->nullable();

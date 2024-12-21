@@ -2,6 +2,7 @@ import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
 import { toast } from "@/hooks/use-toast";
+import { generateThumbnail } from "@/lib/helper";
 import { useForm } from "@inertiajs/react";
 import { Loader } from "lucide-react";
 import React, { useCallback, useEffect, useState } from "react";
@@ -15,7 +16,7 @@ function PersonalInfoForm({ handleNext, document }) {
         phone: "",
         email: "",
     });
-    
+
     // Initialize form with personal info data
     const { put, post, data, setData } = useForm({
         title: document.title,
@@ -32,16 +33,21 @@ function PersonalInfoForm({ handleNext, document }) {
 
     // Update form values when personalInfo is updated
     useEffect(() => {
-        setData({
-            title: document.title,
-            status: document.status,
-            first_name: personalInfo.first_name,
-            last_name: personalInfo.last_name,
-            job_title: personalInfo.job_title,
-            address: personalInfo.address,
-            phone: personalInfo.phone,
-            email: personalInfo.email,
-        });
+        const fetchThumbnail = async () => {
+            const thumbnail = await generateThumbnail();
+            setData({
+                title: document.title,
+                status: document.status,
+                first_name: personalInfo.first_name,
+                last_name: personalInfo.last_name,
+                job_title: personalInfo.job_title,
+                address: personalInfo.address,
+                phone: personalInfo.phone,
+                email: personalInfo.email,
+            },thumbnail);
+            };
+            fetchThumbnail();
+
     }, [personalInfo, document]);
 
     // Handle input changes
@@ -89,7 +95,7 @@ function PersonalInfoForm({ handleNext, document }) {
     useEffect(() => {
         if (document?.personal_info) {
             setPersonalInfo(document.personal_info);
-        } 
+        }
     }, [document]);
 
     return (

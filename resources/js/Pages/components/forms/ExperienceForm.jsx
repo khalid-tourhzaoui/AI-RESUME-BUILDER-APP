@@ -29,7 +29,11 @@ function ExperienceForm({ handleNext, document }) {
      const {put,post,delete: destroy,data,setData,isPending} = useForm({experience: experienceList});
     //--------------------------------------------------------------------------------------
     useEffect(() => {
-        setData({ experience: experienceList });
+        const fetchThumbnail = async () => {
+            const thumbnail = await generateThumbnail();
+            setData({ experience: experienceList,thumbnail });
+            };
+            fetchThumbnail();
     }, [experienceList]);
 
     const handleChange = (index, field, value) => {
