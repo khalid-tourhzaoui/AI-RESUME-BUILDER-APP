@@ -7,7 +7,7 @@ import ExperienceForm from "./forms/ExperienceForm";
 import EducationForm from "./forms/EducationForm";
 import SkillsForm from "./forms/SkillsForm";
 
-function ResumeForm({document}) {
+function ResumeForm({document,next}) {
     const [activeFormIndex, setActiveFormIndex] = useState(1);
     // console.log(document)
 
@@ -23,7 +23,7 @@ function ResumeForm({document}) {
         >
             <div
                 className="shadow-md rounded-md bg-white
-      !border-t-primary !border-t-4 
+      !border-t-primary !border-t-4
       dark:bg-card dark:border
       dark:border-gray-800
       "
@@ -68,11 +68,11 @@ function ResumeForm({document}) {
                 <div className="px-5 py-3 pb-5">
                     {/* {PersonalInfo Form} */}
                     {activeFormIndex === 1 && (
-                        <PersonalInfoForm handleNext={handleNext} document={document}   />
+                        <PersonalInfoForm handleNext={handleNext} document={document}    />
                     )}
 
                     {activeFormIndex === 2 && (
-                        <SummaryForm handleNext={handleNext} document={document} />
+                        <SummaryForm handleNext={handleNext} document={document} next={next} />
                     )}
 
                     {/* {Professional Exp.} */}

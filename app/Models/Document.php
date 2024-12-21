@@ -20,9 +20,7 @@ class Document extends Model
         'thumbnail',
         'current_position',
         'status',
-        'author_name',
-        'author_email',
-        
+
     ];
 
     public function education()

@@ -2,11 +2,12 @@ import { Button } from "@/Components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/Components/ui/card";
 import { Label } from "@/Components/ui/label";
 import { Textarea } from "@/Components/ui/textarea";
-import { toast } from "@/hooks/use-toast";
 import { AIChatSession } from "@/lib/google-ai-model";
 import { useForm } from "@inertiajs/react";
 import { Loader, Sparkles } from "lucide-react";
 import React, { useCallback, useEffect, useState } from "react";
+import Swal from "sweetalert2";
+
 const prompt = `Job Title: {jobTitle}. Based on the job title, please generate concise
   and complete summaries for my resume in JSON format, incorporating the following experience
   levels: fresher, mid, and experienced. Each summary should be limited to 3 to 4 lines,
@@ -15,65 +16,60 @@ const prompt = `Job Title: {jobTitle}. Based on the job title, please generate c
   engaging and tailored to highlight unique strengths, aspirations, and contributions to collaborative
   projects, demonstrating a clear understanding of the role and industry standards.`;
 
-function SummaryForm({ document, handleNext }) {
+function SummaryForm({ document, handleNext,next }) {
     const [loading, setLoading] = useState(false);
     const [aiGeneratedSummary, setAiGeneratedSummary] = useState(null);
-    // const [summary, setSummary] = useState("wc");
     const { data, setData, patch } = useForm({
         summary: document?.summary || "",
     });
 
+    // AI Summary Generation
     const GenerateSummaryFromAI = async () => {
+        const jobTitle = document?.personal_info?.job_title;
+        if (!jobTitle) return;
+
+        setLoading(true);
+
         try {
-            const jobTitle = document?.personal_info?.job_title;
-            if (!jobTitle) return;
-            setLoading(true);
             const PROMPT = prompt.replace("{jobTitle}", jobTitle);
             const result = await AIChatSession.sendMessage(PROMPT);
             const responseText = await result.response.text();
-            setAiGeneratedSummary(JSON.parse(responseText));
-            console.log(aiGeneratedSummary.summaries);
+            const generatedSummary = JSON.parse(responseText);
+
+            setAiGeneratedSummary(generatedSummary);
         } catch (error) {
-            toast({
+            Swal.fire({
                 title: "Failed to generate summary",
-                variant: "destructive",
+                text: "Something went wrong while generating the summary.",
+                icon: "error",
+                confirmButtonText: "OK",
             });
         } finally {
             setLoading(false);
         }
     };
 
+    // Handle AI summary selection
     const handleSelect = (summary) => {
         setData("summary", summary);
     };
 
+    // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!data.summary.trim()) {
-            toast({
-                title: "Validation Error",
-                description: "Summary cannot be empty.",
-                variant: "destructive",
-            });
-            return;
-        }
         try {
-            await patch(route("documents.UpdateSummary", document.document_id));
-            toast({
-                title: "Success",
-                description: "Information saved successfully.",
-                variant: "success",
+            await patch(route("documents.UpdateSummary", document.document_id), {
+                data: { summary: data.summary },
             });
-            if (handleNext) handleNext();
+            if(next){
+                handleNext();
+            }
+            console.log(next)
+
         } catch (error) {
-            toast({
-                title: "Error",
-                description: "Failed to save information.",
-                variant: "destructive",
-            });
+            console.log(error);
         }
     };
-
 
     return (
         <div>
@@ -90,16 +86,17 @@ function SummaryForm({ document, handleNext }) {
                             type="button"
                             className="gap-1"
                             disabled={loading}
-                            onClick={() => GenerateSummaryFromAI()}
+                            onClick={GenerateSummaryFromAI}
                         >
                             <Sparkles size="15px" className="text-purple-500" />
                             Generate with AI
                         </Button>
                     </div>
+
                     <Textarea
                         className="mt-5 min-h-36"
                         required
-                        value={document?.summary || data.summary}
+                        value={data.summary}
                         onChange={(e) => setData("summary", e.target.value)}
                     />
 
@@ -112,11 +109,8 @@ function SummaryForm({ document, handleNext }) {
                                 {aiGeneratedSummary?.summaries?.map(
                                     (suggestion, index) => (
                                         <Card
-                                            role="button"
                                             key={index}
-                                            className="my-4 bg-primary/5 shadow-none
-                                                    border-primary/30
-                                                "
+                                            className="my-4 bg-primary/5 shadow-none border-primary/30"
                                             onClick={() =>
                                                 handleSelect(suggestion.summary)
                                             }
@@ -126,9 +120,7 @@ function SummaryForm({ document, handleNext }) {
                                                     {suggestion.experienceLevel
                                                         ?.charAt(0)
                                                         ?.toUpperCase() +
-                                                        suggestion.experienceLevel?.slice(
-                                                            1
-                                                        )}
+                                                        suggestion.experienceLevel?.slice(1)}
                                                 </CardTitle>
                                             </CardHeader>
                                             <CardContent className="text-sm">
@@ -144,15 +136,9 @@ function SummaryForm({ document, handleNext }) {
                     <Button
                         className="mt-4"
                         type="submit"
-                        disabled={
-                            loading || document?.status === "archived"
-                                ? true
-                                : false
-                        }
+                        disabled={loading || document?.status === "archived"}
                     >
-                        {loading && (
-                            <Loader size="15px" className="animate-spin" />
-                        )}
+                        {loading && <Loader size="15px" className="animate-spin" />}
                         Save Changes
                     </Button>
                 </form>

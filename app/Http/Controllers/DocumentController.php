@@ -6,29 +6,47 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Models\Document;
 use Inertia\Inertia;
+use Illuminate\Database\QueryException;
 
 class DocumentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+
     public function index()
     {
-        return response()->json(Document::where('user_id', auth()->id())->get());
-        // return Inertia::render('components/ResumeList', [
-        //     'documents' => Document::where('user_id', auth()->id())->get(),
-        // ]);
-
+        try {
+            $documents = Document::where('user_id', auth()->id())->get();
+            return response()->json($documents);
+        } catch (QueryException $ex) {
+            if ($ex->getCode() === '2002') {
+                return response()->json([
+                    'error' => 'Le serveur de base de données est indisponible. Veuillez réessayer plus tard.'
+                ], 503);
+            }
+            return response()->json([
+                'error' => 'Une erreur s\'est produite lors de la récupération des données.'
+            ], 500);
+        }
     }
+
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        return Inertia::render('components/AddResume', [
-            'status' => session('status'),
-        ]);
+        try{
+            return Inertia::render('components/AddResume');
+        }catch (\Exception $ex) {
+            // Vérifier si l'exception est due à une connexion refusée
+            if ($ex->getCode() == 'HY000') {
+                 return Inertia::render('components/errors/Error');
+            } else {
+                 return Inertia::render('components/errors/Error');
+            }
+        }
     }
 
     /**
@@ -36,135 +54,165 @@ class DocumentController extends Controller
      */
     public function store(Request $request)
     {
-        $document = Document::create([
-            'document_id' => Str::uuid(),
-            'user_id' => auth()->id(),
-            'title' => "Untitled Document",
-        ]);
-
-        return redirect()->route('documents.edit', ['document_id' => $document->document_id])
-            ->with([
-                'status' => 'Document created.',
+        try {
+            $document = Document::create([
+                'document_id' => Str::uuid(),
+                'user_id' => auth()->id(),
+                'title' => "Untitled Document",
             ]);
-    }
 
+            return redirect()->route('documents.edit', ['document_id' => $document->document_id])
+                ->with('success', 'Document created successfully. You can now edit it.');
+        } catch (\Exception $ex) {
+            if ($ex->getCode() === 'HY000') {
 
+                return Inertia::render('components/errors/Error', [
+                    'message' => 'Unable to connect to the database. Please try again later.'
+                ]);
+            }
 
-    public function updateThemeColor(Request $request, $id)
-    {
-        $document = Document::findOrFail($id);
-        $document->update([
-            'theme_color' => $request->input('themeColor')
-        ]);
+            return redirect()->route('dashboard')
+                ->with('error', 'An error occurred while creating the document. Please try again.');
+            }
+        }
+        /*--------------------------------------------------------------------------------------------------*/
+        public function updateThemeColor(Request $request, $id)
+        {
+            $document = Document::findOrFail($id);
+            $document->theme_color = $request->themeColor;
+            $document->save(); // Save the updated theme color to the database
 
-        return response()->json(['message' => 'Theme color updated successfully']);
-    }
-
-
-
-
-
+            return response()->json([
+                "color : " => $request->themeColor,
+                "id : " => $id,
+                "request : " => $request->all(),
+            ]);
+        }
+    /*--------------------------------------------------------------------------------------------------*/
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $document_id)
     {
-        $document = Document::where('document_id', $document_id)->firstOrFail();
-        return Inertia::render('components/EditResume', [
-            'document' => $document,
-            'personalInfo'  =>  $document->personalInfo,
-            'education'  =>  $document->education,
-            'skills'  =>  $document->skills,
-            'experience'  =>  $document->experience,
-        ]);
-        // return $document->personalInfo;
+        try{
+            $document = Document::where('document_id', $document_id)->firstOrFail();
+
+            return Inertia::render('components/EditResume', [
+                'document' => $document,
+                'personalInfo'  =>  $document->personalInfo,
+                'education'  =>  $document->education,
+                'skills'  =>  $document->skills,
+                'experience'  =>  $document->experience,
+                'success' => session('success'),
+                'error' => session('error'),
+                'next' => session('next'),
+            ]);
+        }catch (\Exception $ex) {
+            return redirect()->route('dashboard')
+                ->with('error','The document you are trying to edit does not exist or you do not have permission to edit it.');
+        }
+
     }
-
-
-
+    /*--------------------------------------------------------------------------------------------------*/
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, $document_id)
     {
-        $document = Document::where('document_id', $document_id)->firstOrFail();
-        $document->update([
-            'title' => $request->input('title'),
-        ]);
+        try {
+            $document = Document::where('document_id', $document_id)->firstOrFail();
+            $document->update([
+                'title' => $request->input('title'),
+            ]);
 
-        return redirect()->route('documents.edit', $document->document_id)
-            ->with('success', 'Document title updated successfully');
+            return redirect()->route('documents.edit', $document->document_id)
+                ->with('success', 'Document title updated successfully');
+        } catch (\Exception $ex) {
+            return redirect()->route('dashboard')
+                ->with('error', 'An error occurred while updating the document. Please try again.');
+        }
     }
-
+    /*--------------------------------------------------------------------------------------------------*/
     public function UpdateSummary(Request $request, $document_id)
     {
-        $document = Document::where('document_id', $document_id)->firstOrFail();
-        // return $request->all();
-        $document->update([
-            'summary' => $request->input('summary'),
-        ]);
+        try {
+            $document = Document::where('document_id', $document_id)->firstOrFail();
 
-        return redirect()->route('documents.edit', $document->document_id)
-            ->with('success', 'Document title updated successfully');
+            $request->validate([
+                'summary' => 'nullable|string|max:255',
+            ]);
+
+            $document->update([
+                'summary' => $request->input('summary'),
+            ]);
+            return redirect()->route('documents.edit', $document->document_id)
+                ->with(['success'=>'Document summary updated successfully','next'=>true]);
+
+        } catch (\Exception $ex) {
+            return redirect()->route('documents.edit', $document_id)
+                ->with('error', 'An error occurred while updating the summary: ' . $ex->getMessage());
+        }
     }
+
     //---------------------------------------------------------------------------
     public function ArchivedDocument($id){
-        $document = Document::findOrFail($id);
-        $document->status="archived";
-        $document->save();
-
-        return response()->json([
-            'message' => 'Document updated',
-            'document' => $document
-        ]);
+        try {
+            $document = Document::findOrFail($id);
+            $document->status="archived";
+            $document->save();
+            return redirect()->route('documents.edit', $document->document_id)
+            ->with('success','Document archived successfully');
+        } catch (\Exception $ex) {
+            return redirect()->route('documents.edit', $document->document_id)
+            ->with('error','An error occurred while archiving the document. Please try again.');
+        }
     }
     //---------------------------------------------------------------------------
     public function RestoreDocument($id){
-        $document = Document::findOrFail($id);
-        $document->status="private";
-        $document->save();
-
-        return response()->json([
-            'message' => 'Document updated',
-            'document' => $document
-        ]);
+        try{
+            $document = Document::findOrFail($id);
+            $document->status="private";
+            $document->save();
+            return redirect()->route('documents.edit', $document->document_id)
+            ->with('success','Document restored successfully');
+        }catch (\Exception $ex) {
+            return redirect()->route('documents.edit', $document->document_id)
+            ->with('error','An error occurred while restoring the document. Please try again.');
+        }
     }
     //---------------------------------------------------------------------------
     public function PublicDocument($id){
-        $document = Document::findOrFail($id);
-        $document->status="public";
-        $document->save();
-
-        return response()->json([
-            'message' => 'Document updated',
-            'document' => $document
-        ]);
+        try{
+            $document = Document::findOrFail($id);
+            $document->status="public";
+            $document->save();
+            return redirect()->route('documents.edit', $document->document_id)
+            ->with('success','Document updated successfully');
+        }catch(\Exception $ex){
+            return redirect()->route('documents.edit', $document->document_id)
+            ->with('error','An error occurred while updating the document. Please try again.');
+        }
     }
     //---------------------------------------------------------------------------
     public function PreviewResume($document_id)
     {
         try {
-            // Set isLoading to true initially
             $isLoading = true;
             $isSuccess = false;
 
-            // Fetch the document by its ID
             $document = Document::where("document_id", $document_id)->first();
 
-            // If the document is found, set isSuccess to true
             if ($document) {
                 $isLoading = false;
                 $isSuccess = true;
             }
 
-            // Return Inertia response with document and status flags
             return Inertia::render('components/Preview/PublicResume', [
                 'document' => $document,
                 'isLoading' => $isLoading,
                 'isSuccess' => $isSuccess,
             ]);
         } catch (\Exception $e) {
-            // If any error occurs, set isLoading to false and isSuccess to false
             return Inertia::render('components/Preview/PublicResume', [
                 'document' => null,
                 'isLoading' => false,
@@ -173,20 +221,20 @@ class DocumentController extends Controller
         }
     }
 
-
-
     //---------------------------------------------------------------------------
     /**
      * Remove the specified resource from storage.
      */
     public function destroy($id)
     {
-        $document = Document::findOrFail($id);
-        $document->delete();
-
-        return response()->json([
-            'message' => 'Document deleted',
-            'document' => $document
-        ]);
+        try{
+            $document = Document::findOrFail($id);
+            $document->delete();
+            return redirect()->route('dashboard')
+            ->with('success','Document deleted successfully');
+        }catch (\Exception $ex) {
+            return redirect()->route('dashboard')
+            ->with('error','An error occurred while deleting the document. Please try again.');
+        }
     }
 }

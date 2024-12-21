@@ -3,7 +3,6 @@ import { useForm } from "@inertiajs/react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Palette, ChevronDown } from "lucide-react";
-import { toast } from "@/hooks/use-toast";
 
 const ThemeColor = ({ document }) => {
   const colors = [
@@ -27,23 +26,20 @@ const ThemeColor = ({ document }) => {
   const onSave = async (color) => {
     try {
       // Trigger the POST request to update the theme color
-      await post(route("documents.UpdateThemeColor", { id: document.id }), {
+      const response = await post(route("documents.UpdateThemeColor", { id: document.id }), {
         data: {
           themeColor: color,
         },
       });
 
-      toast({
-        title: "Succès",
-        description: "La couleur du thème a été mise à jour avec succès.",
-      });
+      if (response.data.success) {
+        setSelectedColor(response.data["color : "]); // Update selected color with the response
+        console.log("Color updated successfully:", response.data);
+      } else {
+        console.error("Failed to update theme color:", response.data);
+      }
     } catch (error) {
-      console.error("Échec de la mise à jour de la couleur du thème:", error);
-      toast({
-        title: "Erreur",
-        description: "La mise à jour de la couleur du thème a échoué.",
-        variant: "destructive",
-      });
+      console.error("Error updating theme color:", error);
     }
   };
 

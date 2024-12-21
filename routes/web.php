@@ -56,8 +56,18 @@ Route::middleware(['auth','verified'])->group(function () {
 
 
 Route::get('/dashboard', function () {
-    $document=Document::where('user_id', Auth::id())->get();
-    return Inertia::render('Dashboard')->with('document', $document);
+    try {
+        $document=Document::where('user_id', Auth::id())->get();
+        return Inertia::render('Dashboard')->with(['document'=>$document,'success' => session('success'),
+                'error' => session('error'),]);
+    } catch (\Exception $ex) {
+        // Vérifier si l'exception est due à une connexion refusée
+        if ($ex->getCode() == 'HY000') {
+             return Inertia::render('components/errors/Error');
+        } else {
+             return Inertia::render('components/errors/Error');
+        }
+    }
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

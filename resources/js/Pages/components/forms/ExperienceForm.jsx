@@ -5,6 +5,7 @@ import { Label } from "@/Components/ui/label";
 import { Input } from "@/Components/ui/input";
 import { useForm } from "@inertiajs/react";
 import RichTextEditor from "../editor";
+import { generateThumbnail } from "@/lib/helper";
 
 const initialState = {
     id: undefined,

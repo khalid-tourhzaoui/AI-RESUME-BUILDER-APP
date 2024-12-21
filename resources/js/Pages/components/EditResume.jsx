@@ -1,14 +1,36 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, usePage } from "@inertiajs/react";
-import React from "react";
+import React, { useEffect } from "react";
 import TopSection from "./common/TopSection";
 import ResumeForm from "./ResumeForm";
 import ResumePreview from "./ResumePreview";
+import Swal from "sweetalert2";
 
 function EditResume() {
-    const { document } = usePage().props;
-    
-    // console.log(document)
+    const { document, success, error,next } = usePage().props;
+
+    useEffect(() => {
+        if (success) {
+            Swal.fire({
+                position: 'top-end',
+                icon: "success",
+                title: "Succès!",
+                text: success,
+                showConfirmButton: true,
+                timer: 5000
+            });
+
+        }
+
+        if (error) {
+            Swal.fire({
+                icon: "error",
+                title: "Erreur!",
+                text: error,
+            });
+        }
+    }, [success, error]);
+
     return (
         <AuthenticatedLayout
             header={
@@ -29,7 +51,7 @@ function EditResume() {
                                     <div className="w-full mt-1">
                                         <div className="flex flex-col lg:flex-row items-start w-full py-3 gap-6">
                                             {/* {Form Section} */}
-                                            <ResumeForm document={document} />
+                                            <ResumeForm document={document} next={next} />
                                             {/* {Preview Section} */}
                                             <ResumePreview document={document} />
                                         </div>
