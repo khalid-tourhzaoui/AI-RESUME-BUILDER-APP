@@ -7,12 +7,12 @@ import ResumePreview from "./ResumePreview";
 import Swal from "sweetalert2";
 
 function EditResume() {
-    const { document, success, error,next } = usePage().props;
+    const { document, success, error} = usePage().props;
 
     useEffect(() => {
         if (success) {
             Swal.fire({
-                position: 'top-end',
+                position: 'center',
                 icon: "success",
                 title: "Succès!",
                 text: success,
@@ -20,13 +20,17 @@ function EditResume() {
                 timer: 5000
             });
 
+
         }
 
         if (error) {
             Swal.fire({
+                position: 'center',
                 icon: "error",
                 title: "Erreur!",
                 text: error,
+                showConfirmButton: true,
+                timer: 5000
             });
         }
     }, [success, error]);
@@ -51,7 +55,7 @@ function EditResume() {
                                     <div className="w-full mt-1">
                                         <div className="flex flex-col lg:flex-row items-start w-full py-3 gap-6">
                                             {/* {Form Section} */}
-                                            <ResumeForm document={document} next={next} />
+                                            <ResumeForm document={document} />
                                             {/* {Preview Section} */}
                                             <ResumePreview document={document} />
                                         </div>

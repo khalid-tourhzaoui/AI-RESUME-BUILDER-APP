@@ -7,7 +7,7 @@ import ExperienceForm from "./forms/ExperienceForm";
 import EducationForm from "./forms/EducationForm";
 import SkillsForm from "./forms/SkillsForm";
 
-function ResumeForm({document,next}) {
+function ResumeForm({document}) {
     const [activeFormIndex, setActiveFormIndex] = useState(1);
     // console.log(document)
 
@@ -72,7 +72,7 @@ function ResumeForm({document,next}) {
                     )}
 
                     {activeFormIndex === 2 && (
-                        <SummaryForm handleNext={handleNext} document={document} next={next} />
+                        <SummaryForm handleNext={handleNext} document={document} />
                     )}
 
                     {/* {Professional Exp.} */}

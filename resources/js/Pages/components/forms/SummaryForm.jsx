@@ -5,7 +5,7 @@ import { Textarea } from "@/Components/ui/textarea";
 import { AIChatSession } from "@/lib/google-ai-model";
 import { useForm } from "@inertiajs/react";
 import { Loader, Sparkles } from "lucide-react";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useState } from "react";
 import Swal from "sweetalert2";
 
 const prompt = `Job Title: {jobTitle}. Based on the job title, please generate concise
@@ -16,7 +16,7 @@ const prompt = `Job Title: {jobTitle}. Based on the job title, please generate c
   engaging and tailored to highlight unique strengths, aspirations, and contributions to collaborative
   projects, demonstrating a clear understanding of the role and industry standards.`;
 
-function SummaryForm({ document, handleNext,next }) {
+function SummaryForm({ document, handleNext }) {
     const [loading, setLoading] = useState(false);
     const [aiGeneratedSummary, setAiGeneratedSummary] = useState(null);
     const { data, setData, patch } = useForm({
@@ -57,17 +57,15 @@ function SummaryForm({ document, handleNext,next }) {
     // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         try {
             await patch(route("documents.UpdateSummary", document.document_id), {
                 data: { summary: data.summary },
             });
-            if(next){
-                handleNext();
-            }
-            console.log(next)
 
+            if (handleNext) handleNext();
         } catch (error) {
-            console.log(error);
+            console.log(error)
         }
     };
 

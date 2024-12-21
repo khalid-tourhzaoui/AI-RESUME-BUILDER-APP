@@ -7,26 +7,28 @@ import Swal from "sweetalert2";
 export default function Dashboard() {
     const { document, success, error } = usePage().props;
 
-    useEffect(() => {
-        if (success) {
-            Swal.fire({
-                position: "top-end",
-                icon: "success",
-                title: "Succès!",
-                text: success,
-                showConfirmButton: true,
-                timer: 5000,
-            });
-        }
+    // useEffect(() => {
+    //     if (success) {
+    //         Swal.fire({
+    //             position: "center",
+    //             icon: "success",
+    //             title: "Succès!",
+    //             text: success,
+    //             showConfirmButton: true,
+    //             timer: 5000,
+    //         });
+    //     }
 
-        if (error) {
-            Swal.fire({
-                icon: "error",
-                title: "Erreur!",
-                text: error,
-            });
-        }
-    }, [success, error]);
+    //     if (error) {
+    //         Swal.fire({
+    //             icon: "error",
+    //             title: "Erreur!",
+    //             text: error,
+    //             showConfirmButton: true,
+    //             timer: 5000,
+    //         });
+    //     }
+    // }, [success, error]);
     return (
         <AuthenticatedLayout
             header={

@@ -14,7 +14,6 @@ const initialState = {
     description: "",
     start_date: "",
     end_date: "",
-
 };
 
 function EducationForm({ handleNext, document }) {
@@ -33,7 +32,7 @@ function EducationForm({ handleNext, document }) {
         education: educationList,
     });
 
-    // Synchronize educationList with data
+    //-------------------------------------------------------------------------------------------
     useEffect(() => {
         const fetchThumbnail = async () => {
             const thumbnail = await generateThumbnail();
@@ -41,7 +40,7 @@ function EducationForm({ handleNext, document }) {
         };
         fetchThumbnail();
     }, [educationList]);
-
+    //-------------------------------------------------------------------------------------------
     const handleChange = (index, field, value) => {
         setEducationList((prev) =>
             prev.map((item, i) =>
@@ -49,28 +48,26 @@ function EducationForm({ handleNext, document }) {
             )
         );
     };
-
+    //-------------------------------------------------------------------------------------------
     const addNewEducation = () => {
         setEducationList((prev) => [...prev, { ...initialState }]);
     };
-
-    // Only delete the specific item by its ID
+    //-------------------------------------------------------------------------------------------
     const removeEducation = (index, id) => {
         setEducationList((prev) => prev.filter((_, i) => i !== index));
         removeEducationBack(id);
     };
-
-    // Function to handle the deletion on the server
+    //-------------------------------------------------------------------------------------------
     const removeEducationBack = async (id) => {
         try {
             await destroy(route("education.delete", id), {
-                data: { education: [{ id }] }, // Only pass the education ID
+                data: { education: [{ id }] },
             });
         } catch (error) {
             console.error("Failed to delete education", error);
         }
     };
-
+    //-------------------------------------------------------------------------------------------
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSaving(true);
@@ -81,7 +78,6 @@ function EducationForm({ handleNext, document }) {
             const toAdd = [];
             const toDelete = [];
 
-            // Identify items to update, add, or delete
             educationList.forEach((item) => {
                 const existingItem = existingEducation.find(
                     (edu) => edu.id === item.id
@@ -119,7 +115,6 @@ function EducationForm({ handleNext, document }) {
             if (toAdd.length > 0) {
                 await post(route("education.store", document.id), {
                     education: toAdd,
-
                 });
             }
 
@@ -152,7 +147,7 @@ function EducationForm({ handleNext, document }) {
                                         size="icon"
                                         onClick={() =>
                                             removeEducation(index, item.id)
-                                        } // Correctly pass the index for deletion
+                                        } 
                                     >
                                         <X size="13px" />
                                     </Button>
