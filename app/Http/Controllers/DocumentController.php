@@ -141,6 +141,52 @@ public function updateThemeColor(Request $request, $id)
         ]);
     }
     //---------------------------------------------------------------------------
+    public function PublicDocument($id){
+        $document = Document::findOrFail($id);
+        $document->status="public";
+        $document->save();
+
+        return response()->json([
+            'message' => 'Document updated',
+            'document' => $document
+        ]);
+    }
+    //---------------------------------------------------------------------------
+    public function PreviewResume($document_id)
+    {
+        try {
+            // Set isLoading to true initially
+            $isLoading = true;
+            $isSuccess = false;
+
+            // Fetch the document by its ID
+            $document = Document::where("document_id", $document_id)->first();
+
+            // If the document is found, set isSuccess to true
+            if ($document) {
+                $isLoading = false;
+                $isSuccess = true;
+            }
+
+            // Return Inertia response with document and status flags
+            return Inertia::render('components/Preview/PublicResume', [
+                'document' => $document,
+                'isLoading' => $isLoading,
+                'isSuccess' => $isSuccess,
+            ]);
+        } catch (\Exception $e) {
+            // If any error occurs, set isLoading to false and isSuccess to false
+            return Inertia::render('components/Preview/PublicResume', [
+                'document' => null,
+                'isLoading' => false,
+                'isSuccess' => false,
+            ]);
+        }
+    }
+
+
+
+    //---------------------------------------------------------------------------
     /**
      * Remove the specified resource from storage.
      */

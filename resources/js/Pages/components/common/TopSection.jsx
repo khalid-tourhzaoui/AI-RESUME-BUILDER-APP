@@ -67,7 +67,7 @@ const TopSection = ({ document }) => {
                         status={data.status}
                         isLoading={processing}
                     />
-                    <Share />
+                    <Share document={document} isLoading={processing} />
                     <MoreOption document={document} isLoading={processing} />
                 </div>
             </div>
