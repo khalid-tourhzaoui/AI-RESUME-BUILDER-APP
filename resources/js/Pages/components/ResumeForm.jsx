@@ -8,7 +8,7 @@ import EducationForm from "./forms/EducationForm";
 import SkillsForm from "./forms/SkillsForm";
 
 function ResumeForm({document}) {
-    const [activeFormIndex, setActiveFormIndex] = useState(1);
+    const [activeFormIndex, setActiveFormIndex] = useState(document.current_position);
     // console.log(document)
 
   const handleNext = () => {

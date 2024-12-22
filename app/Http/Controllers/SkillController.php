@@ -33,6 +33,8 @@ class SkillController extends Controller
             }
             $DataSkill=Skill::where('document_id',$document_id)->first();
             $documentData = $DataSkill->document;
+            $documentData->thumbnail=$request->thumbnail;
+            $documentData->save();
             return redirect()->route('documents.edit', $documentData->document_id)
                 ->with('success','Skills added successfully.');
         }catch(\Exception $e){
@@ -64,6 +66,8 @@ class SkillController extends Controller
             }
             $DataSkill=Skill::where('document_id',$document_id)->first();
             $documentData = $DataSkill->document;
+            $documentData->thumbnail=$request->thumbnail;
+            $documentData->save();
             return redirect()->route('documents.edit', $documentData->document_id)
                 ->with('success','Skills updated successfully.');
         }catch(\Exception $e){
@@ -78,6 +82,8 @@ class SkillController extends Controller
             $skill=Skill::find($id);
             $skillData=Document::find($skill->document_id)->first();
             $skill->delete();
+            $skillData->thumbnail=$request->thumbnail;
+            $skillData->save();
             return redirect()->route('documents.edit', $skillData->document_id)
                 ->with('success','Skill deleted successfully.');
         }catch(\Exception $e){

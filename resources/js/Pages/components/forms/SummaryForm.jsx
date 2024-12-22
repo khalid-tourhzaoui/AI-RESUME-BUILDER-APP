@@ -94,6 +94,8 @@ function SummaryForm({ document, handleNext }) {
                     <Textarea
                         className="mt-5 min-h-36"
                         required
+                        max={500}
+                        min={10}
                         value={data.summary}
                         onChange={(e) => setData("summary", e.target.value)}
                     />

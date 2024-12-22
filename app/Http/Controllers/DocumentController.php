@@ -137,14 +137,14 @@ class DocumentController extends Controller
             $document = Document::where('document_id', $document_id)->firstOrFail();
 
             $request->validate([
-                'summary' => 'nullable|string|max:255',
+                'summary' => 'nullable|string|max:500',
             ]);
 
             $document->update([
                 'summary' => $request->input('summary'),
             ]);
             return redirect()->route('documents.edit', $document->document_id)
-                ->with(['success'=>'Document summary updated successfully','next'=>true]);
+                ->with(['success'=>'Document summary updated successfully']);
 
         } catch (\Exception $ex) {
             return redirect()->back()->with('error','Error! '.$ex->getMessage());

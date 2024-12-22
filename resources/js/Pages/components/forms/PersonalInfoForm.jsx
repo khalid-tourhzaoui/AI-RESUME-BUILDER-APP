@@ -15,11 +15,10 @@ function PersonalInfoForm({ handleNext, document }) {
         address: "",
         phone: "",
         email: "",
-        thumbnail:"",
+        thumbnail: "",
     });
     const [errors, setErrors] = useState({});
-
-    // Initialize form with personal info data
+    const [isFormValid, setIsFormValid] = useState(false); // Track form validity
     const { put, post, data, setData } = useForm({
         title: document.title,
         status: document.status,
@@ -29,47 +28,10 @@ function PersonalInfoForm({ handleNext, document }) {
         address: personalInfo.address,
         phone: personalInfo.phone,
         email: personalInfo.email,
-        thumbnail:personalInfo.thumbnail
+        thumbnail: personalInfo.thumbnail,
     });
 
     const [isSaving, setIsSaving] = useState(false);
-
-    // Update form values when personalInfo is updated
-    useEffect(() => {
-        const fetchThumbnail = async () => {
-            const thumbnail = await generateThumbnail();
-            setData({
-                title: document.title,
-                status: document.status,
-                first_name: personalInfo.first_name,
-                last_name: personalInfo.last_name,
-                job_title: personalInfo.job_title,
-                address: personalInfo.address,
-                phone: personalInfo.phone,
-                email: personalInfo.email,
-                thumbnail:thumbnail
-            });
-            };
-            fetchThumbnail();
-
-    }, [personalInfo, document]);
-
-    // Handle input changes
-    const handleChange = useCallback((e) => {
-        const { name, value } = e.target;
-        setPersonalInfo((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
-
-        // Déclenche une validation après un délai (par exemple, 500 ms)
-        clearTimeout(typingTimeout);
-        const typingTimeout = setTimeout(() => {
-            validateField(name, value);
-        }, 500);
-    }, []);
-
-    //---------------------------------------------------
 
     const personalInfoSchema = Yup.object().shape({
         first_name: Yup.string()
@@ -78,58 +40,115 @@ function PersonalInfoForm({ handleNext, document }) {
         last_name: Yup.string()
             .required("Last Name is required")
             .min(2, "Last Name must be at least 2 characters"),
-        job_title: Yup.string()
-            .required("Job Title is required"),
-        address: Yup.string()
-            .required("Address is required"),
+        job_title: Yup.string().required("Job Title is required"),
+        address: Yup.string().required("Address is required"),
         phone: Yup.string()
             .required("Phone Number is required")
-            .matches(/^(\+212|0)([ \-_/]*)(\d[ \-_/]*){9}$/, "Invalid Moroccan phone number"),
+            .matches(
+                /^(\+212|0)([ \-_/]*)(\d[ \-_/]*){9}$/,
+                "Invalid Moroccan phone number"
+            ),
         email: Yup.string()
             .required("Email is required")
             .email("Invalid email format"),
     });
-    // Validate field
+
+    useEffect(() => {
+        const processPersonalInfoList = async () => {
+            try {
+                const thumbnail = await generateThumbnail();
+                setData({
+                    title: document.title,
+                    status: document.status,
+                    first_name: personalInfo.first_name,
+                    last_name: personalInfo.last_name,
+                    job_title: personalInfo.job_title,
+                    address: personalInfo.address,
+                    phone: personalInfo.phone,
+                    email: personalInfo.email,
+                    thumbnail: thumbnail,
+                });
+                checkFormValidity(); // Check form validity after setting the data
+            } catch (err) {
+                setIsFormValid(false);
+            }
+        };
+        processPersonalInfoList();
+    }, [personalInfo, document]);
+
     const validateField = async (name, value) => {
         try {
             await personalInfoSchema.validateAt(name, { [name]: value });
-            setErrors((prev) => ({ ...prev, [name]: undefined })); // Efface l'erreur si valide
+            setErrors((prev) => ({ ...prev, [name]: undefined }));
         } catch (err) {
-            setErrors((prev) => ({ ...prev, [name]: err.message })); // Ajoute l'erreur si invalide
+            setErrors((prev) => ({ ...prev, [name]: err.message }));
         }
     };
-    // Handle blur event
+
+    const checkFormValidity = async () => {
+        try {
+            await personalInfoSchema.validate(personalInfo, { abortEarly: false });
+            setIsFormValid(true); // Set valid if no validation errors
+        } catch (err) {
+            setIsFormValid(false); // Set invalid if there are validation errors
+        }
+    };
+
+    const handleChange = useCallback(async (e) => {
+        const { name, value } = e.target;
+        setPersonalInfo((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+
+        const typingTimeout = setTimeout(async () => {
+            await validateField(name, value);
+            checkFormValidity(); // Check form validity after each change
+        }, 500);
+
+        clearTimeout(typingTimeout);
+    }, [personalInfo]);
+
     const handleBlur = (e) => {
         const { name, value } = e.target;
         validateField(name, value);
     };
 
-
-
-
-    // Save function
     const onSave = async (data) => {
         try {
             if (document.personal_info) {
-                await put(route("personals.update", document.document_id), data);
-                console.log("put");
+                await put(
+                    route("personals.update", document.document_id),
+                    data
+                );
             } else {
-                await post(route("personals.store", document.document_id), data);
-                console.log("post");
+                await post(
+                    route("personals.store", document.document_id),
+                    data
+                );
             }
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
     };
 
-    // Handle form submission
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        setIsSaving(true);
-        await onSave(data); // Send the form data to the backend
-        setIsSaving(false);
-        if (handleNext) handleNext();
+        try {
+            e.preventDefault();
+            setIsSaving(true);
+            await onSave(data); // Send the form data to the backend
+            setIsSaving(false);
+            if (handleNext) handleNext();
+        } catch (error) {
+            setErrors(
+                error.inner.reduce((acc, curr) => {
+                    acc[curr.path] = curr.message;
+                    return acc;
+                }, {})
+            );
+        }
     };
+
     useEffect(() => {
         if (document?.personal_info) {
             setPersonalInfo(document.personal_info);
@@ -140,9 +159,7 @@ function PersonalInfoForm({ handleNext, document }) {
         <div>
             <div className="w-full">
                 <h2 className="font-bold text-lg">Personal Information</h2>
-                <p className="text-sm">
-                    Get Started with the personal information
-                </p>
+                <p className="text-sm">Get Started with the personal information</p>
             </div>
             <div>
                 <form onSubmit={handleSubmit}>
@@ -154,14 +171,13 @@ function PersonalInfoForm({ handleNext, document }) {
                                 required
                                 autoComplete="off"
                                 placeholder="First Name"
-                                value={personalInfo.first_name || document.personal_info?.first_name || ""}
+                                value={personalInfo.first_name || ""}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                             />
                             {errors.first_name && (
                                 <p className="text-red-500 text-sm">{errors.first_name}</p>
                             )}
-
                         </div>
                         <div>
                             <Label className="text-sm">Last Name</Label>
@@ -170,7 +186,7 @@ function PersonalInfoForm({ handleNext, document }) {
                                 required
                                 autoComplete="off"
                                 placeholder="Last Name"
-                                value={personalInfo.last_name || document.personal_info?.last_name || ""}
+                                value={personalInfo.last_name || ""}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                             />
@@ -185,7 +201,7 @@ function PersonalInfoForm({ handleNext, document }) {
                                 required
                                 autoComplete="off"
                                 placeholder="Job Title"
-                                value={personalInfo.job_title || document.personal_info?.job_title || ""}
+                                value={personalInfo.job_title || ""}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                             />
@@ -200,7 +216,7 @@ function PersonalInfoForm({ handleNext, document }) {
                                 required
                                 autoComplete="off"
                                 placeholder="Address"
-                                value={personalInfo.address || document.personal_info?.address || ""}
+                                value={personalInfo.address || ""}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                             />
@@ -215,7 +231,7 @@ function PersonalInfoForm({ handleNext, document }) {
                                 required
                                 autoComplete="off"
                                 placeholder="Phone Number"
-                                value={personalInfo.phone || document.personal_info?.phone || ""}
+                                value={personalInfo.phone || ""}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                             />
@@ -230,7 +246,7 @@ function PersonalInfoForm({ handleNext, document }) {
                                 required
                                 autoComplete="off"
                                 placeholder="Email"
-                                value={personalInfo.email || document.personal_info?.email || ""}
+                                value={personalInfo.email || ""}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                             />
@@ -243,10 +259,13 @@ function PersonalInfoForm({ handleNext, document }) {
                     <Button
                         className="mt-4"
                         type="submit"
-                        disabled={isSaving || document?.status === "archived"}
+                        disabled={!isFormValid || document?.status === "archived"}
                     >
                         {isSaving ? (
-                            <><Loader size="15px" className="animate-spin" />Save Changes</>
+                            <>
+                                <Loader size="15px" className="animate-spin" />
+                                Save Changes
+                            </>
                         ) : (
                             "Save Changes"
                         )}
