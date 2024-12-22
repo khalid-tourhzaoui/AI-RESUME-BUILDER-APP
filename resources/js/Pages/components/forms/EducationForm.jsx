@@ -5,6 +5,7 @@ import { Textarea } from "@/Components/ui/textarea";
 import { generateThumbnail } from "@/lib/helper";
 import { useForm } from "@inertiajs/react";
 import { Loader, Plus, X } from "lucide-react";
+import * as Yup from "yup";
 import React, { useEffect, useState } from "react";
 
 const initialState = {
@@ -20,33 +21,81 @@ function EducationForm({ handleNext, document }) {
     const [educationList, setEducationList] = useState(() =>
         document?.education?.length ? document.education : [initialState]
     );
-    const [isSaving, setIsSaving] = useState(false);
-
+    const [errors, setErrors] = useState([]);
+    const [isFormValid, setIsFormValid] = useState(false);
     const {
         put,
         post,
         delete: destroy,
         data,
         setData,
-    } = useForm({
-        education: educationList,
+        isPending,
+    } = useForm({ education: educationList });
+    //-------------------------------------------------------------------------------------------
+    const educationSchema = Yup.object().shape({
+        university_name: Yup.string()
+            .required("University name is required")
+            .min(3, "University name must be at least 3 characters"),
+        degree: Yup.string().required("Degree is required"),
+        major: Yup.string().required("Major is required"),
+        description: Yup.string().max(
+            300,
+            "Description must be less than 300 characters"
+        ),
+        start_date: Yup.date().required("Start date is required"),
+        end_date: Yup.date().required("End date is required"),
     });
-
     //-------------------------------------------------------------------------------------------
     useEffect(() => {
-        const fetchThumbnail = async () => {
-            const thumbnail = await generateThumbnail();
-            setData({ education: educationList, thumbnail });
+        const processEducationList = async () => {
+            try {
+                // Fetch thumbnail
+                const thumbnail = await generateThumbnail();
+                setData({ education: educationList, thumbnail });
+
+                // Validate the form
+                await Promise.all(
+                    educationList.map((exp) =>
+                        educationSchema.validate(exp)
+                    )
+                );
+                setIsFormValid(true);
+            } catch (err) {
+                setIsFormValid(false);
+            }
         };
-        fetchThumbnail();
+        processEducationList();
     }, [educationList]);
     //-------------------------------------------------------------------------------------------
+    const validateField = async (index, field, value) => {
+        try {
+            await educationSchema.validateAt(field, { [field]: value });
+            setErrors((prev) => {
+                const newErrors = [...prev];
+                if (newErrors[index]) {
+                    delete newErrors[index][field];
+                }
+                return newErrors;
+            });
+        } catch (err) {
+            setErrors((prev) => {
+                const newErrors = [...prev];
+                if (!newErrors[index]) {
+                    newErrors[index] = {};
+                }
+                newErrors[index][field] = err.message;
+                return newErrors;
+            });
+        }
+    };
+    //--------------------------------------------------------------------------------------------------
     const handleChange = (index, field, value) => {
         setEducationList((prev) =>
             prev.map((item, i) =>
                 i === index ? { ...item, [field]: value } : item
             )
         );
+        validateField(index, field, value);
     };
     //-------------------------------------------------------------------------------------------
     const addNewEducation = () => {
@@ -67,10 +116,10 @@ function EducationForm({ handleNext, document }) {
             console.error("Failed to delete education", error);
         }
     };
+
     //-------------------------------------------------------------------------------------------
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setIsSaving(true);
 
         try {
             const existingEducation = document.education || [];
@@ -117,16 +166,24 @@ function EducationForm({ handleNext, document }) {
                     education: toAdd,
                 });
             }
+            await Promise.all(
+                educationList.map((item) => educationSchema.validate(item))
+            );
 
             // Move to the next step
             if (handleNext) handleNext();
         } catch (error) {
             console.error("Failed to save education details", error);
-        } finally {
-            setIsSaving(false);
+            setErrors(
+                error.inner.reduce((acc, curr) => {
+                    acc[curr.path] = curr.message;
+                    return acc;
+                }, [])
+            );
         }
     };
 
+    //-------------------------------------------------------------------------------------------
     return (
         <div>
             <div className="w-full">
@@ -142,7 +199,7 @@ function EducationForm({ handleNext, document }) {
                                     <Button
                                         variant="secondary"
                                         type="button"
-                                        disabled={isSaving}
+                                        disabled={isPending}
                                         className="size-[20px] text-center rounded-full absolute -top-3 -right-5 !bg-black
                                          dark:!bg-gray-600 text-white"
                                         size="icon"
@@ -171,6 +228,11 @@ function EducationForm({ handleNext, document }) {
                                             )
                                         }
                                     />
+                                    {errors[index]?.university_name && (
+                                        <p className="text-red-500 text-sm">
+                                            {errors[index].university_name}
+                                        </p>
+                                    )}
                                 </div>
                                 <div>
                                     <Label className="text-sm">Degree</Label>
@@ -187,6 +249,11 @@ function EducationForm({ handleNext, document }) {
                                             )
                                         }
                                     />
+                                    {errors[index]?.degree && (
+                                        <p className="text-red-500 text-sm">
+                                            {errors[index].degree}
+                                        </p>
+                                    )}
                                 </div>
                                 <div>
                                     <Label className="text-sm">Major</Label>
@@ -203,6 +270,11 @@ function EducationForm({ handleNext, document }) {
                                             )
                                         }
                                     />
+                                    {errors[index]?.major && (
+                                        <p className="text-red-500 text-sm">
+                                            {errors[index].major}
+                                        </p>
+                                    )}
                                 </div>
                                 <div>
                                     <Label className="text-sm">
@@ -221,6 +293,11 @@ function EducationForm({ handleNext, document }) {
                                             )
                                         }
                                     />
+                                    {errors[index]?.start_date && (
+                                        <p className="text-red-500 text-sm">
+                                            {errors[index].start_date}
+                                        </p>
+                                    )}
                                 </div>
                                 <div>
                                     <Label className="text-sm">End Date</Label>
@@ -237,6 +314,11 @@ function EducationForm({ handleNext, document }) {
                                             )
                                         }
                                     />
+                                    {errors[index]?.end_date && (
+                                        <p className="text-red-500 text-sm">
+                                            {errors[index].end_date}
+                                        </p>
+                                    )}
                                 </div>
                                 <div className="col-span-2 mt-1">
                                     <Label className="text-sm">
@@ -255,6 +337,11 @@ function EducationForm({ handleNext, document }) {
                                             )
                                         }
                                     />
+                                    {errors[index]?.description && (
+                                        <p className="text-red-500 text-sm">
+                                            {errors[index].description}
+                                        </p>
+                                    )}
                                 </div>
                             </div>
 
@@ -264,7 +351,7 @@ function EducationForm({ handleNext, document }) {
                                         className="gap-1 mt-1 text-primary border-primary/50"
                                         variant="outline"
                                         type="button"
-                                        disabled={isSaving}
+                                        disabled={isPending}
                                         onClick={addNewEducation}
                                     >
                                         <Plus size="15px" />
@@ -274,8 +361,12 @@ function EducationForm({ handleNext, document }) {
                         </div>
                     ))}
                 </div>
-                <Button className="mt-4" type="submit" disabled={isSaving}>
-                    {isSaving && (
+                <Button
+                    className="mt-4"
+                    type="submit"
+                    disabled={!isFormValid || isPending}
+                >
+                    {isPending && (
                         <Loader size="15px" className="animate-spin" />
                     )}
                     Save Changes

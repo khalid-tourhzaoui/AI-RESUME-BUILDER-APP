@@ -1,11 +1,12 @@
 import { Loader, Plus, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { Button } from '@/Components/ui/button';
+import { Button } from "@/Components/ui/button";
 import { Label } from "@/Components/ui/label";
 import { Input } from "@/Components/ui/input";
 import { useForm } from "@inertiajs/react";
 import RichTextEditor from "../editor";
 import { generateThumbnail } from "@/lib/helper";
+import * as Yup from "yup";
 
 const initialState = {
     id: undefined,
@@ -18,42 +19,106 @@ const initialState = {
     end_date: "",
     work_summary: "",
     currentlyWorking: false,
-  };
+};
 
 function ExperienceForm({ handleNext, document }) {
-    //--------------------------------------------------------------------------------------
     const [experienceList, setExperienceList] = useState(() =>
-            document?.experience?.length ? document.experience : [initialState]
-        );
-    //--------------------------------------------------------------------------------------
-     const [isSaving, setIsSaving] = useState(false);
-     const {put,post,delete: destroy,data,setData,isPending} = useForm({experience: experienceList});
-    //--------------------------------------------------------------------------------------
-    useEffect(() => {
-        const fetchThumbnail = async () => {
-            const thumbnail = await generateThumbnail();
-            setData({ experience: experienceList,thumbnail });
-            };
-            fetchThumbnail();
-    }, [experienceList]);
+        document?.experience?.length ? document.experience : [initialState]
+    );
+    const [errors, setErrors] = useState([]);
+    const [isFormValid, setIsFormValid] = useState(false);
+    const {
+        put,
+        post,
+        delete: destroy,
+        data,
+        setData,
+        isPending,
+    } = useForm({
+        experience: experienceList,
+    });
 
+    //--------------------------------------------------------------------------------------------------------------------------
+    const experienceSchema = Yup.object().shape({
+        title: Yup.string()
+            .required("Position title is required")
+            .min(3, "Position title must be at least 3 characters"),
+        company_name: Yup.string()
+            .required("Company name is required")
+            .min(3, "Company name must be at least 3 characters"),
+        city: Yup.string().required("City is required"),
+        country: Yup.string().required("Country is required"),
+        start_date: Yup.date()
+            .required("Start date is required")
+            .typeError("Invalid start date"),
+        end_date: Yup.date()
+            .required("End date is required")
+            .min(Yup.ref("start_date"), "End date must be after start date"),
+    });
+    //--------------------------------------------------------------------------------------------------------------------------
+    useEffect(() => {
+        const processExperienceList = async () => {
+            try {
+                // Fetch thumbnail
+                const thumbnail = await generateThumbnail();
+                setData({ experience: experienceList, thumbnail });
+
+                // Validate the form
+                await Promise.all(
+                    experienceList.map((exp) => experienceSchema.validate(exp))
+                );
+                setIsFormValid(true);
+            } catch (err) {
+                setIsFormValid(false);
+            }
+        };
+
+        processExperienceList();
+    }, [experienceList]);
+    //--------------------------------------------------------------------------------------------------------------------------
+    const validateField = async (index, field, value) => {
+        try {
+            await experienceSchema.validateAt(field, { [field]: value });
+            setErrors((prev) => {
+                const newErrors = [...prev];
+                if (newErrors[index]) {
+                    delete newErrors[index][field];
+                }
+                return newErrors;
+            });
+        } catch (err) {
+            setErrors((prev) => {
+                const newErrors = [...prev];
+                if (!newErrors[index]) {
+                    newErrors[index] = {};
+                }
+                newErrors[index][field] = err.message;
+                return newErrors;
+            });
+        }
+    };
+    //--------------------------------------------------------------------------------------------------------------------------
     const handleChange = (index, field, value) => {
         setExperienceList((prev) =>
             prev.map((item, i) =>
                 i === index ? { ...item, [field]: value } : item
             )
         );
+        validateField(index, field, value);
     };
-    //--------------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------------------------------------------------------
+
     const addNewExperience = () => {
         setExperienceList((prev) => [...prev, { ...initialState }]);
     };
-    //--------------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------------------------------------------------------
+
     const removeExperience = (index, id) => {
         setExperienceList((prev) => prev.filter((_, i) => i !== index));
-        removeEperienceBack(id);
+        if (id) removeEperienceBack(id);
     };
-    //--------------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------------------------------------------------------
+
     const removeEperienceBack = async (id) => {
         try {
             await destroy(route("experience.delete", id), {
@@ -63,29 +128,33 @@ function ExperienceForm({ handleNext, document }) {
             console.error("Failed to delete experience", error);
         }
     };
-    //--------------------------------------------------------------------------------------
-    const handEditor = (value,name,index) => {
+    //--------------------------------------------------------------------------------------------------------------------------
+
+    const handleEditorChange = (value, name, index) => {
         setExperienceList((prevState) => {
-          const newExperienceList = [...prevState];
-          newExperienceList[index] = {
-            ...newExperienceList[index],
-            [name]: value,
-          };
-          return newExperienceList;
+            const newExperienceList = [...prevState];
+            newExperienceList[index] = {
+                ...newExperienceList[index],
+                [name]: value,
+            };
+            return newExperienceList;
         });
-      };
-    //--------------------------------------------------------------------------------------
+    };
+    
+    //--------------------------------------------------------------------------------------------------------------------------
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setIsSaving(true);
 
-        const existingEperience = document.experience || [];
+        const existingExperience = document.experience || [];
         const toUpdate = [];
         const toAdd = [];
         const toDelete = [];
 
         experienceList.forEach((item) => {
-            const existingItem = existingEperience.find((exp) => exp.id === item.id);
+            const existingItem = existingExperience.find(
+                (exp) => exp.id === item.id
+            );
 
             if (existingItem) {
                 const hasChanged = Object.keys(item).some(
@@ -99,7 +168,7 @@ function ExperienceForm({ handleNext, document }) {
             }
         });
 
-        existingEperience.forEach((existingItem) => {
+        existingExperience.forEach((existingItem) => {
             const isDeleted = !experienceList.some(
                 (item) => item.id === existingItem.id
             );
@@ -122,12 +191,16 @@ function ExperienceForm({ handleNext, document }) {
             if (handleNext) handleNext();
         } catch (error) {
             console.error("Failed to save experience details", error);
-        } finally {
-            setIsSaving(false);
+            setErrors(
+                error.inner.reduce((acc, curr) => {
+                    acc[curr.path] = curr.message;
+                    return acc;
+                }, [])
+            );
         }
     };
 
-    //--------------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------------------------------------------------------
     return (
         <div>
             <div className="w-full">
@@ -135,20 +208,20 @@ function ExperienceForm({ handleNext, document }) {
                 <p className="text-sm">Add previous job experience</p>
             </div>
             <form onSubmit={handleSubmit}>
-                <div
-                    className="border w-full h-auto divide-y-[1px] rounded-md px-3 pb-4 my-5">
+                <div className="border w-full h-auto divide-y-[1px] rounded-md px-3 pb-4 my-5">
                     {experienceList?.map((item, index) => (
                         <div key={index}>
-                            <div
-                                className="relative grid grid-cols-2 mb-5 pt-4 gap-3">
+                            <div className="relative grid grid-cols-2 mb-5 pt-4 gap-3">
                                 {experienceList?.length > 1 && (
                                     <Button
                                         variant="secondary"
                                         type="button"
-                                        className="size-[20px] text-center rounded-full absolute -top-3 -right-5
-                                      !bg-black dark:!bg-gray-600 text-white"
+                                        className="size-[20px] text-center rounded-full absolute -top-3 -right-5 !bg-black
+                                         dark:!bg-gray-600 text-white"
                                         size="icon"
-                                        onClick={() => removeExperience(index,item.id)}
+                                        onClick={() =>
+                                            removeExperience(index, item.id)
+                                        }
                                     >
                                         <X size="13px" />
                                     </Button>
@@ -163,8 +236,19 @@ function ExperienceForm({ handleNext, document }) {
                                         placeholder=""
                                         required
                                         value={item?.title || ""}
-                                        onChange={(e) => handleChange(index, e.target.name, e.target.value)}
+                                        onChange={(e) =>
+                                            handleChange(
+                                                index,
+                                                e.target.name,
+                                                e.target.value
+                                            )
+                                        }
                                     />
+                                    {errors[index]?.title && (
+                                        <p className="text-red-500 text-sm">
+                                            {errors[index].title}
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div>
@@ -176,8 +260,19 @@ function ExperienceForm({ handleNext, document }) {
                                         placeholder=""
                                         required
                                         value={item?.company_name || ""}
-                                        onChange={(e) => handleChange(index, e.target.name, e.target.value)}
+                                        onChange={(e) =>
+                                            handleChange(
+                                                index,
+                                                e.target.name,
+                                                e.target.value
+                                            )
+                                        }
                                     />
+                                    {errors[index]?.company_name && (
+                                        <p className="text-red-500 text-sm">
+                                            {errors[index].company_name}
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div>
@@ -187,8 +282,19 @@ function ExperienceForm({ handleNext, document }) {
                                         placeholder=""
                                         required
                                         value={item?.city || ""}
-                                        onChange={(e) => handleChange(index, e.target.name, e.target.value)}
+                                        onChange={(e) =>
+                                            handleChange(
+                                                index,
+                                                e.target.name,
+                                                e.target.value
+                                            )
+                                        }
                                     />
+                                    {errors[index]?.city && (
+                                        <p className="text-red-500 text-sm">
+                                            {errors[index].city}
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div>
@@ -198,8 +304,19 @@ function ExperienceForm({ handleNext, document }) {
                                         placeholder=""
                                         required
                                         value={item?.country || ""}
-                                        onChange={(e) => handleChange(index, e.target.name, e.target.value)}
+                                        onChange={(e) =>
+                                            handleChange(
+                                                index,
+                                                e.target.name,
+                                                e.target.value
+                                            )
+                                        }
                                     />
+                                    {errors[index]?.country && (
+                                        <p className="text-red-500 text-sm">
+                                            {errors[index].country}
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div>
@@ -212,8 +329,19 @@ function ExperienceForm({ handleNext, document }) {
                                         placeholder=""
                                         required
                                         value={item?.start_date || ""}
-                                        onChange={(e) => handleChange(index, e.target.name, e.target.value)}
+                                        onChange={(e) =>
+                                            handleChange(
+                                                index,
+                                                e.target.name,
+                                                e.target.value
+                                            )
+                                        }
                                     />
+                                    {errors[index]?.start_date && (
+                                        <p className="text-red-500 text-sm">
+                                            {errors[index].start_date}
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div>
@@ -224,20 +352,33 @@ function ExperienceForm({ handleNext, document }) {
                                         placeholder=""
                                         required
                                         value={item?.end_date || ""}
-                                        onChange={(e) => handleChange(index, e.target.name, e.target.value)}
+                                        onChange={(e) =>
+                                            handleChange(
+                                                index,
+                                                e.target.name,
+                                                e.target.value
+                                            )
+                                        }
                                     />
+                                    {errors[index]?.end_date && (
+                                        <p className="text-red-500 text-sm">
+                                            {errors[index].end_date}
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div className="col-span-2 mt-1">
-                                    {/* {Work Summary} */}
                                     <RichTextEditor
                                         jobTitle={item.title || ""}
                                         initialValue={item?.work_summary || ""}
                                         onEditorChange={(value) =>
-                                            handEditor(value, "work_summary", index)
+                                            handleEditorChange(
+                                                value,
+                                                "work_summary",
+                                                index
+                                            )
                                         }
                                     />
-
                                 </div>
                             </div>
 
@@ -256,7 +397,11 @@ function ExperienceForm({ handleNext, document }) {
                         </div>
                     ))}
                 </div>
-                <Button className="mt-4" type="submit" disabled={isPending}>
+                <Button
+                    className="mt-4"
+                    type="submit"
+                    disabled={!isFormValid || isPending}
+                >
                     {isPending && (
                         <Loader size="15px" className="animate-spin" />
                     )}

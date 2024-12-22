@@ -18,7 +18,7 @@ class ExperienceController extends Controller
                 'experience.*.country' => 'required|string|max:255',
                 'experience.*.work_summary' => 'required|string|max:255',
                 'experience.*.start_date' => 'required|date',
-                'experience.*.end_date' => 'required|date|after_or_equal:education.*.start_date',
+                'experience.*.end_date' => 'required|date|after_or_equal:experience.*.start_date',
             ]);
             $experienceData = $request->experience;
             foreach ($experienceData as $experience) {
@@ -48,7 +48,8 @@ class ExperienceController extends Controller
 
             $ExperienceData=Experience::where('document_id',$document_id)->first();
             $documentData = $ExperienceData->document;
-
+            $documentData->thumbnail=$request->thumbnail;
+            $documentData->save();
             return redirect()->route('documents.edit', $documentData->document_id)
                 ->with('success','Experience added successfully.');
         }catch(\Exception $e){
@@ -68,7 +69,7 @@ class ExperienceController extends Controller
                 'experience.*.country' => 'required|string|max:255',
                 'experience.*.work_summary' => 'required|string|max:255',
                 'experience.*.start_date' => 'required|date',
-                'experience.*.end_date' => 'required|date|after_or_equal:education.*.start_date',
+                'experience.*.end_date' => 'required|date|after_or_equal:experience.*.start_date',
             ]);
             $experienceData = $request->experience;
             foreach ($experienceData as $experience) {
@@ -89,6 +90,8 @@ class ExperienceController extends Controller
 
             $ExperienceData=Experience::where('document_id',$document_id)->first();
             $documentData = $ExperienceData->document;
+            $documentData->thumbnail=$request->thumbnail;
+            $documentData->save();
             return redirect()->route('documents.edit', $documentData->document_id)
                 ->with('success','Experience updated successfully.');
         }catch(\Exception $e){

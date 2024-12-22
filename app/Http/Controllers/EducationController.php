@@ -9,6 +9,7 @@ class EducationController extends Controller
 {
     public function update(Request $request, $document_id)
     {
+        // return $request->thumbnail;
         try{
             $request->validate([
                 'education.*.university_name' => 'required|string|max:50',
@@ -35,6 +36,7 @@ class EducationController extends Controller
             $documentData = $EducationData->document;
             $documentData->thumbnail=$request->thumbnail;
             $documentData->save();
+            return $documentData;
             return redirect()->route('documents.edit', $documentData->document_id)
                 ->with('success','Education information updated successfully.');
         }catch (\Exception $e){
@@ -76,6 +78,8 @@ class EducationController extends Controller
             }
             $EducationData=Education::where('document_id',$document_id)->first();
             $documentData = $EducationData->document;
+            $documentData->thumbnail=$request->thumbnail;
+            $documentData->save();
             return redirect()->route('documents.edit', $documentData->document_id)
                 ->with('success','Education information addes successfully.');
 
