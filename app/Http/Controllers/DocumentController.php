@@ -71,8 +71,7 @@ class DocumentController extends Controller
                 ]);
             }
 
-            return redirect()->route('dashboard')
-                ->with('error', 'An error occurred while creating the document. Please try again.');
+            return redirect()->back()->with('error', 'An error occurred while creating the document. Please try again.');
             }
         }
         /*--------------------------------------------------------------------------------------------------*/
@@ -128,8 +127,7 @@ class DocumentController extends Controller
             return redirect()->route('documents.edit', $document->document_id)
                 ->with('success', 'Document title updated successfully');
         } catch (\Exception $ex) {
-            return redirect()->route('dashboard')
-                ->with('error', 'An error occurred while updating the document. Please try again.');
+            return redirect()->back()->with('error', 'An error occurred while updating the document. Please try again.');
         }
     }
     /*--------------------------------------------------------------------------------------------------*/
@@ -149,8 +147,7 @@ class DocumentController extends Controller
                 ->with(['success'=>'Document summary updated successfully','next'=>true]);
 
         } catch (\Exception $ex) {
-            return redirect()->route('documents.edit', $document_id)
-                ->with('error', 'An error occurred while updating the summary: ' . $ex->getMessage());
+            return redirect()->back()->with('error','Error! '.$ex->getMessage());
         }
     }
 
@@ -163,8 +160,8 @@ class DocumentController extends Controller
             return redirect()->route('documents.edit', $document->document_id)
             ->with('success','Document archived successfully');
         } catch (\Exception $ex) {
-            return redirect()->route('documents.edit', $document->document_id)
-            ->with('error','An error occurred while archiving the document. Please try again.');
+            return redirect()->back()
+                ->with('error','Error! '.$ex->getMessage());
         }
     }
     //---------------------------------------------------------------------------
@@ -176,8 +173,7 @@ class DocumentController extends Controller
             return redirect()->route('documents.edit', $document->document_id)
             ->with('success','Document restored successfully');
         }catch (\Exception $ex) {
-            return redirect()->route('documents.edit', $document->document_id)
-            ->with('error','An error occurred while restoring the document. Please try again.');
+            return redirect()->back()->with('error','An error occurred while restoring the document. Please try again.');
         }
     }
     //---------------------------------------------------------------------------
@@ -189,8 +185,7 @@ class DocumentController extends Controller
             return redirect()->route('documents.edit', $document->document_id)
             ->with('success','Document updated successfully');
         }catch(\Exception $ex){
-            return redirect()->route('documents.edit', $document->document_id)
-            ->with('error','An error occurred while updating the document. Please try again.');
+            return redirect()->back()->with('error','An error occurred while updating the document. Please try again.');
         }
     }
     //---------------------------------------------------------------------------
@@ -233,8 +228,7 @@ class DocumentController extends Controller
             return redirect()->route('dashboard')
             ->with('success','Document deleted successfully');
         }catch (\Exception $ex) {
-            return redirect()->route('dashboard')
-            ->with('error','An error occurred while deleting the document. Please try again.');
+            return redirect()->back()->with('error','An error occurred while deleting the document. Please try again.');
         }
     }
 }

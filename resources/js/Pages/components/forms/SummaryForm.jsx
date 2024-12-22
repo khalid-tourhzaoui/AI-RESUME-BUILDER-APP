@@ -108,7 +108,7 @@ function SummaryForm({ document, handleNext }) {
                                     (suggestion, index) => (
                                         <Card
                                             key={index}
-                                            className="my-4 bg-primary/5 shadow-none border-primary/30"
+                                            className="my-4 bg-primary/5 shadow-none border-primary/30 cursor-pointer"
                                             onClick={() =>
                                                 handleSelect(suggestion.summary)
                                             }
@@ -121,7 +121,7 @@ function SummaryForm({ document, handleNext }) {
                                                         suggestion.experienceLevel?.slice(1)}
                                                 </CardTitle>
                                             </CardHeader>
-                                            <CardContent className="text-sm">
+                                            <CardContent className="text-sm cursor-pointer">
                                                 <p>{suggestion.summary}</p>
                                             </CardContent>
                                         </Card>

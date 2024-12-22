@@ -130,7 +130,8 @@ function SkillsForm({ document }) {
                                     <Button
                                         variant="secondary"
                                         type="button"
-                                        className="size-[20px] text-center rounded-full absolute -top-3 -right-5 !bg-black dark:!bg-gray-600 text-white"
+                                        className="size-[20px] text-center rounded-full absolute -top-3 -right-5 !bg-black
+                                         dark:!bg-gray-600 text-white"
                                         size="icon"
                                         disabled={isSaving}
                                         onClick={() => removeSkill(index, item.id)}

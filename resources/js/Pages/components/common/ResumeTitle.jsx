@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { FileText, Globe, Lock, Trash2 } from "lucide-react";
+import { FileText, Globe, Lock, Save, Trash2 } from "lucide-react";
 
-function ResumeTitle({ initialTitle, status, isLoading, onSave }) {
+function ResumeTitle({ initialTitle, status, isLoading, onSave,handleSave }) {
   const [title, setTitle] = useState(initialTitle || "Untitled Resume");
 
   useEffect(() => {
@@ -20,6 +20,7 @@ function ResumeTitle({ initialTitle, status, isLoading, onSave }) {
     if (e.key === "Enter") {
       e.preventDefault();
       e.currentTarget.blur();
+
     }
   };
 
@@ -45,6 +46,7 @@ function ResumeTitle({ initialTitle, status, isLoading, onSave }) {
           <Trash2 size="14px" />
         ) : null}
       </span>
+      <Save  className="stroke-primary cursor-pointer" onClick={()=>handleSave()} size="20px"/>
     </div>
   );
 }

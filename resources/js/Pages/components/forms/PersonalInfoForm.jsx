@@ -1,7 +1,6 @@
 import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
-import { toast } from "@/hooks/use-toast";
 import { generateThumbnail } from "@/lib/helper";
 import { useForm } from "@inertiajs/react";
 import { Loader } from "lucide-react";
@@ -69,18 +68,8 @@ function PersonalInfoForm({ handleNext, document }) {
                 await post(route("personals.store", document.document_id), data);
                 console.log("post");
             }
-            // Show success toast
-            toast({
-                title: "Success",
-                description: "Information saved successfully",
-                variant: "success", // You can use "destructive" for errors
-            });
         } catch (error) {
-            toast({
-                title: "Error",
-                description: "Failed to save information",
-                variant: "destructive",
-            });
+            console.log(error)
         }
     };
 

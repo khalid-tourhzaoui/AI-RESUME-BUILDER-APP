@@ -143,11 +143,12 @@ function EducationForm({ handleNext, document }) {
                                         variant="secondary"
                                         type="button"
                                         disabled={isSaving}
-                                        className="size-[20px] text-center rounded-full absolute -top-3 -right-5 !bg-black dark:!bg-gray-600 text-white"
+                                        className="size-[20px] text-center rounded-full absolute -top-3 -right-5 !bg-black
+                                         dark:!bg-gray-600 text-white"
                                         size="icon"
                                         onClick={() =>
                                             removeEducation(index, item.id)
-                                        } 
+                                        }
                                     >
                                         <X size="13px" />
                                     </Button>

@@ -7,7 +7,6 @@ import PreviewModal from "../PreviewModal";
 import Download from "./Download";
 import Share from "./Share";
 import MoreOption from "./MoreOption";
-import { toast } from "@/hooks/use-toast";
 import { Button } from "@/Components/ui/button";
 
 const TopSection = ({ document }) => {
@@ -16,7 +15,7 @@ const TopSection = ({ document }) => {
         status: document.status,
     });
 
-    const isArchived = document.status === "archived"; // Improved check for archived status
+    const isArchived = document.status === "archived";
 
     const handleTitleChange = (title) => {
         setData("title", title);
@@ -27,19 +26,6 @@ const TopSection = ({ document }) => {
         put(route("documents.update", document.document_id), {
             title: data.title,
         })
-            .then(() => {
-                toast({
-                    title: "Success",
-                    description: "Title updated successfully",
-                });
-            })
-            .catch(() => {
-                toast({
-                    title: "Error",
-                    description: "Failed to update the title",
-                    variant: "destructive",
-                });
-            });
     };
 
     return (
@@ -54,9 +40,10 @@ const TopSection = ({ document }) => {
                 <div className="flex items-center gap-2">
                     <ResumeTitle
                         isLoading={processing}
-                        initialTitle={data.title} // Use data.title from useForm
+                        initialTitle={data.title}
                         status={data.status}
                         onSave={handleTitleChange}
+                        handleSave={handleSave}
                     />
                 </div>
                 <div className="flex items-center gap-2">

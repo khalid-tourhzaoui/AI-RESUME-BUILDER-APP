@@ -230,17 +230,6 @@ function ExperienceForm({ handleNext, document }) {
 
                                 <div className="col-span-2 mt-1">
                                     {/* {Work Summary} */}
-                                    {/* <RichTextEditor
-                                        jobTitle={item.title}
-                                        initialValue={item.work_summary || ""}
-                                        onEditorChange={(value) =>
-                                            handEditor(
-                                                value,
-                                                "work_summary",
-                                                index
-                                            )
-                                        }
-                                    /> */}
                                     <RichTextEditor
                                         jobTitle={item.title || ""}
                                         initialValue={item?.work_summary || ""}
