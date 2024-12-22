@@ -4,6 +4,7 @@ import { Label } from "@/Components/ui/label";
 import { generateThumbnail } from "@/lib/helper";
 import { useForm } from "@inertiajs/react";
 import { Loader } from "lucide-react";
+import * as Yup from "yup";
 import React, { useCallback, useEffect, useState } from "react";
 
 function PersonalInfoForm({ handleNext, document }) {
@@ -14,7 +15,9 @@ function PersonalInfoForm({ handleNext, document }) {
         address: "",
         phone: "",
         email: "",
+        thumbnail:"",
     });
+    const [errors, setErrors] = useState({});
 
     // Initialize form with personal info data
     const { put, post, data, setData } = useForm({
@@ -26,6 +29,7 @@ function PersonalInfoForm({ handleNext, document }) {
         address: personalInfo.address,
         phone: personalInfo.phone,
         email: personalInfo.email,
+        thumbnail:personalInfo.thumbnail
     });
 
     const [isSaving, setIsSaving] = useState(false);
@@ -43,7 +47,8 @@ function PersonalInfoForm({ handleNext, document }) {
                 address: personalInfo.address,
                 phone: personalInfo.phone,
                 email: personalInfo.email,
-            },thumbnail);
+                thumbnail:thumbnail
+            });
             };
             fetchThumbnail();
 
@@ -56,7 +61,51 @@ function PersonalInfoForm({ handleNext, document }) {
             ...prev,
             [name]: value,
         }));
+
+        // Déclenche une validation après un délai (par exemple, 500 ms)
+        clearTimeout(typingTimeout);
+        const typingTimeout = setTimeout(() => {
+            validateField(name, value);
+        }, 500);
     }, []);
+
+    //---------------------------------------------------
+
+    const personalInfoSchema = Yup.object().shape({
+        first_name: Yup.string()
+            .required("First Name is required")
+            .min(2, "First Name must be at least 2 characters"),
+        last_name: Yup.string()
+            .required("Last Name is required")
+            .min(2, "Last Name must be at least 2 characters"),
+        job_title: Yup.string()
+            .required("Job Title is required"),
+        address: Yup.string()
+            .required("Address is required"),
+        phone: Yup.string()
+            .required("Phone Number is required")
+            .matches(/^(\+212|0)([ \-_/]*)(\d[ \-_/]*){9}$/, "Invalid Moroccan phone number"),
+        email: Yup.string()
+            .required("Email is required")
+            .email("Invalid email format"),
+    });
+    // Validate field
+    const validateField = async (name, value) => {
+        try {
+            await personalInfoSchema.validateAt(name, { [name]: value });
+            setErrors((prev) => ({ ...prev, [name]: undefined })); // Efface l'erreur si valide
+        } catch (err) {
+            setErrors((prev) => ({ ...prev, [name]: err.message })); // Ajoute l'erreur si invalide
+        }
+    };
+    // Handle blur event
+    const handleBlur = (e) => {
+        const { name, value } = e.target;
+        validateField(name, value);
+    };
+
+
+
 
     // Save function
     const onSave = async (data) => {
@@ -107,7 +156,12 @@ function PersonalInfoForm({ handleNext, document }) {
                                 placeholder="First Name"
                                 value={personalInfo.first_name || document.personal_info?.first_name || ""}
                                 onChange={handleChange}
+                                onBlur={handleBlur}
                             />
+                            {errors.first_name && (
+                                <p className="text-red-500 text-sm">{errors.first_name}</p>
+                            )}
+
                         </div>
                         <div>
                             <Label className="text-sm">Last Name</Label>
@@ -118,7 +172,11 @@ function PersonalInfoForm({ handleNext, document }) {
                                 placeholder="Last Name"
                                 value={personalInfo.last_name || document.personal_info?.last_name || ""}
                                 onChange={handleChange}
+                                onBlur={handleBlur}
                             />
+                            {errors.last_name && (
+                                <p className="text-red-500 text-sm">{errors.last_name}</p>
+                            )}
                         </div>
                         <div className="col-span-2">
                             <Label className="text-sm">Job Title</Label>
@@ -129,7 +187,11 @@ function PersonalInfoForm({ handleNext, document }) {
                                 placeholder="Job Title"
                                 value={personalInfo.job_title || document.personal_info?.job_title || ""}
                                 onChange={handleChange}
+                                onBlur={handleBlur}
                             />
+                            {errors.job_title && (
+                                <p className="text-red-500 text-sm">{errors.job_title}</p>
+                            )}
                         </div>
                         <div className="col-span-2">
                             <Label className="text-sm">Address</Label>
@@ -140,7 +202,11 @@ function PersonalInfoForm({ handleNext, document }) {
                                 placeholder="Address"
                                 value={personalInfo.address || document.personal_info?.address || ""}
                                 onChange={handleChange}
+                                onBlur={handleBlur}
                             />
+                            {errors.address && (
+                                <p className="text-red-500 text-sm">{errors.address}</p>
+                            )}
                         </div>
                         <div className="col-span-2">
                             <Label className="text-sm">Phone Number</Label>
@@ -151,7 +217,11 @@ function PersonalInfoForm({ handleNext, document }) {
                                 placeholder="Phone Number"
                                 value={personalInfo.phone || document.personal_info?.phone || ""}
                                 onChange={handleChange}
+                                onBlur={handleBlur}
                             />
+                            {errors.phone && (
+                                <p className="text-red-500 text-sm">{errors.phone}</p>
+                            )}
                         </div>
                         <div className="col-span-2">
                             <Label className="text-sm">Email</Label>
@@ -162,7 +232,11 @@ function PersonalInfoForm({ handleNext, document }) {
                                 placeholder="Email"
                                 value={personalInfo.email || document.personal_info?.email || ""}
                                 onChange={handleChange}
+                                onBlur={handleBlur}
                             />
+                            {errors.email && (
+                                <p className="text-red-500 text-sm">{errors.email}</p>
+                            )}
                         </div>
                     </div>
 

@@ -17,24 +17,10 @@ function ResumeForm({document}) {
   };
     return (
         <div
-            className="flex-1 w-full lg:sticky
-  lg:top-16
-  "
-        >
-            <div
-                className="shadow-md rounded-md bg-white
-      !border-t-primary !border-t-4
-      dark:bg-card dark:border
-      dark:border-gray-800
-      "
-            >
-                <div
-                    className="
-        flex items-center gap-1
-        px-3 justify-end
-        border-b py-[7px] min-h-10
-        "
-                >
+            className="flex-1 w-full lg:sticky lg:top-16">
+            <div className="shadow-md rounded-md bg-white !border-t-primary !border-t-4 dark:bg-card dark:border
+             dark:border-gray-800">
+                <div className=" flex items-center gap-1 px-3 justify-end border-b py-[7px] min-h-10">
                     {activeFormIndex > 1 && (
                         <Button
                             variant="outline"

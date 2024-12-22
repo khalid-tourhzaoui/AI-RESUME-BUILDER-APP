@@ -5,6 +5,7 @@ import Error from "../errors/Error";
 
 function PublicResume() {
     const { document, isLoading, isSuccess } = usePage().props;
+    console.log("preview data : ",document)
 
     // Si le chargement est en cours, affichez un message ou un spinner
     if (isLoading) {

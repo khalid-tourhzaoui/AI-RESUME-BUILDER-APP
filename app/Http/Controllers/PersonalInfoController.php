@@ -20,6 +20,8 @@ class PersonalInfoController extends Controller
             ]);
             $document = Document::where('document_id', $document_id)->firstOrFail();
             $document->personalInfo()->create($validated);
+            $document->thumbnail=$request->thumbnail;
+            $document->save();
             return redirect()->route('documents.edit', $document->document_id)
                 ->with('success', 'Personal information created successfully.');
         }catch(\Exception $e){
@@ -41,12 +43,15 @@ class PersonalInfoController extends Controller
             ]);
             $document = Document::where('document_id', $document_id)->firstOrFail();
             $document->personalInfo->update($validated);
+            $document->thumbnail=$request->thumbnail;
+            $document->save();
             return redirect()->route('documents.edit', $document->document_id)
                 ->with('success', 'Personal information updated successfully.');
         }catch(\Exception $e){
             return redirect()->back()
                 ->with('error','Error! '.$e->getMessage());
         }
+        // return $request->all();
     }
 
 }

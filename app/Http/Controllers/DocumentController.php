@@ -197,22 +197,24 @@ class DocumentController extends Controller
 
             $document = Document::where("document_id", $document_id)->first();
 
-            if ($document) {
+            if ($document && $document->status=="public") {
                 $isLoading = false;
                 $isSuccess = true;
+                return Inertia::render('components/Preview/PublicResume', [
+                    'document' => $document,
+                    'personalInfo'  =>  $document->personalInfo,
+                    'education'  =>  $document->education,
+                    'skills'  =>  $document->skills,
+                    'experience'  =>  $document->experience,
+                    'isLoading' => $isLoading,
+                    'isSuccess' => $isSuccess,
+                ]);
+            }else{
+                return Inertia::render('components/errors/Error');
             }
 
-            return Inertia::render('components/Preview/PublicResume', [
-                'document' => $document,
-                'isLoading' => $isLoading,
-                'isSuccess' => $isSuccess,
-            ]);
         } catch (\Exception $e) {
-            return Inertia::render('components/Preview/PublicResume', [
-                'document' => null,
-                'isLoading' => false,
-                'isSuccess' => false,
-            ]);
+            return response()->json('You',404);
         }
     }
 

@@ -21,8 +21,6 @@ return new class extends Migration
             $table->longText('thumbnail')->nullable();
             $table->integer('current_position')->default(1);
             $table->enum('status', ['archived', 'private', 'public'])->default('private');
-            $table->string('author_name', 255)->nullable();
-            $table->string('author_email', 255)->nullable();
             $table->timestamps();
 
         });
