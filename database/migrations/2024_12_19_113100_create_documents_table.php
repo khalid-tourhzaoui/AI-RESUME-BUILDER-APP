@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('document_id')->unique();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('title', 255)->nullable();
-            $table->text('summary')->nullable();
+            $table->longText('summary')->nullable();
             $table->string('theme_color', 255)->default('#7c3aed');
             $table->longText('thumbnail')->nullable();
             $table->integer('current_position')->default(1);

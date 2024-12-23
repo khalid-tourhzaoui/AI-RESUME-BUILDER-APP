@@ -22,13 +22,13 @@ Route::get('/', function () {
     ]);
 });
 
+// Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
 Route::middleware(['auth','verified'])->group(function () {
     Route::post('documents', [DocumentController::class, 'store'])->name('documents.store');
-    Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
     Route::get('documents/{document_id}/edit', [DocumentController::class, 'edit'])->name('documents.edit');
     Route::put('/documents/{document_id}', [DocumentController::class, 'update'])->name('documents.update');
     Route::patch('/documents/{document_id}', [DocumentController::class, 'UpdateSummary'])->name('documents.UpdateSummary');
-    Route::post('/documents/{document_id}', [DocumentController::class, 'UpdateThemeColor'])->name('documents.UpdateThemeColor');
+    Route::post('/documents/{id}/update-theme-color', [DocumentController::class, 'updateThemeColor'])->name('documents.UpdateThemeColor');
     Route::delete('/documents/{document_id}', [DocumentController::class, 'destroy'])->name('documents.delete');
     Route::patch('/documents/archive/{document_id}', [DocumentController::class, 'ArchivedDocument'])->name('documents.archive');
     Route::patch('/documents/restore/{document_id}', [DocumentController::class, 'RestoreDocument'])->name('documents.restore');

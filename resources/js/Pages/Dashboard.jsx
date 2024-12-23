@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 
 export default function Dashboard() {
     const { document, success, error } = usePage().props;
+    console.log(document);
 
     // useEffect(() => {
     //     if (success) {
@@ -43,7 +44,7 @@ export default function Dashboard() {
                 <div className="mx-auto max-w-12xl sm:px-6 lg:px-8">
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900">
-                            <Page document={document} e />
+                            <Page document={document}  />
                         </div>
                     </div>
                 </div>

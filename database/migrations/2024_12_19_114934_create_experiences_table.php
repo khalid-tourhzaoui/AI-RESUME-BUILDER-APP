@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('city', 255)->nullable();
             $table->string('country', 255)->nullable();
             $table->boolean('currently_working')->default(false);
-            $table->text('work_summary')->nullable();
+            $table->longText('work_summary')->nullable();
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade');

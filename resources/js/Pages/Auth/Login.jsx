@@ -23,7 +23,7 @@ export default function Login({ status, canResetPassword }) {
     };
 
     const handleSocialLogin = (provider) => {
-        window.location.href = route('socialite.redirect', provider); // Use window.location.href for GET request
+        window.location.href = route('socialite.redirect', provider); 
     };
 
     return (

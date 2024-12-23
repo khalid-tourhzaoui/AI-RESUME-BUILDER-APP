@@ -77,16 +77,20 @@ class DocumentController extends Controller
         /*--------------------------------------------------------------------------------------------------*/
         public function updateThemeColor(Request $request, $id)
         {
+            // $validated = $request->validate([
+            //     'themeColor' => 'required|string|max:7', // Validation de la couleur hexadécimale
+            // ]);
+
             $document = Document::findOrFail($id);
             $document->theme_color = $request->themeColor;
-            $document->save(); // Save the updated theme color to the database
+            $document->save();
 
             return response()->json([
-                "color : " => $request->themeColor,
-                "id : " => $id,
-                "request : " => $request->all(),
+                'success' => true,
+                'themeColor' => $request->themeColor,
             ]);
         }
+
     /*--------------------------------------------------------------------------------------------------*/
     /**
      * Show the form for editing the specified resource.

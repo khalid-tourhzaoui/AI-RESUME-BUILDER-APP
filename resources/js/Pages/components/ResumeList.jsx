@@ -2,27 +2,28 @@ import React, { Fragment } from "react";
 import useSWR from "swr";
 import { Loader, RotateCw } from "lucide-react";
 import ResumeItem from "./common/ResumeItem";
+import { usePage } from "@inertiajs/react";
 
-const fetcher = (url) =>
-    fetch(url, {
-        method: "GET",
-        credentials: "include",
-        headers: {
-            "Content-Type": "application/json",
-        },
-    }).then((res) => {
-        if (!res.ok) {
-            throw new Error("Failed to fetch");
-        }
-        return res.json();
-    });
+// const fetcher = (url) =>
+//     fetch(url, {
+//         method: "GET",
+//         credentials: "include",
+//         headers: {
+//             "Content-Type": "application/json",
+//         },
+//     }).then((res) => {
+//         if (!res.ok) {
+//             throw new Error("Failed to fetch");
+//         }
+//         return res.json();
+//     });
 
 export default function ResumeList() {
-    const {data: documents,error,isLoading,mutate} = useSWR("http://127.0.0.1:8000/documents", fetcher);
+    const {document,error,processing} =usePage().props;
 
     return (
         <Fragment>
-            {isLoading ? (
+            {processing ? (
                 <div
                     className="flex items-center mx-5">
                     <Loader
@@ -41,7 +42,7 @@ export default function ResumeList() {
                 </div>
             ) : (
                 <>
-                    {documents?.map((resume) => (
+                    {document?.map((resume) => (
                         <ResumeItem
                             key={resume.document_id}
                             id={resume.id}

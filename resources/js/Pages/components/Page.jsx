@@ -2,7 +2,6 @@ import React from "react";
 import AddResume from "./AddResume";
 import ResumeList from "./ResumeList";
 import TrashListBox from "./TrashListBox";
-import { usePage } from "@inertiajs/react";
 
 function Page(props) {
     const { document } = props;
@@ -29,7 +28,7 @@ function Page(props) {
                     </h5>
                     <div className="flex flex-wrap w-full gap-5">
                         <AddResume />
-                        <ResumeList />
+                        <ResumeList  document={document}/>
                     </div>
                 </div>
             </div>

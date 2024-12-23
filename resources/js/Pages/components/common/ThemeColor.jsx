@@ -12,32 +12,33 @@ const ThemeColor = ({ document }) => {
   ];
 
   const { data, setData, post, processing } = useForm({
-    themeColor: document?.theme_color || colors[0], // Initial theme color
+    themeColor: document?.theme_color || colors[0],
   });
 
   const [selectedColor, setSelectedColor] = useState(data.themeColor);
 
   const onColorSelect = (color) => {
-    setSelectedColor(color); // Update the color in the local state
-    setData("themeColor", color); // Update the form data with the new color
-    onSave(color); // Call the save function to send the update
+    setSelectedColor(color);  // Update UI state immediately
+    onSave(color);  // Call to save color in backend
   };
 
   const onSave = async (color) => {
+    console.log("Color updated successfully:", color);
     try {
-      // Trigger the POST request to update the theme color
       const response = await post(route("documents.UpdateThemeColor", { id: document.id }), {
         data: {
           themeColor: color,
         },
       });
 
+      // Update selectedColor after receiving the response from backend
       if (response.data.success) {
-        setSelectedColor(response.data["color : "]); // Update selected color with the response
-        console.log("Color updated successfully:", response.data);
+        setSelectedColor(response.data.themeColor);  // Set the color returned from backend
+        console.log("Color updated successfully:", response.data.themeColor);
       } else {
         console.error("Failed to update theme color:", response.data);
       }
+
     } catch (error) {
       console.error("Error updating theme color:", error);
     }
@@ -65,7 +66,7 @@ const ThemeColor = ({ document }) => {
             <div
               key={index}
               role="button"
-              onClick={() => onColorSelect(color)} // Call onColorSelect when a color is clicked
+              onClick={() => onColorSelect(color)}  // Set color when clicked
               className={`h-5 w-8 rounded-[5px] hover:border-black border ${selectedColor === color && "border-black"}`}
               style={{ background: color }}
             />
