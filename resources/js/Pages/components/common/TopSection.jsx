@@ -2,7 +2,6 @@ import React from "react";
 import { AlertCircle, Loader } from "lucide-react";
 import { useForm } from "@inertiajs/react";
 import ResumeTitle from "./ResumeTitle";
-import ThemeColor from "./ThemeColor";
 import PreviewModal from "../PreviewModal";
 import Download from "./Download";
 import Share from "./Share";
@@ -45,10 +44,10 @@ const TopSection = ({ document }) => {
                         status={data.status}
                         onSave={handleTitleChange}
                         handleSave={handleSave}
+
                     />
                 </div>
                 <div className="flex items-center gap-2">
-                    <ThemeColor document={document} isLoading={processing} />
                     <PreviewModal document={document} isLoading={processing} />
                     <Download
                         title={data.title}

@@ -59,12 +59,12 @@ export const InfiniteMovingCards = ({
             if (speed === "fast") {
                 containerRef.current.style.setProperty(
                     "--animation-duration",
-                    "20s"
+                    "40s"
                 );
             } else if (speed === "normal") {
                 containerRef.current.style.setProperty(
                     "--animation-duration",
-                    "20s"
+                    "40s"
                 );
             } else {
                 containerRef.current.style.setProperty(
@@ -98,14 +98,14 @@ export const InfiniteMovingCards = ({
                     })} >
                         <li
                             key={item.color}
-                            className="flex flex-col items-center justify-center w-28 h-10 max-w-full relative rounded-lg
+                            className="flex flex-col items-center justify-center w-32 h-10 max-w-full relative rounded-lg
                             shadow-lg border-4 flex-shrink-0"
                             style={{
-                                background: `linear-gradient(to bottom right, ${item.color}, white)`,
-                                borderColor: item.color,
+                                background: `linear-gradient(to bottom right, ${item.hex}, white)`,
+                                borderColor: item.hex,
                             }}
                         >
-                            <span className="text-xl">{item.color}  {item.icon}</span>
+                            <span className="text-base">{item.color}  {item.icon}</span>
                             {/* <span className="text-white font-bold mt-2">
                                 {item.color}
                             </span> */}

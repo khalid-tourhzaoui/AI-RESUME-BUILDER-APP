@@ -6,6 +6,8 @@ import ResumeForm from "./ResumeForm";
 import ResumePreview from "./ResumePreview";
 import Swal from "sweetalert2";
 import { InfiniteMovingCards } from "@/Components/ui/infinite-moving-cards";
+import { colors } from "@/constant/colors";
+import { Vortex } from "@/Components/ui/vortex"; // Importer le composant Vortex
 
 function EditResume() {
     const { document, success, error } = usePage().props;
@@ -33,29 +35,6 @@ function EditResume() {
             });
         }
     }, [success, error]);
-    const colors = [
-        { color: "Red", icon: "🔥", hex: "#FF0000" },
-        { color: "Blue", icon: "💧", hex: "#0000FF" },
-        { color: "Green", icon: "🌿", hex: "#008000" },
-        { color: "Yellow", icon: "🌟", hex: "#FFFF00" },
-        { color: "Purple", icon: "🔮", hex: "#800080" },
-        { color: "Orange", icon: "🍊", hex: "#FFA500" },
-        { color: "Pink", icon: "🌸", hex: "#FFC0CB" },
-        { color: "Cyan", icon: "🌀", hex: "#00FFFF" },
-        { color: "Gray", icon: "🌫️", hex: "#808080" },
-        { color: "Black", icon: "⚫", hex: "#000000" },
-        { color: "White", icon: "⚪", hex: "#FFFFFF" },
-        { color: "Brown", icon: "🍂", hex: "#8B4513" },
-        { color: "Indigo", icon: "💙", hex: "#4B0082" },
-        { color: "Violet", icon: "💜", hex: "#EE82EE" },
-        { color: "Gold", icon: "🌟", hex: "#FFD700" },
-        { color: "Silver", icon: "🌕", hex: "#C0C0C0" },
-        { color: "Teal", icon: "🌊", hex: "#008080" },
-        { color: "Lime", icon: "🍋", hex: "#00FF00" },
-        { color: "Maroon", icon: "🍒", hex: "#800000" },
-        { color: "Olive", icon: "🌿", hex: "#808000" }
-    ];
-
 
     return (
         <AuthenticatedLayout
@@ -77,10 +56,17 @@ function EditResume() {
 
             <div className="py-2">
                 <div className="mx-auto max-w-12xl sm:px-6 lg:px-8">
-                    <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900">
-                            <div className="relative w-full">
-                                <div className="w-full mx-auto max-w-7xl py-4 px-5">
+                    <div className="overflow-hidden bg-black shadow-sm sm:rounded-lg">
+                        {/* Ajout du Vortex ici */}
+                        <Vortex
+                            backgroundColor="black"
+                            rangeY={800}
+                            particleCount={500}
+                            baseHue={120}
+                            className="flex items-center flex-col justify-center px-2 md:px-10 py-4 w-full min-h-screen relative"
+                        >
+                            <div className="relative z-10 w-full">
+                                <div className="w-full mx-auto max-w-12xl py-4 px-5">
                                     <TopSection document={document} />
                                     <div className="w-full mt-1">
                                         <div className="flex flex-col lg:flex-row items-start w-full py-3 gap-10">
@@ -94,7 +80,7 @@ function EditResume() {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </Vortex>
                     </div>
                 </div>
             </div>
