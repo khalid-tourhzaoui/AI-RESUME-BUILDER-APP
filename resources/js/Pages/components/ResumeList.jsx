@@ -1,11 +1,12 @@
 import React, { Fragment } from "react";
-import { Loader, RotateCw } from "lucide-react";
+import { ClipboardCheck, Loader, RotateCw } from "lucide-react";
 import ResumeItem from "./common/ResumeItem";
 import { usePage } from "@inertiajs/react";
 
 export default function ResumeList({document}) {
     const {error,processing} =usePage().props;
     console.log(document);
+    
     return (
         <Fragment>
             {processing ? (
@@ -39,6 +40,7 @@ export default function ResumeList({document}) {
                             thumbnail={resume.thumbnail}
                         />
                     ))}
+                    
                 </>
             )}
         </Fragment>

@@ -85,7 +85,7 @@ class DocumentController extends Controller
                 $document = Document::findOrFail($id);
                 $document->theme_color = $request->themeColor;
                 $document->save();
-                return redirect()->back()->with('success', 'Document title updated successfully');
+                return redirect()->back()->with('success','Document theme color updated successfully');
             }catch (\Exception $ex) {
                 return redirect()->back()->with('error', 'An error occurred while updating the document. Please try again.');
             }
