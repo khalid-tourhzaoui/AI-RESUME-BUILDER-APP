@@ -107,6 +107,7 @@ export default function UpdateProfileInformation({
                         </p>
                     </Transition>
                 </div>
+
             </form>
         </section>
     );

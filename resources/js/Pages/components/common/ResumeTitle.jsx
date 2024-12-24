@@ -26,9 +26,9 @@ function ResumeTitle({ initialTitle, status, isLoading, onSave,handleSave }) {
 
   return (
     <div className="flex items-center gap-1 pr-4">
-      <FileText className="stroke-primary" size="20px" />
+      <FileText className=" hidden lg:flex stroke-primary" size="20px" />
       <h5
-        className="text-[20px] px-1 text-gray-700 dark:text-gray-300 font-semibold opacity-100 !pointer-events-none"
+        className="text-[15px] px-1 text-gray-700 dark:text-gray-300 font-semibold opacity-100 !pointer-events-none"
         contentEditable={isLoading || status === "archived" ? false : true}
         suppressContentEditableWarning={true}
         onBlur={handleBlur}

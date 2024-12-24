@@ -28,7 +28,7 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::get('documents/{document_id}/edit', [DocumentController::class, 'edit'])->name('documents.edit');
     Route::put('/documents/{document_id}', [DocumentController::class, 'update'])->name('documents.update');
     Route::patch('/documents/{document_id}', [DocumentController::class, 'UpdateSummary'])->name('documents.UpdateSummary');
-    Route::post('/documents/{id}/update-theme-color', [DocumentController::class, 'updateThemeColor'])->name('documents.UpdateThemeColor');
+    Route::get('/documents/{id}/updateThemeColor', [DocumentController::class, 'updateThemeColor'])->name('documents.UpdateThemeColor');
     Route::delete('/documents/{document_id}', [DocumentController::class, 'destroy'])->name('documents.delete');
     Route::patch('/documents/archive/{document_id}', [DocumentController::class, 'ArchivedDocument'])->name('documents.archive');
     Route::patch('/documents/restore/{document_id}', [DocumentController::class, 'RestoreDocument'])->name('documents.restore');

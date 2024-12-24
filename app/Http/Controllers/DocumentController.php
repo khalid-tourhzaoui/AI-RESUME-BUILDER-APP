@@ -77,18 +77,19 @@ class DocumentController extends Controller
         /*--------------------------------------------------------------------------------------------------*/
         public function updateThemeColor(Request $request, $id)
         {
-            // $validated = $request->validate([
-            //     'themeColor' => 'required|string|max:7', // Validation de la couleur hexadécimale
-            // ]);
+            try{
+                $validated = $request->validate([
+                    'themeColor' => 'required|string|max:7', // Validation de la couleur hexadécimale
+                ]);
 
-            $document = Document::findOrFail($id);
-            $document->theme_color = $request->themeColor;
-            $document->save();
+                $document = Document::findOrFail($id);
+                $document->theme_color = $request->themeColor;
+                $document->save();
+                return redirect()->back()->with('success', 'Document title updated successfully');
+            }catch (\Exception $ex) {
+                return redirect()->back()->with('error', 'An error occurred while updating the document. Please try again.');
+            }
 
-            return response()->json([
-                'success' => true,
-                'themeColor' => $request->themeColor,
-            ]);
         }
 
     /*--------------------------------------------------------------------------------------------------*/
