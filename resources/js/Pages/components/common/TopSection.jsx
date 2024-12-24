@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { AlertCircle } from "lucide-react";
+import React from "react";
+import { AlertCircle, Loader } from "lucide-react";
 import { useForm } from "@inertiajs/react";
 import ResumeTitle from "./ResumeTitle";
 import ThemeColor from "./ThemeColor";
@@ -7,7 +7,6 @@ import PreviewModal from "../PreviewModal";
 import Download from "./Download";
 import Share from "./Share";
 import MoreOption from "./MoreOption";
-import { Button } from "@/Components/ui/button";
 
 const TopSection = ({ document }) => {
     const { data, setData, put, processing } = useForm({
@@ -27,6 +26,8 @@ const TopSection = ({ document }) => {
             title: data.title,
         })
     };
+
+
 
     return (
         <>
@@ -56,16 +57,11 @@ const TopSection = ({ document }) => {
                     />
                     <Share document={document} isLoading={processing} />
                     <MoreOption document={document} isLoading={processing} />
+
+
                 </div>
             </div>
             <div>
-                {/* <Button
-          onClick={handleSave}
-          disabled={processing}
-          className="btn btn-primary"
-        >
-          Save Changes
-        </Button> */}
             </div>
         </>
     );

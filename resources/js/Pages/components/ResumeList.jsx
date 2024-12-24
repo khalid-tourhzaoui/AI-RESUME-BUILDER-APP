@@ -1,26 +1,11 @@
 import React, { Fragment } from "react";
-import useSWR from "swr";
 import { Loader, RotateCw } from "lucide-react";
 import ResumeItem from "./common/ResumeItem";
 import { usePage } from "@inertiajs/react";
 
-// const fetcher = (url) =>
-//     fetch(url, {
-//         method: "GET",
-//         credentials: "include",
-//         headers: {
-//             "Content-Type": "application/json",
-//         },
-//     }).then((res) => {
-//         if (!res.ok) {
-//             throw new Error("Failed to fetch");
-//         }
-//         return res.json();
-//     });
-
-export default function ResumeList() {
-    const {document,error,processing} =usePage().props;
-
+export default function ResumeList({document}) {
+    const {error,processing} =usePage().props;
+    console.log(document);
     return (
         <Fragment>
             {processing ? (

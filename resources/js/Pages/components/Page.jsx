@@ -1,39 +1,85 @@
-import React from "react";
+import React, { useState } from "react";
 import AddResume from "./AddResume";
 import ResumeList from "./ResumeList";
-import TrashListBox from "./TrashListBox";
+import { HoverEffect } from "@/Components/ui/card-hover-effect";
+import { FileText, CheckCircle, Lock, Archive } from "lucide-react";
 
-function Page(props) {
-    const { document } = props;
-    return (
-        <div className="w-full">
-            <div className="w-full mx-auto max-w-7xl py-5 px-5">
-                <div className="flex items-start justify-between">
-                    <div>
-                        <h1 className="text-2xl font-bold">Resume Builder</h1>
-                        <p className="text-base dark:text-inherit">
-                            Create your own custom resume with AI & Subscribe to
-                            the channel
-                        </p>
-                    </div>
-                    <div className="shrink-0 flex items-center gap-3">
-                        {/* {Trash List} */}
-                        <TrashListBox document={document} />
-                    </div>
-                </div>
+function Page({ document}) {
+  const [filter, setFilter] = useState(null);
 
-                <div className="w-full pt-11">
-                    <h5 className="text-xl font-semibold dark:text-inherit mb-3">
-                        All Resume
-                    </h5>
-                    <div className="flex flex-wrap w-full gap-5">
-                        <AddResume />
-                        <ResumeList  document={document}/>
-                    </div>
-                </div>
-            </div>
+  const data = [
+    {
+      id: 1,
+      title: "Number of all resumes",
+      description: "Total resumes in the system",
+      count: document.length,
+      status: null, // Null means show all
+      icon: FileText,
+      backgroundColor: "bg-gradient-to-r from-blue-500 to-blue-700",
+      hoverColor: "bg-blue-300",
+    },
+    {
+      id: 2,
+      title: "Number of public resumes",
+      description: "Currently active resumes",
+      count: document.filter((item) => item.status === "public").length,
+      status: "public",
+      icon: CheckCircle,
+      backgroundColor: "bg-gradient-to-r from-green-500 to-green-700",
+      hoverColor: "bg-green-300",
+    },
+    {
+      id: 3,
+      title: "Number of private resumes",
+      description: "Resumes marked as private",
+      count: document.filter((item) => item.status === "private").length,
+      status: "private",
+      icon: Lock,
+      backgroundColor: "bg-gradient-to-r from-yellow-500 to-yellow-700",
+      hoverColor: "bg-yellow-300",
+    },
+    {
+      id: 4,
+      title: "Number of archived resumes",
+      description: "Archived resumes for later use",
+      count: document.filter((item) => item.status == "archived").length,
+      status: "archived",
+      icon: Archive,
+      backgroundColor: "bg-gradient-to-r from-purple-500 to-purple-700",
+      hoverColor: "bg-purple-300",
+    },
+  ];
+
+  const filteredDocuments = filter
+    ? document.filter((item) => item.status === filter)
+    : document;
+    console.log(filteredDocuments);
+
+  return (
+      <div className="w-full mx-auto max-w-12xl">
+        <div className="flex items-center justify-between">
+          <div>
+            <HoverEffect
+              items={data}
+              onClick={(item) => setFilter(item.status)}
+            />
+          </div>
         </div>
-    );
+
+        <div className="w-full">
+          <h5 className="text-xl font-semibold dark:text-inherit text-white">
+            {filter ? `Filtered Resumes (${filter})` : "All Resumes"}
+          </h5>
+          <div className="flex flex-wrap w-full gap-5">
+            <AddResume />
+            <ResumeList
+              document={filteredDocuments}
+            />
+          </div>
+        </div>
+      </div>
+
+  );
 }
 
 export default Page;

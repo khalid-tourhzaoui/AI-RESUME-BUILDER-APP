@@ -5,14 +5,13 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/Components/ui/popover";
-import { Skeleton } from "@/Components/ui/skeleton";
 import { useForm } from "@inertiajs/react";
-import { Dot, FileText, Loader, Search, Trash, Trash2, Undo } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import { Dot, FileText, Search, Trash, Trash2, Undo } from "lucide-react";
+import React, {  useState } from "react";
 import { format } from "date-fns"; // Ensure you have the date-fns package if you're using `format`
 
 function TrashListBox({ document }) {
-    const { data, setData, patch ,delete:destroy} = useForm();
+    const {  patch ,delete:destroy} = useForm();
     const [search, setSearch] = useState("");
 
     // Filter documents based on the archived status
