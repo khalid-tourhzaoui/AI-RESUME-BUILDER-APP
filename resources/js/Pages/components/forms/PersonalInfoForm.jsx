@@ -180,7 +180,7 @@ function PersonalInfoForm({ handleNext, document }) {
                                 </p>
                             )}
                         </div>
-                        <div className="col-span-2">
+                        <div className="col-span-1">
                             <Label className="text-sm">Job Title ( <Briefcase size={20} className="inline-flex"/> ) : </Label>
                             <Input
                                 name="job_title"
@@ -198,7 +198,7 @@ function PersonalInfoForm({ handleNext, document }) {
                                 </p>
                             )}
                         </div>
-                        <div className="col-span-2">
+                        <div className="col-span-1">
                             <Label className="text-sm">Address ( <LocateIcon size={20} className="inline-flex"/> ) : </Label>
                             <Input
                                 name="address"
@@ -216,7 +216,7 @@ function PersonalInfoForm({ handleNext, document }) {
                                 </p>
                             )}
                         </div>
-                        <div className="col-span-2">
+                        <div className="col-span-1">
                             <Label className="text-sm">Phone Number ( <PhoneIcon size={20} className="inline-flex"/> ) :</Label>
                             <Input
                                 name="phone"
@@ -233,9 +233,9 @@ function PersonalInfoForm({ handleNext, document }) {
                                     ( <AlertCircle size={20} className="inline-flex"/> ) : {errors.phone}
                                 </p>
                             )}
-                            
+
                         </div>
-                        <div className="col-span-2">
+                        <div className="col-span-1">
                             <Label className="text-sm">Email ( <Mail size={20} className="inline-flex"/> ) : </Label>
                             <Input
                                 name="email"
@@ -256,7 +256,7 @@ function PersonalInfoForm({ handleNext, document }) {
                     </div>
 
                     <Button
-                        className="mt-4"
+                        className="mt-4 mx-auto"
                         type="submit"
                         disabled={!isFormValid || document?.status === "archived"}
                     >

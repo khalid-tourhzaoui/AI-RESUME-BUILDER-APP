@@ -4,7 +4,17 @@ import { Label } from "@/Components/ui/label";
 import { Textarea } from "@/Components/ui/textarea";
 import { generateThumbnail } from "@/lib/helper";
 import { useForm } from "@inertiajs/react";
-import { Loader, Plus, X } from "lucide-react";
+import {
+    AlertCircle,
+    AlignLeft,
+    Calendar,
+    FlaskConical,
+    GraduationCap,
+    Loader,
+    Medal,
+    Plus,
+    X,
+} from "lucide-react";
 import * as Yup from "yup";
 import React, { useEffect, useState } from "react";
 
@@ -36,10 +46,12 @@ function EducationForm({ handleNext, document }) {
         university_name: Yup.string()
             .required("University name is required")
             .min(3, "University name must be at least 3 characters"),
-        degree: Yup.string().required("Degree is required"),
-        major: Yup.string().required("Major is required"),
+        degree: Yup.string()
+            .required("Degree is required")
+            .min(3, "Degree must be at least 3 characters"),
+        major: Yup.string().required("Major is required").min(""),
         description: Yup.string().max(
-            300,
+            1000,
             "Description must be less than 300 characters"
         ),
         start_date: Yup.date().required("Start date is required"),
@@ -55,9 +67,7 @@ function EducationForm({ handleNext, document }) {
 
                 // Validate the form
                 await Promise.all(
-                    educationList.map((exp) =>
-                        educationSchema.validate(exp)
-                    )
+                    educationList.map((exp) => educationSchema.validate(exp))
                 );
                 setIsFormValid(true);
             } catch (err) {
@@ -191,10 +201,10 @@ function EducationForm({ handleNext, document }) {
                 <p className="text-sm">Add your education details</p>
             </div>
             <form onSubmit={handleSubmit}>
-                <div className="border w-full h-auto divide-y-[1px] rounded-md px-3 pb-4 my-5">
+                <div className="border-2 w-full h-auto divide-y-[1px] rounded-md px-3 pb-4 my-5">
                     {educationList.map((item, index) => (
                         <div key={index}>
-                            <div className="relative grid grid-cols-2 mb-5 pt-4 gap-3">
+                            <div className="grid grid-cols-2 sm:grid-cols-1 md:grid-cols-2 gap-5 mb-5 pt-4 relative">
                                 {educationList.length > 1 && (
                                     <Button
                                         variant="secondary"
@@ -213,12 +223,18 @@ function EducationForm({ handleNext, document }) {
 
                                 <div className="col-span-2">
                                     <Label className="text-sm">
-                                        University Name
+                                        University Name (
+                                        <GraduationCap
+                                            size={20}
+                                            className="inline-flex"
+                                        />
+                                        ) :
                                     </Label>
                                     <Input
                                         name="university_name"
                                         placeholder="Enter university name"
                                         required
+                                        className="w-full mt-2"
                                         value={item.university_name}
                                         onChange={(e) =>
                                             handleChange(
@@ -229,17 +245,30 @@ function EducationForm({ handleNext, document }) {
                                         }
                                     />
                                     {errors[index]?.university_name && (
-                                        <p className="text-red-500 text-sm">
-                                            {errors[index].university_name}
+                                        <p className="text-red-500 text-sm mt-2">
+                                            ({" "}
+                                            <AlertCircle
+                                                size={20}
+                                                className="inline-flex"
+                                            />{" "}
+                                            ) : {errors[index].university_name}
                                         </p>
                                     )}
                                 </div>
-                                <div>
-                                    <Label className="text-sm">Degree</Label>
+                                <div className="col-span-1">
+                                    <Label className="text-sm">
+                                        Degree ({" "}
+                                        <Medal
+                                            size={20}
+                                            className="inline-flex"
+                                        />{" "}
+                                        ) :
+                                    </Label>
                                     <Input
                                         name="degree"
                                         placeholder="Enter degree"
                                         required
+                                        className="w-full mt-2"
                                         value={item.degree}
                                         onChange={(e) =>
                                             handleChange(
@@ -250,17 +279,30 @@ function EducationForm({ handleNext, document }) {
                                         }
                                     />
                                     {errors[index]?.degree && (
-                                        <p className="text-red-500 text-sm">
-                                            {errors[index].degree}
+                                        <p className="text-red-500 text-sm mt-2">
+                                            ({" "}
+                                            <AlertCircle
+                                                size={20}
+                                                className="inline-flex"
+                                            />{" "}
+                                            ) : {errors[index].degree}
                                         </p>
                                     )}
                                 </div>
-                                <div>
-                                    <Label className="text-sm">Major</Label>
+                                <div className="col-span-1">
+                                    <Label className="text-sm">
+                                        Major ({" "}
+                                        <FlaskConical
+                                            size={20}
+                                            className="inline-flex"
+                                        />{" "}
+                                        ) :
+                                    </Label>
                                     <Input
                                         name="major"
                                         placeholder="Enter major"
                                         required
+                                        className="w-full mt-2"
                                         value={item.major}
                                         onChange={(e) =>
                                             handleChange(
@@ -271,19 +313,30 @@ function EducationForm({ handleNext, document }) {
                                         }
                                     />
                                     {errors[index]?.major && (
-                                        <p className="text-red-500 text-sm">
-                                            {errors[index].major}
+                                        <p className="text-red-500 text-sm mt-2">
+                                            ({" "}
+                                            <AlertCircle
+                                                size={20}
+                                                className="inline-flex"
+                                            />{" "}
+                                            ) : {errors[index].major}
                                         </p>
                                     )}
                                 </div>
-                                <div>
+                                <div className="col-span-1">
                                     <Label className="text-sm">
-                                        Start Date
+                                        Start Date ({" "}
+                                        <Calendar
+                                            size={20}
+                                            className="inline-flex"
+                                        />{" "}
+                                        ) :
                                     </Label>
                                     <Input
                                         name="start_date"
                                         type="date"
                                         required
+                                        className="w-full mt-2"
                                         value={item.start_date}
                                         onChange={(e) =>
                                             handleChange(
@@ -294,17 +347,30 @@ function EducationForm({ handleNext, document }) {
                                         }
                                     />
                                     {errors[index]?.start_date && (
-                                        <p className="text-red-500 text-sm">
-                                            {errors[index].start_date}
+                                        <p className="text-red-500 text-sm mt-2">
+                                            ({" "}
+                                            <AlertCircle
+                                                size={20}
+                                                className="inline-flex"
+                                            />{" "}
+                                            ) : {errors[index].start_date}
                                         </p>
                                     )}
                                 </div>
-                                <div>
-                                    <Label className="text-sm">End Date</Label>
+                                <div className="col-span-1">
+                                    <Label className="text-sm">
+                                        End Date ({" "}
+                                        <Calendar
+                                            size={20}
+                                            className="inline-flex"
+                                        />{" "}
+                                        ) :
+                                    </Label>
                                     <Input
                                         name="end_date"
                                         type="date"
                                         required
+                                        className="w-full mt-2"
                                         value={item.end_date}
                                         onChange={(e) =>
                                             handleChange(
@@ -315,19 +381,30 @@ function EducationForm({ handleNext, document }) {
                                         }
                                     />
                                     {errors[index]?.end_date && (
-                                        <p className="text-red-500 text-sm">
-                                            {errors[index].end_date}
+                                        <p className="text-red-500 text-sm mt-2">
+                                            ({" "}
+                                            <AlertCircle
+                                                size={20}
+                                                className="inline-flex"
+                                            />{" "}
+                                            ) :{errors[index].end_date}
                                         </p>
                                     )}
                                 </div>
                                 <div className="col-span-2 mt-1">
                                     <Label className="text-sm">
-                                        Description
+                                        Description ({" "}
+                                        <AlignLeft
+                                            size={20}
+                                            className="inline-flex"
+                                        />{" "}
+                                        ) :
                                     </Label>
                                     <Textarea
                                         name="description"
                                         placeholder="Enter description"
                                         required
+                                        className="w-full mt-2"
                                         value={item.description}
                                         onChange={(e) =>
                                             handleChange(
@@ -338,8 +415,13 @@ function EducationForm({ handleNext, document }) {
                                         }
                                     />
                                     {errors[index]?.description && (
-                                        <p className="text-red-500 text-sm">
-                                            {errors[index].description}
+                                        <p className="text-red-500 text-sm mt-2">
+                                            ({" "}
+                                            <AlertCircle
+                                                size={20}
+                                                className="inline-flex"
+                                            />{" "}
+                                            ) : {errors[index].description}
                                         </p>
                                     )}
                                 </div>
