@@ -13,7 +13,7 @@ function Page({ document}) {
       title: "Number of all resumes",
       description: "Total resumes in the system",
       count: document.length,
-      status: null, // Null means show all
+      status: null, 
       icon: FileText,
       backgroundColor: "bg-gradient-to-r from-blue-500 to-blue-700",
       hoverColor: "bg-blue-300",

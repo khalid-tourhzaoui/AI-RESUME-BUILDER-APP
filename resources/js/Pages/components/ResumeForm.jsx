@@ -18,8 +18,7 @@ function ResumeForm({document}) {
     return (
         <div
             className="flex-1 w-full lg:sticky lg:top-16">
-            <div className="shadow-md rounded-md bg-white !border-t-primary !border-t-4 dark:bg-card dark:border
-             dark:border-gray-800">
+            <div className="shadow-md rounded-md bg-white !border-t-8" style={{borderColor:document.theme_color}}>
                 <div className=" flex items-center gap-1 px-3 justify-end border-b py-[7px] min-h-10">
                     {activeFormIndex > 1 && (
                         <Button
@@ -50,6 +49,7 @@ function ResumeForm({document}) {
                         Next
                         <ArrowRight size="16px" />
                     </Button>
+                    
                 </div>
                 <div className="px-5 py-3 pb-5">
                     {/* {PersonalInfo Form} */}

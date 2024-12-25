@@ -92,7 +92,7 @@ export const InfiniteMovingCards = ({
                 )}
             >
                 {items.map((item, idx) => (
-                    <Link  href={route('documents.UpdateThemeColor', {
+                    <Link key={idx}  href={route('documents.UpdateThemeColor', {
                         id: documentId,
                         themeColor: item.hex
                     })} >

@@ -33,5 +33,5 @@ export const colors = [
     { color: "Azure", icon: "🌊", hex: "#3498DB" },
     { color: "Apple", icon: "🍏", hex: "#A3D550" },
     { color: "Sky", icon: "🌌", hex: "#00BFFF" },
-    { color: "Purple Heart", icon: "💜", hex: "#5B2C6F" }
+    
 ];

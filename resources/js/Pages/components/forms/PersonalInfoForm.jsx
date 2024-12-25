@@ -3,7 +3,7 @@ import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
 import { generateThumbnail } from "@/lib/helper";
 import { useForm } from "@inertiajs/react";
-import { Loader } from "lucide-react";
+import { AlertCircle, Briefcase, Loader, LocateIcon, Mail, PersonStanding, PersonStandingIcon, PhoneIcon, User, UserCircle } from "lucide-react";
 import * as Yup from "yup";
 import React, { useCallback, useEffect, useState } from "react";
 
@@ -34,23 +34,13 @@ function PersonalInfoForm({ handleNext, document }) {
     const [isSaving, setIsSaving] = useState(false);
 
     const personalInfoSchema = Yup.object().shape({
-        first_name: Yup.string()
-            .required("First Name is required")
-            .min(2, "First Name must be at least 2 characters"),
-        last_name: Yup.string()
-            .required("Last Name is required")
-            .min(2, "Last Name must be at least 2 characters"),
-        job_title: Yup.string().required("Job Title is required"),
-        address: Yup.string().required("Address is required"),
-        phone: Yup.string()
-            .required("Phone Number is required")
-            .matches(
-                /^(\+212|0)([ \-_/]*)(\d[ \-_/]*){9}$/,
-                "Invalid Moroccan phone number"
-            ),
-        email: Yup.string()
-            .required("Email is required")
-            .email("Invalid email format"),
+        first_name: Yup.string().required("First Name is required").min(2, "First Name must be at least 2 characters"),
+        last_name: Yup.string().required("Last Name is required").min(2, "Last Name must be at least 2 characters"),
+        job_title: Yup.string().required("Job Title is required").min(2, "Job Title must be at least 2 characters"),
+        address: Yup.string().required("Address is required").min(2, "Address must be at least 2 characters"),
+        phone: Yup.string().required("Phone Number is required")
+        .matches(/^(\+212|0)([ \-_/]*)(\d[ \-_/]*){9}$/,"Invalid Moroccan phone number"),
+        email: Yup.string().required("Email is required").email("Invalid email format"),
     });
 
     useEffect(() => {
@@ -68,7 +58,7 @@ function PersonalInfoForm({ handleNext, document }) {
                     email: personalInfo.email,
                     thumbnail: thumbnail,
                 });
-                checkFormValidity(); // Check form validity after setting the data
+                checkFormValidity();
             } catch (err) {
                 setIsFormValid(false);
             }
@@ -76,7 +66,7 @@ function PersonalInfoForm({ handleNext, document }) {
         processPersonalInfoList();
     }, [personalInfo, document]);
 
-    const validateField = async (name, value) => {
+    const validateField  = async (name, value) => {
         try {
             await personalInfoSchema.validateAt(name, { [name]: value });
             setErrors((prev) => ({ ...prev, [name]: undefined }));
@@ -88,9 +78,9 @@ function PersonalInfoForm({ handleNext, document }) {
     const checkFormValidity = async () => {
         try {
             await personalInfoSchema.validate(personalInfo, { abortEarly: false });
-            setIsFormValid(true); // Set valid if no validation errors
+            setIsFormValid(true);
         } catch (err) {
-            setIsFormValid(false); // Set invalid if there are validation errors
+            setIsFormValid(false);
         }
     };
 
@@ -100,19 +90,10 @@ function PersonalInfoForm({ handleNext, document }) {
             ...prev,
             [name]: value,
         }));
+        await validateField(name, value);
 
-        const typingTimeout = setTimeout(async () => {
-            await validateField(name, value);
-            checkFormValidity(); // Check form validity after each change
-        }, 500);
-
-        clearTimeout(typingTimeout);
     }, [personalInfo]);
 
-    const handleBlur = (e) => {
-        const { name, value } = e.target;
-        validateField(name, value);
-    };
 
     const onSave = async (data) => {
         try {
@@ -136,7 +117,7 @@ function PersonalInfoForm({ handleNext, document }) {
         try {
             e.preventDefault();
             setIsSaving(true);
-            await onSave(data); // Send the form data to the backend
+            await onSave(data);
             setIsSaving(false);
             if (handleNext) handleNext();
         } catch (error) {
@@ -163,95 +144,113 @@ function PersonalInfoForm({ handleNext, document }) {
             </div>
             <div>
                 <form onSubmit={handleSubmit}>
-                    <div className="grid grid-cols-2 mt-5 gap-3">
+                    <div className="grid grid-cols-2 mt-5 gap-2">
                         <div>
-                            <Label className="text-sm">First Name</Label>
+                            <Label className="text-sm">First Name ( <UserCircle size={20} className="inline-flex"/> ) : </Label>
                             <Input
                                 name="first_name"
                                 required
+                                className="mt-2"
                                 autoComplete="off"
                                 placeholder="First Name"
                                 value={personalInfo.first_name || ""}
                                 onChange={handleChange}
-                                onBlur={handleBlur}
+
                             />
                             {errors.first_name && (
-                                <p className="text-red-500 text-sm">{errors.first_name}</p>
+                                <p className="text-red-500 text-sm mt-3">
+                                    ( <AlertCircle size={20} className="inline-flex"/> ) : {errors.first_name}
+                                </p>
                             )}
                         </div>
                         <div>
-                            <Label className="text-sm">Last Name</Label>
+                            <Label className="text-sm">Last Name ( <UserCircle size={20} className="inline-flex"/> ) : </Label>
                             <Input
                                 name="last_name"
                                 required
+                                className="mt-2"
                                 autoComplete="off"
                                 placeholder="Last Name"
                                 value={personalInfo.last_name || ""}
                                 onChange={handleChange}
-                                onBlur={handleBlur}
+
                             />
                             {errors.last_name && (
-                                <p className="text-red-500 text-sm">{errors.last_name}</p>
+                                <p className="text-red-500 text-sm mt-3">
+                                    ( <AlertCircle size={20} className="inline-flex"/> ) : {errors.last_name}
+                                </p>
                             )}
                         </div>
                         <div className="col-span-2">
-                            <Label className="text-sm">Job Title</Label>
+                            <Label className="text-sm">Job Title ( <Briefcase size={20} className="inline-flex"/> ) : </Label>
                             <Input
                                 name="job_title"
                                 required
+                                className="mt-2"
                                 autoComplete="off"
                                 placeholder="Job Title"
                                 value={personalInfo.job_title || ""}
                                 onChange={handleChange}
-                                onBlur={handleBlur}
+
                             />
                             {errors.job_title && (
-                                <p className="text-red-500 text-sm">{errors.job_title}</p>
+                                <p className="text-red-500 text-sm mt-3">
+                                    ( <AlertCircle size={20} className="inline-flex"/> ) : {errors.job_title}
+                                </p>
                             )}
                         </div>
                         <div className="col-span-2">
-                            <Label className="text-sm">Address</Label>
+                            <Label className="text-sm">Address ( <LocateIcon size={20} className="inline-flex"/> ) : </Label>
                             <Input
                                 name="address"
                                 required
+                                className="mt-2"
                                 autoComplete="off"
                                 placeholder="Address"
                                 value={personalInfo.address || ""}
                                 onChange={handleChange}
-                                onBlur={handleBlur}
+
                             />
                             {errors.address && (
-                                <p className="text-red-500 text-sm">{errors.address}</p>
+                                <p className="text-red-500 text-sm mt-3">
+                                    ( <AlertCircle size={20} className="inline-flex"/> ) : {errors.address}
+                                </p>
                             )}
                         </div>
                         <div className="col-span-2">
-                            <Label className="text-sm">Phone Number</Label>
+                            <Label className="text-sm">Phone Number ( <PhoneIcon size={20} className="inline-flex"/> ) :</Label>
                             <Input
                                 name="phone"
                                 required
+                                className="mt-2"
                                 autoComplete="off"
                                 placeholder="Phone Number"
                                 value={personalInfo.phone || ""}
                                 onChange={handleChange}
-                                onBlur={handleBlur}
+
                             />
                             {errors.phone && (
-                                <p className="text-red-500 text-sm">{errors.phone}</p>
+                                <p className="text-red-500 text-sm mt-3">
+                                    ( <AlertCircle size={20} className="inline-flex"/> ) : {errors.phone}
+                                </p>
                             )}
                         </div>
                         <div className="col-span-2">
-                            <Label className="text-sm">Email</Label>
+                            <Label className="text-sm">Email ( <Mail size={20} className="inline-flex"/> ) : </Label>
                             <Input
                                 name="email"
                                 required
+                                className="mt-2"
                                 autoComplete="off"
                                 placeholder="Email"
                                 value={personalInfo.email || ""}
                                 onChange={handleChange}
-                                onBlur={handleBlur}
+
                             />
                             {errors.email && (
-                                <p className="text-red-500 text-sm">{errors.email}</p>
+                                <p className="text-red-500 text-sm mt-3">
+                                    ( <AlertCircle size={20} className="inline-flex"/> ) : {errors.email}
+                                </p>
                             )}
                         </div>
                     </div>
