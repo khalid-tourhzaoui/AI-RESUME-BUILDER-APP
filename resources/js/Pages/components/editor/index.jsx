@@ -18,6 +18,7 @@ import { toast } from "@/hooks/use-toast";
 import { Label } from "@/Components/ui/label";
 import { Button } from "@/Components/ui/button";
 import { AIChatSession } from "@/lib/google-ai-model";
+import Swal from "sweetalert2";
 
 const PROMPT = `Given the job title "{jobTitle}",
  create 6-7 concise and personal bullet points in
@@ -32,7 +33,7 @@ const RichTextEditor = (props) => {
     const [loading, setLoading] = useState(false);
     const [value, setValue] = useState(initialValue || "");
     //---------------------------------------------------------------------------------
-    
+
     const GenerateSummaryFromAI = async () => {
         try {
             if (!jobTitle) {
@@ -60,9 +61,11 @@ const RichTextEditor = (props) => {
                 validJsonArray = JSON.parse(`[${responseText}]`);
             } catch (error) {
                 console.error("Invalid JSON:", responseText);
-                toast({
-                    title: "Invalid response format",
-                    variant: "destructive",
+                Swal.fire({
+                    title: "Failed to generate summary",
+                    text: "Something went wrong while generating the summary.",
+                    icon: "error",
+                    confirmButtonText: "OK",
                 });
                 return;
             }

@@ -1,10 +1,11 @@
 import { Button } from "@/Components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/Components/ui/card";
 import { Label } from "@/Components/ui/label";
+import { TextGenerateEffect } from "@/Components/ui/text-generate-effect";
 import { Textarea } from "@/Components/ui/textarea";
 import { AIChatSession } from "@/lib/google-ai-model";
 import { useForm } from "@inertiajs/react";
-import { Loader, Sparkles } from "lucide-react";
+import { Book, FileText, Loader, Sparkles } from "lucide-react";
 import React, { useState } from "react";
 import Swal from "sweetalert2";
 
@@ -78,7 +79,7 @@ function SummaryForm({ document, handleNext }) {
             <div>
                 <form onSubmit={handleSubmit}>
                     <div className="flex items-end justify-between">
-                        <Label>Add Summary</Label>
+                        <Label>Add Summary ( <FileText   size={20} className="inline-flex"/> ) : </Label>
                         <Button
                             variant="outline"
                             type="button"
@@ -94,11 +95,17 @@ function SummaryForm({ document, handleNext }) {
                     <Textarea
                         className="mt-5 min-h-36"
                         required
-                        max={500}
+                        max={1000}
                         min={10}
                         value={data.summary}
                         onChange={(e) => setData("summary", e.target.value)}
                     />
+
+                    {data.summary.length > 0 && (
+                        <p className="text-sm text-right mt-4">
+                            {data.summary.length} / 1000
+                        </p>
+                    )}
 
                     {aiGeneratedSummary && (
                         <div>
@@ -124,7 +131,8 @@ function SummaryForm({ document, handleNext }) {
                                                 </CardTitle>
                                             </CardHeader>
                                             <CardContent className="text-sm cursor-pointer">
-                                                <p>{suggestion.summary}</p>
+                                                {/* <p>{suggestion.summary}</p> */}
+                                               <p><TextGenerateEffect words={suggestion.summary} /></p>
                                             </CardContent>
                                         </Card>
                                     )

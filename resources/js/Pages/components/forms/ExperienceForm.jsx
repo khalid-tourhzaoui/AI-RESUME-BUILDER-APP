@@ -1,12 +1,22 @@
-import { Loader, Plus, X } from "lucide-react";
+import {
+    AlertCircle,
+    Briefcase,
+    Building,
+    Calendar,
+    Globe,
+    Loader,
+    MapPin,
+    Plus,
+    X,
+} from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { Button } from "@/Components/ui/button";
 import { Label } from "@/Components/ui/label";
 import { Input } from "@/Components/ui/input";
 import { useForm } from "@inertiajs/react";
 import RichTextEditor from "../editor";
 import { generateThumbnail } from "@/lib/helper";
 import * as Yup from "yup";
+import { Button } from '@/Components/ui/button';
 
 const initialState = {
     id: undefined,
@@ -33,10 +43,10 @@ function ExperienceForm({ handleNext, document }) {
         delete: destroy,
         data,
         setData,
-        isPending,
     } = useForm({
         experience: experienceList,
     });
+    const [loading, setLoading] = useState(false);
 
     //--------------------------------------------------------------------------------------------------------------------------
     const experienceSchema = Yup.object().shape({
@@ -46,8 +56,12 @@ function ExperienceForm({ handleNext, document }) {
         company_name: Yup.string()
             .required("Company name is required")
             .min(3, "Company name must be at least 3 characters"),
-        city: Yup.string().required("City is required"),
-        country: Yup.string().required("Country is required"),
+        city: Yup.string()
+            .required("City is required")
+            .min(3, "City must be at least 3 characters"),
+        country: Yup.string()
+            .required("Country is required")
+            .min(3, "Country must be at least 3 characters"),
         start_date: Yup.date()
             .required("Start date is required")
             .typeError("Invalid start date"),
@@ -140,7 +154,7 @@ function ExperienceForm({ handleNext, document }) {
             return newExperienceList;
         });
     };
-    
+
     //--------------------------------------------------------------------------------------------------------------------------
 
     const handleSubmit = async (e) => {
@@ -188,6 +202,7 @@ function ExperienceForm({ handleNext, document }) {
                     experience: toAdd,
                 });
             }
+            setLoading(true);
             if (handleNext) handleNext();
         } catch (error) {
             console.error("Failed to save experience details", error);
@@ -197,6 +212,7 @@ function ExperienceForm({ handleNext, document }) {
                     return acc;
                 }, [])
             );
+            setLoading(false);
         }
     };
 
@@ -207,17 +223,17 @@ function ExperienceForm({ handleNext, document }) {
                 <h2 className="font-bold text-lg">Professional Experience</h2>
                 <p className="text-sm">Add previous job experience</p>
             </div>
+
             <form onSubmit={handleSubmit}>
-                <div className="border w-full h-auto divide-y-[1px] rounded-md px-3 pb-4 my-5">
+                <div className="border-2 w-full h-auto divide-y-[1px] rounded-md px-3 pb-4 my-5">
                     {experienceList?.map((item, index) => (
                         <div key={index}>
-                            <div className="relative grid grid-cols-2 mb-5 pt-4 gap-3">
+                            <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-5 mb-5 pt-4 relative">
                                 {experienceList?.length > 1 && (
                                     <Button
                                         variant="secondary"
                                         type="button"
-                                        className="size-[20px] text-center rounded-full absolute -top-3 -right-5 !bg-black
-                                         dark:!bg-gray-600 text-white"
+                                        className="size-[20px] text-center rounded-full absolute -top-3 -right-5 !bg-black dark:!bg-gray-600 text-white"
                                         size="icon"
                                         onClick={() =>
                                             removeExperience(index, item.id)
@@ -227,14 +243,20 @@ function ExperienceForm({ handleNext, document }) {
                                     </Button>
                                 )}
 
-                                <div>
+                                <div className="col-span-1">
                                     <Label className="text-sm">
-                                        Position title
+                                        Position title (
+                                        <Briefcase
+                                            size={20}
+                                            className="inline-flex"
+                                        />
+                                        ) :
                                     </Label>
                                     <Input
                                         name="title"
-                                        placeholder=""
+                                        placeholder="Enter"
                                         required
+                                        className="mt-2 w-full"
                                         value={item?.title || ""}
                                         onChange={(e) =>
                                             handleChange(
@@ -245,20 +267,31 @@ function ExperienceForm({ handleNext, document }) {
                                         }
                                     />
                                     {errors[index]?.title && (
-                                        <p className="text-red-500 text-sm">
-                                            {errors[index].title}
+                                        <p className="text-red-500 text-sm mt-3">
+                                            ({" "}
+                                            <AlertCircle
+                                                size={20}
+                                                className="inline-flex"
+                                            />{" "}
+                                            ) : {errors[index].title}
                                         </p>
                                     )}
                                 </div>
 
-                                <div>
+                                <div className="col-span-1">
                                     <Label className="text-sm">
-                                        Company Name
+                                        Company Name (
+                                        <Building
+                                            size={20}
+                                            className="inline-flex"
+                                        />
+                                        ) :
                                     </Label>
                                     <Input
                                         name="company_name"
-                                        placeholder=""
+                                        placeholder="Enter "
                                         required
+                                        className="mt-2 w-full"
                                         value={item?.company_name || ""}
                                         onChange={(e) =>
                                             handleChange(
@@ -269,18 +302,32 @@ function ExperienceForm({ handleNext, document }) {
                                         }
                                     />
                                     {errors[index]?.company_name && (
-                                        <p className="text-red-500 text-sm">
-                                            {errors[index].company_name}
+                                        <p className="text-red-500 text-sm mt-3">
+                                            ({" "}
+                                            <AlertCircle
+                                                size={20}
+                                                className="inline-flex"
+                                            />{" "}
+                                            ) : {errors[index].company_name}
                                         </p>
                                     )}
                                 </div>
 
-                                <div>
-                                    <Label className="text-sm">City</Label>
+                                {/* City */}
+                                <div className="col-span-1">
+                                    <Label className="text-sm">
+                                        City (
+                                        <MapPin
+                                            size={20}
+                                            className="inline-flex"
+                                        />
+                                        ) :
+                                    </Label>
                                     <Input
                                         name="city"
                                         placeholder=""
                                         required
+                                        className="mt-2 w-full"
                                         value={item?.city || ""}
                                         onChange={(e) =>
                                             handleChange(
@@ -291,18 +338,31 @@ function ExperienceForm({ handleNext, document }) {
                                         }
                                     />
                                     {errors[index]?.city && (
-                                        <p className="text-red-500 text-sm">
-                                            {errors[index].city}
+                                        <p className="text-red-500 text-sm mt-3">
+                                            ({" "}
+                                            <AlertCircle
+                                                size={20}
+                                                className="inline-flex"
+                                            />{" "}
+                                            ) : {errors[index].city}
                                         </p>
                                     )}
                                 </div>
 
-                                <div>
-                                    <Label className="text-sm">Country</Label>
+                                <div className="col-span-1">
+                                    <Label className="text-sm">
+                                        Country : (
+                                        <Globe
+                                            size={20}
+                                            className="inline-flex"
+                                        />
+                                        ) :
+                                    </Label>
                                     <Input
                                         name="country"
                                         placeholder=""
                                         required
+                                        className="mt-2 w-full"
                                         value={item?.country || ""}
                                         onChange={(e) =>
                                             handleChange(
@@ -313,21 +373,31 @@ function ExperienceForm({ handleNext, document }) {
                                         }
                                     />
                                     {errors[index]?.country && (
-                                        <p className="text-red-500 text-sm">
-                                            {errors[index].country}
+                                        <p className="text-red-500 text-sm mt-3">
+                                            ({" "}
+                                            <AlertCircle
+                                                size={20}
+                                                className="inline-flex"
+                                            />{" "}
+                                            ) : {errors[index].country}
                                         </p>
                                     )}
                                 </div>
 
-                                <div>
+                                <div className="col-span-1">
                                     <Label className="text-sm">
-                                        Start Date
+                                        Start Date (
+                                        <Calendar
+                                            size={20}
+                                            className="inline-flex"
+                                        />
+                                        ) :
                                     </Label>
                                     <Input
                                         name="start_date"
                                         type="date"
-                                        placeholder=""
                                         required
+                                        className="mt-2 w-full"
                                         value={item?.start_date || ""}
                                         onChange={(e) =>
                                             handleChange(
@@ -338,19 +408,31 @@ function ExperienceForm({ handleNext, document }) {
                                         }
                                     />
                                     {errors[index]?.start_date && (
-                                        <p className="text-red-500 text-sm">
-                                            {errors[index].start_date}
+                                        <p className="text-red-500 text-sm mt-3">
+                                            ({" "}
+                                            <AlertCircle
+                                                size={20}
+                                                className="inline-flex"
+                                            />{" "}
+                                            ) : {errors[index].start_date}
                                         </p>
                                     )}
                                 </div>
 
-                                <div>
-                                    <Label className="text-sm">End Date</Label>
+                                <div className="col-span-1">
+                                    <Label className="text-sm">
+                                        End Date (
+                                        <Calendar
+                                            size={20}
+                                            className="inline-flex"
+                                        />
+                                        ) :
+                                    </Label>
                                     <Input
                                         name="end_date"
                                         type="date"
-                                        placeholder=""
                                         required
+                                        className="mt-2 w-full"
                                         value={item?.end_date || ""}
                                         onChange={(e) =>
                                             handleChange(
@@ -361,13 +443,18 @@ function ExperienceForm({ handleNext, document }) {
                                         }
                                     />
                                     {errors[index]?.end_date && (
-                                        <p className="text-red-500 text-sm">
-                                            {errors[index].end_date}
+                                        <p className="text-red-500 text-sm mt-3">
+                                            ({" "}
+                                            <AlertCircle
+                                                size={20}
+                                                className="inline-flex"
+                                            />{" "}
+                                            ) : {errors[index].end_date}
                                         </p>
                                     )}
                                 </div>
 
-                                <div className="col-span-2 mt-1">
+                                <div className="col-span-1 sm:col-span-2 mt-1">
                                     <RichTextEditor
                                         jobTitle={item.title || ""}
                                         initialValue={item?.work_summary || ""}
@@ -397,14 +484,14 @@ function ExperienceForm({ handleNext, document }) {
                         </div>
                     ))}
                 </div>
+
+                {/* Save Button */}
                 <Button
                     className="mt-4"
                     type="submit"
-                    disabled={!isFormValid || isPending}
+                    disabled={!isFormValid || loading}
                 >
-                    {isPending && (
-                        <Loader size="15px" className="animate-spin" />
-                    )}
+                    {loading && <Loader size="15px" className="animate-spin" />}
                     Save Changes
                 </Button>
             </form>

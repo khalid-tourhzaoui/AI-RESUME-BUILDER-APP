@@ -16,7 +16,7 @@ class ExperienceController extends Controller
                 'experience.*.company_name' => 'required|string|max:255',
                 'experience.*.city' => 'required|string|max:255',
                 'experience.*.country' => 'required|string|max:255',
-                'experience.*.work_summary' => 'required|string|max:255',
+                'experience.*.work_summary' => 'required|string|max:1000',
                 'experience.*.start_date' => 'required|date',
                 'experience.*.end_date' => 'required|date|after_or_equal:experience.*.start_date',
             ]);
@@ -67,7 +67,7 @@ class ExperienceController extends Controller
                 'experience.*.company_name' => 'required|string|max:255',
                 'experience.*.city' => 'required|string|max:255',
                 'experience.*.country' => 'required|string|max:255',
-                'experience.*.work_summary' => 'required|string|max:255',
+                'experience.*.work_summary' => 'required|string|max:1000',
                 'experience.*.start_date' => 'required|date',
                 'experience.*.end_date' => 'required|date|after_or_equal:experience.*.start_date',
             ]);

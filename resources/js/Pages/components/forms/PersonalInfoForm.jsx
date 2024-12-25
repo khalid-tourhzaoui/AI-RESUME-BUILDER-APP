@@ -3,7 +3,7 @@ import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
 import { generateThumbnail } from "@/lib/helper";
 import { useForm } from "@inertiajs/react";
-import { AlertCircle, Briefcase, Loader, LocateIcon, Mail, PersonStanding, PersonStandingIcon, PhoneIcon, User, UserCircle } from "lucide-react";
+import { AlertCircle, Briefcase, Loader, LocateIcon, Mail, PhoneIcon, UserCircle } from "lucide-react";
 import * as Yup from "yup";
 import React, { useCallback, useEffect, useState } from "react";
 
@@ -18,7 +18,7 @@ function PersonalInfoForm({ handleNext, document }) {
         thumbnail: "",
     });
     const [errors, setErrors] = useState({});
-    const [isFormValid, setIsFormValid] = useState(false); // Track form validity
+    const [isFormValid, setIsFormValid] = useState(false);
     const { put, post, data, setData } = useForm({
         title: document.title,
         status: document.status,
@@ -32,7 +32,7 @@ function PersonalInfoForm({ handleNext, document }) {
     });
 
     const [isSaving, setIsSaving] = useState(false);
-
+    //--------------------------------------------------------------------------------------------------------------------------------
     const personalInfoSchema = Yup.object().shape({
         first_name: Yup.string().required("First Name is required").min(2, "First Name must be at least 2 characters"),
         last_name: Yup.string().required("Last Name is required").min(2, "Last Name must be at least 2 characters"),
@@ -42,7 +42,7 @@ function PersonalInfoForm({ handleNext, document }) {
         .matches(/^(\+212|0)([ \-_/]*)(\d[ \-_/]*){9}$/,"Invalid Moroccan phone number"),
         email: Yup.string().required("Email is required").email("Invalid email format"),
     });
-
+    //--------------------------------------------------------------------------------------------------------------------------------
     useEffect(() => {
         const processPersonalInfoList = async () => {
             try {
@@ -65,7 +65,7 @@ function PersonalInfoForm({ handleNext, document }) {
         };
         processPersonalInfoList();
     }, [personalInfo, document]);
-
+    //--------------------------------------------------------------------------------------------------------------------------------
     const validateField  = async (name, value) => {
         try {
             await personalInfoSchema.validateAt(name, { [name]: value });
@@ -74,7 +74,7 @@ function PersonalInfoForm({ handleNext, document }) {
             setErrors((prev) => ({ ...prev, [name]: err.message }));
         }
     };
-
+    //--------------------------------------------------------------------------------------------------------------------------------
     const checkFormValidity = async () => {
         try {
             await personalInfoSchema.validate(personalInfo, { abortEarly: false });
@@ -83,7 +83,7 @@ function PersonalInfoForm({ handleNext, document }) {
             setIsFormValid(false);
         }
     };
-
+    //--------------------------------------------------------------------------------------------------------------------------------
     const handleChange = useCallback(async (e) => {
         const { name, value } = e.target;
         setPersonalInfo((prev) => ({
@@ -93,8 +93,7 @@ function PersonalInfoForm({ handleNext, document }) {
         await validateField(name, value);
 
     }, [personalInfo]);
-
-
+    //--------------------------------------------------------------------------------------------------------------------------------
     const onSave = async (data) => {
         try {
             if (document.personal_info) {
@@ -112,7 +111,7 @@ function PersonalInfoForm({ handleNext, document }) {
             console.log(error);
         }
     };
-
+    //--------------------------------------------------------------------------------------------------------------------------------
     const handleSubmit = async (e) => {
         try {
             e.preventDefault();
@@ -129,7 +128,7 @@ function PersonalInfoForm({ handleNext, document }) {
             );
         }
     };
-
+    //--------------------------------------------------------------------------------------------------------------------------------
     useEffect(() => {
         if (document?.personal_info) {
             setPersonalInfo(document.personal_info);
@@ -234,6 +233,7 @@ function PersonalInfoForm({ handleNext, document }) {
                                     ( <AlertCircle size={20} className="inline-flex"/> ) : {errors.phone}
                                 </p>
                             )}
+                            
                         </div>
                         <div className="col-span-2">
                             <Label className="text-sm">Email ( <Mail size={20} className="inline-flex"/> ) : </Label>

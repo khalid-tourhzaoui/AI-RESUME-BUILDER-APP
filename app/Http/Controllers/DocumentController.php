@@ -142,7 +142,7 @@ class DocumentController extends Controller
             $document = Document::where('document_id', $document_id)->firstOrFail();
 
             $request->validate([
-                'summary' => 'nullable|string|max:500',
+                'summary' => 'nullable|string|max:1000',
             ]);
 
             $document->update([
