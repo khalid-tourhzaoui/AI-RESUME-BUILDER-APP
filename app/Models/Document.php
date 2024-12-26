@@ -42,4 +42,16 @@ class Document extends Model
     {
         return $this->hasMany(Skill::class, 'document_id');
     }
+    public function hobbies()
+    {
+        return $this->hasMany(Hobbie::class, 'document_id');
+    }
+    public function languages()
+    {
+        return $this->hasMany(Language::class, 'document_id');
+    }
+    public function socialMedias()
+    {
+        return $this->hasMany(SocialMedia::class, 'document_id');
+    }
 }

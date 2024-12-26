@@ -11,6 +11,7 @@ use App\Http\Controllers\PersonalInfoController;
 use App\Http\Controllers\EducationController;
 use App\Http\Controllers\SkillController;
 use App\Http\Controllers\ExperienceController;
+use App\Http\Controllers\ProfilDetailsController;
 use App\Models\Document;
 
 Route::get('/', function () {
@@ -34,7 +35,10 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::patch('/documents/restore/{document_id}', [DocumentController::class, 'RestoreDocument'])->name('documents.restore');
     Route::patch('/documents/public/{document_id}', [DocumentController::class, 'PublicDocument'])->name('documents.public');
     Route::get('/preview/{document_id}/resume', [DocumentController::class, 'PreviewResume'])->name('documents.preview');
-
+    // ----------------------------------------------------------------------------------------------------------------------
+    Route::post('/langauges/{document_id}/', [ProfilDetailsController::class, 'store'])->name('language.store');
+    Route::put('/langauges/{document_id}/', [ProfilDetailsController::class, 'update'])->name('language.update');
+    Route::delete('/langauges/{document_id}/', [ProfilDetailsController::class, 'destroy'])->name('language.delete');
     // ----------------------------------------------------------------------------------------------------------------------
     Route::post('/personals/{document_id}', [PersonalInfoController::class, 'store'])->name('personals.store');
     Route::put('/personals/{document_id}', [PersonalInfoController::class, 'update'])->name('personals.update');

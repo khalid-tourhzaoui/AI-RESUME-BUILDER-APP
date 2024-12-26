@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('document_id');
             $table->string('name', 255)->nullable();
-            $table->string('level', 255)->nullable();
+            $table->enum('level',['natif','intermediare','advanced'])->nullable();
             $table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade');
             $table->timestamps();
         });
