@@ -7,7 +7,7 @@ import { FlagIcon, Loader, Plus, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { generateThumbnail } from "@/lib/helper";
 import * as Yup from "yup";
-
+import "/node_modules/flag-icons/css/flag-icons.min.css";
 import {
     Select,
     SelectContent,
@@ -132,7 +132,7 @@ function LanguageForm({ document, handleNext }) {
 
     const removeLanguageBack = async (id) => {
         try {
-            await destroy(route("language.delete", id), {
+            await destroy(route("profile-details.delete", id), {
                 data: { language: [{ id }] },
             });
         } catch (error) {
@@ -177,14 +177,14 @@ function LanguageForm({ document, handleNext }) {
 
             // Update modified records
             if (toUpdate.length > 0) {
-                await put(route("language.update", document.id), {
+                await put(route("profile-details.update", document.id), {
                     languages: toUpdate,
                 });
             }
 
             // Add new records
             if (toAdd.length > 0) {
-                await post(route("language.store", document.id), {
+                await post(route("profile-details.store", document.id), {
                     languages: toAdd,
                 });
             }
@@ -233,10 +233,10 @@ function LanguageForm({ document, handleNext }) {
 
                                 <div className="flex-1">
                                     <Label className="text-sm">Name </Label>
-
+                                    
                                     <Select name={item.name || ""} onValueChange={(value) => handleChange(index, "name", value)}>
                                         <SelectTrigger className="w-full">
-                                            <SelectValue placeholder={item.name} />
+                                        <SelectValue placeholder={item.name} />
                                         </SelectTrigger>
                                         <SelectContent>
                                             <div className="px-2 py-1">
@@ -263,11 +263,7 @@ function LanguageForm({ document, handleNext }) {
                                                         disabled={isDisabled}
                                                     >
                                                         <div className="flex items-center">
-                                                            <FlagIcon
-                                                                code={language.code.toUpperCase()}
-                                                                size={20}
-                                                                className="mr-2"
-                                                            />
+                                                            <span className={language.flagClass+" mr-2"}></span>
                                                             {language.name}
                                                         </div>
                                                     </SelectItem>

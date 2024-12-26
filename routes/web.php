@@ -36,9 +36,9 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::patch('/documents/public/{document_id}', [DocumentController::class, 'PublicDocument'])->name('documents.public');
     Route::get('/preview/{document_id}/resume', [DocumentController::class, 'PreviewResume'])->name('documents.preview');
     // ----------------------------------------------------------------------------------------------------------------------
-    Route::post('/langauges/{document_id}/', [ProfilDetailsController::class, 'store'])->name('language.store');
-    Route::put('/langauges/{document_id}/', [ProfilDetailsController::class, 'update'])->name('language.update');
-    Route::delete('/langauges/{document_id}/', [ProfilDetailsController::class, 'destroy'])->name('language.delete');
+    Route::post('/profile-details/{document_id}/', [ProfilDetailsController::class, 'store'])->name('profile-details.store');
+    Route::put('/profile-details/{document_id}/', [ProfilDetailsController::class, 'update'])->name('profile-details.update');
+    Route::delete('/profile-details/{document_id}/', [ProfilDetailsController::class, 'destroy'])->name('profile-details.delete');
     // ----------------------------------------------------------------------------------------------------------------------
     Route::post('/personals/{document_id}', [PersonalInfoController::class, 'store'])->name('personals.store');
     Route::put('/personals/{document_id}', [PersonalInfoController::class, 'update'])->name('personals.update');
@@ -46,10 +46,6 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::post('/education/{document_id}', [EducationController ::class, 'store'])->name('education.store');
     Route::put('/education/{document_id}', [EducationController ::class, 'update'])->name('education.update');
     Route::delete('/education/{document_id}', [EducationController::class, 'delete'])->name('education.delete');
-    // ----------------------------------------------------------------------------------------------------------------------
-    Route::post('/skill/{document_id}', [SkillController::class, 'store'])->name('skill.store');
-    Route::put('/skill/{document_id}', [SkillController::class, 'update'])->name('skill.update');
-    Route::delete('/skill/{document_id}', [SkillController::class, 'delete'])->name('skill.delete');
     // ----------------------------------------------------------------------------------------------------------------------
     Route::post('/experience/{document_id}', [ExperienceController::class, 'store'])->name('experience.store');
     Route::put('/experience/{document_id}', [ExperienceController::class, 'update'])->name('experience.update');

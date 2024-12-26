@@ -94,7 +94,7 @@ function SkillsForm({ document,handelNext }) {
 
     const removeSkillBack = async (id) => {
         try {
-            await destroy(route("skill.delete", id), {
+            await destroy(route("profile-details.delete", id), {
                 data: { skill: [{ id }] },
             });
         } catch (error) {
@@ -139,14 +139,14 @@ function SkillsForm({ document,handelNext }) {
 
             // Update modified records
             if (toUpdate.length > 0) {
-                await put(route("skill.update", document.id), {
+                await put(route("profile-details.update", document.id), {
                     skills: toUpdate,
                 });
             }
 
             // Add new records
             if (toAdd.length > 0) {
-                await post(route("skill.store", document.id), {
+                await post(route("profile-details.store", document.id), {
                     skills: toAdd,
                 });
             }
