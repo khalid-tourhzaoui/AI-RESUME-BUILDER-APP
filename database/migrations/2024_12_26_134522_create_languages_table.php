@@ -11,16 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('personal_infos', function (Blueprint $table) {
+        Schema::create('languages', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('document_id');
-            $table->string('first_name', 255)->nullable();
-            $table->string('last_name', 255)->nullable();
-            $table->string('job_title', 255)->nullable();
-            $table->string('address', 500)->nullable();
-            $table->string('phone', 50)->nullable();
-            $table->string('email', 255)->nullable();
-            $table->string('img', 255)->nullable();
+            $table->string('name', 255)->nullable();
+            $table->string('level', 255)->nullable();
             $table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade');
             $table->timestamps();
         });
@@ -31,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('personal_infos');
+        Schema::dropIfExists('languages');
     }
 };

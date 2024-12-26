@@ -113,7 +113,7 @@ class DocumentController extends Controller
             ]);
         }catch (\Exception $ex) {
             return redirect()->route('dashboard')
-                ->with('error','The document you are trying to edit does not exist or you do not have permission to edit it.');
+                ->with('error',$ex->getMessage());
         }
 
     }

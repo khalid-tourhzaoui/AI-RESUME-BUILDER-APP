@@ -14,7 +14,7 @@ const initialState = {
     rating: 0,
 };
 
-function SkillsForm({ document }) {
+function SkillsForm({ document,handelNext }) {
     const [skillList, setSkillList] = useState(() =>
         document?.skills?.length ? document.skills : [initialState]
     );

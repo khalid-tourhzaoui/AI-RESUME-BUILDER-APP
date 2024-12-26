@@ -3,7 +3,7 @@ import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
 import { generateThumbnail } from "@/lib/helper";
 import { useForm } from "@inertiajs/react";
-import { AlertCircle, Briefcase, Loader, LocateIcon, Mail, PhoneIcon, UserCircle } from "lucide-react";
+import { AlertCircle, Briefcase, Image, Loader, LocateIcon, Mail, PhoneIcon, UserCircle } from "lucide-react";
 import * as Yup from "yup";
 import React, { useCallback, useEffect, useState } from "react";
 
@@ -15,6 +15,7 @@ function PersonalInfoForm({ handleNext, document }) {
         address: "",
         phone: "",
         email: "",
+        // img: "",
         thumbnail: "",
     });
     const [errors, setErrors] = useState({});
@@ -28,6 +29,7 @@ function PersonalInfoForm({ handleNext, document }) {
         address: personalInfo.address,
         phone: personalInfo.phone,
         email: personalInfo.email,
+        // img: personalInfo.img,
         thumbnail: personalInfo.thumbnail,
     });
 
@@ -41,7 +43,11 @@ function PersonalInfoForm({ handleNext, document }) {
         phone: Yup.string().required("Phone Number is required")
         .matches(/^(\+212|0)([ \-_/]*)(\d[ \-_/]*){9}$/,"Invalid Moroccan phone number"),
         email: Yup.string().required("Email is required").email("Invalid email format"),
+        // img: Yup.mixed().required("Image is required").test("fileType", "Unsupported file format", (value) =>
+        //     value ? ["image/jpeg", "image/png", "image/jpg"].includes(value.type) : false),
+
     });
+
     //--------------------------------------------------------------------------------------------------------------------------------
     useEffect(() => {
         const processPersonalInfoList = async () => {
@@ -56,6 +62,7 @@ function PersonalInfoForm({ handleNext, document }) {
                     address: personalInfo.address,
                     phone: personalInfo.phone,
                     email: personalInfo.email,
+                    // img: personalInfo.img,
                     thumbnail: thumbnail,
                 });
                 checkFormValidity();
@@ -65,6 +72,7 @@ function PersonalInfoForm({ handleNext, document }) {
         };
         processPersonalInfoList();
     }, [personalInfo, document]);
+
     //--------------------------------------------------------------------------------------------------------------------------------
     const validateField  = async (name, value) => {
         try {
@@ -93,6 +101,15 @@ function PersonalInfoForm({ handleNext, document }) {
         await validateField(name, value);
 
     }, [personalInfo]);
+    //--------------------------------------------------------------------------------------------------------------------------------
+    // const handleFileChange = (e) => {
+    //     const file = e.target.files[0];
+    //     if (file) {
+    //         setPersonalInfo((prev) => ({ ...prev, img: file }));
+    //         validateField("img", file);
+    //     }
+    // };
+
     //--------------------------------------------------------------------------------------------------------------------------------
     const onSave = async (data) => {
         try {
@@ -253,6 +270,25 @@ function PersonalInfoForm({ handleNext, document }) {
                                 </p>
                             )}
                         </div>
+                        {/* <div className="col-span-2">
+                            <Label className="text-sm">Image ( <Image size={20} className="inline-flex"/> ) : </Label>
+                            <Input
+                                name="img"
+                                required
+                                className="mt-2"
+                                autoComplete="off"
+                                placeholder="Image"
+                                type="file"
+                                value={personalInfo.img || document?.personalInfo?.img}
+                                onChange={handleChange}
+
+                            />
+                            {errors.img && (
+                                <p className="text-red-500 text-sm mt-3">
+                                    ( <AlertCircle size={20} className="inline-flex"/> ) : {errors.img}
+                                </p>
+                            )}
+                        </div> */}
                     </div>
 
                     <Button

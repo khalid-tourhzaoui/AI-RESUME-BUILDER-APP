@@ -28,6 +28,7 @@ class PersonalInfoController extends Controller
             return redirect()->back()
                 ->with('error','Error! '.$e->getMessage());
         }
+        // return $request->all();
     }
 
     public function update(Request $request, $document_id)
@@ -51,6 +52,7 @@ class PersonalInfoController extends Controller
             return redirect()->back()
                 ->with('error','Error! '.$e->getMessage());
         }
+        // return $request->all();
     }
 
 }

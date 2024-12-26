@@ -1,11 +1,14 @@
 import { Button } from "@/Components/ui/button";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import React, { useState } from "react";
+import React, { act, useState } from "react";
 import PersonalInfoForm from "./forms/PersonalInfoForm";
 import SummaryForm from "./forms/SummaryForm";
 import ExperienceForm from "./forms/ExperienceForm";
 import EducationForm from "./forms/EducationForm";
 import SkillsForm from "./forms/SkillsForm";
+import LanguageForm from "./forms/LanguageForm";
+import SocialMedia from "./forms/SocialMedia";
+import Hobbies from "./forms/Hobbies";
 
 function ResumeForm({document}) {
     const [activeFormIndex, setActiveFormIndex] = useState(document.current_position);
@@ -39,7 +42,7 @@ function ResumeForm({document}) {
                         size="default"
                         className="!px-2 !py-1 !h-auto"
                         disabled={
-                            activeFormIndex === 5 ||
+                            activeFormIndex === 8 ||
                             document.status === "archived"
                                 ? true
                                 : false
@@ -49,30 +52,24 @@ function ResumeForm({document}) {
                         Next
                         <ArrowRight size="16px" />
                     </Button>
-                    
+
                 </div>
                 <div className="px-5 py-3 pb-5">
                     {/* {PersonalInfo Form} */}
-                    {activeFormIndex === 1 && (
-                        <PersonalInfoForm handleNext={handleNext} document={document}    />
-                    )}
-
-                    {activeFormIndex === 2 && (
-                        <SummaryForm handleNext={handleNext} document={document} />
-                    )}
-
+                    {activeFormIndex === 1 && <PersonalInfoForm handleNext={handleNext} document={document}/>}
+                    {activeFormIndex === 2 && <SummaryForm handleNext={handleNext} document={document} />}
                     {/* {Professional Exp.} */}
-                    {activeFormIndex === 3 && (
-                        <ExperienceForm handleNext={handleNext} document={document} />
-                    )}
-
+                    {activeFormIndex === 3 && <ExperienceForm handleNext={handleNext} document={document} />}
                     {/* {Eduncational Info} */}
-                    {activeFormIndex === 4 && (
-                        <EducationForm handleNext={handleNext} document={document} />
-                    )}
-
+                    {activeFormIndex === 4 && <EducationForm handleNext={handleNext} document={document} />}
                     {/* {Skills} */}
-                    {activeFormIndex === 5 && <SkillsForm document={document} />}
+                    {activeFormIndex === 5 && <SkillsForm handleNext={handleNext} document={document}/>}
+                    {/* {Languages} */}
+                    {activeFormIndex === 6 && <LanguageForm handleNext={handleNext} document={document} />}
+                    {/* {Social Media} */}
+                    {activeFormIndex === 7 && <SocialMedia handleNext={handleNext} document={document} />}
+                    {/* {Hobbies} */}
+                    {activeFormIndex === 8 && <Hobbies document={document} />}
                 </div>
             </div>
         </div>
