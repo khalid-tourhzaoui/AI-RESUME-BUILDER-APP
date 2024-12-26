@@ -1,0 +1,67 @@
+/* Card animations */
+.card-wrapper {
+    box-shadow: rgba(96, 75, 74, 0.2) 0px 70px 30px -50px;
+    transition: all 0.5s ease-in-out;
+}
+
+.card-wrapper:hover {
+    border-top-left-radius: 55px;
+}
+
+/* Profile pic */
+.profile-pic-wrapper {
+    transition: all 0.5s ease-in-out, z-index 0.5s ease-in-out 0.1s;
+}
+
+.card-wrapper:hover .profile-pic-wrapper {
+    width: 100px;
+    height: 100px;
+    top: 10px;
+    left: 10px;
+    border-radius: 50%;
+    border: 7px solid #fbb9b6;
+    box-shadow: rgba(96, 75, 74, 0.2) 0px 5px 5px 0px;
+}
+
+.card-wrapper:hover .profile-pic-wrapper:hover {
+    transform: scale(1.3);
+    border-radius: 0;
+}
+
+.profile-pic-wrapper img {
+    transition: transform 0.5s ease-in-out;
+}
+
+.card-wrapper:hover .profile-pic-wrapper img {
+    transform: scale(2.5);
+    object-position: 0px 25px;
+}
+
+/* Bottom Section */
+.bottom-wrapper {
+    transition: all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.card-wrapper:hover .bottom-wrapper {
+    top: 20%;
+    border-radius: 80px 29px 29px 29px;
+}
+
+/* Social Icons */
+.social-icon {
+    height: 20px;
+    fill: white;
+    transition: transform 0.3s ease-in-out, fill 0.3s ease-in-out;
+    filter: drop-shadow(0 5px 5px rgba(165, 132, 130, 0.2));
+}
+
+.social-icon:hover {
+    fill: #f55d56;
+    transform: scale(1.2);
+}
+
+/* Button */
+.button:hover {
+    background: #f55d56;
+    color: white;
+}

@@ -2,6 +2,7 @@ import React, { Fragment } from "react";
 import { ClipboardCheck, Loader, RotateCw } from "lucide-react";
 import ResumeItem from "./common/ResumeItem";
 import { usePage } from "@inertiajs/react";
+import Card from "./Card";
 
 export default function ResumeList({document}) {
     const {error,processing} =usePage().props;
@@ -29,16 +30,25 @@ export default function ResumeList({document}) {
             ) : (
                 <>
                     {document?.map((resume) => (
-                        <ResumeItem
-                            key={resume.document_id}
-                            id={resume.id}
-                            documentId={resume.document_id}
-                            title={resume.title}
-                            status={resume.status}
-                            updatedAt={resume.updated_at}
-                            themeColor={resume.theme_color}
-                            thumbnail={resume.thumbnail}
-                        />
+                        // <ResumeItem
+                        //     key={resume.document_id}
+                        //     id={resume.id}
+                        //     documentId={resume.document_id}
+                        //     title={resume.title}
+                        //     status={resume.status}
+                        //     updatedAt={resume.updated_at}
+                        //     themeColor={resume.theme_color}
+                        //     thumbnail={resume.thumbnail}
+                        // />
+                        <Card
+                        key={resume.document_id}
+                        id={resume.id}
+                        documentId={resume.document_id}
+                        title={resume.title}
+                        status={resume.status}
+                        updatedAt={resume.updated_at}
+                        themeColor={resume.theme_color}
+                        thumbnail={resume.thumbnail}/>
                     ))}
                     
                 </>
