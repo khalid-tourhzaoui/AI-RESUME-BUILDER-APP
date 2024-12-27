@@ -24,7 +24,7 @@ function PersonalInfoForm({ handleNext, document }) {
         address: "",
         phone: "",
         email: "",
-        img: "",
+        // img: "",
         thumbnail: "",
     });
     const [errors, setErrors] = useState({});
@@ -38,7 +38,7 @@ function PersonalInfoForm({ handleNext, document }) {
         address: personalInfo.address,
         phone: personalInfo.phone,
         email: personalInfo.email,
-        img: personalInfo.img,
+        // img: personalInfo.img,
         thumbnail: personalInfo.thumbnail,
     });
 
@@ -66,15 +66,15 @@ function PersonalInfoForm({ handleNext, document }) {
         email: Yup.string()
             .required("Email is required")
             .email("Invalid email format"),
-        img: Yup.mixed()
-            .required("Image is required")
-            .test("fileType", "Unsupported file format", (value) =>
-                value
-                    ? ["image/jpeg", "image/png", "image/jpg"].includes(
-                          value.type
-                      )
-                    : false
-            ),
+        // img: Yup.mixed()
+        //     .required("Image is required")
+        //     .test("fileType", "Unsupported file format", (value) =>
+        //         value
+        //             ? ["image/jpeg", "image/png", "image/jpg"].includes(
+        //                   value.type
+        //               )
+        //             : false
+        //     ),
     });
 
     useEffect(() => {
@@ -90,7 +90,7 @@ function PersonalInfoForm({ handleNext, document }) {
                     address: personalInfo.address,
                     phone: personalInfo.phone,
                     email: personalInfo.email,
-                    img: personalInfo.img,
+                    // img: personalInfo.img,
                     thumbnail: thumbnail,
                 });
                 checkFormValidity();
@@ -124,14 +124,13 @@ function PersonalInfoForm({ handleNext, document }) {
         [personalInfo]
     );
 
-    const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            setPersonalInfo((prev) => ({ ...prev, img: file }));
-            checkFormValidity();
-        }
-    };
-    console.log("data",data,"personal",personalInfo)
+    // const handleFileChange = (e) => {
+    //     const file = e.target.files[0];
+    //     if (file) {
+    //         setPersonalInfo((prev) => ({ ...prev, img: file }));
+    //         checkFormValidity();
+    //     }
+    // };
 
     const onSave = async (data) => {
         try {
@@ -184,113 +183,169 @@ function PersonalInfoForm({ handleNext, document }) {
             </div>
             <div>
                 <form onSubmit={handleSubmit}>
-                    <div className="grid grid-cols-2 mt-5 gap-2">
-                        {[
-                            {
-                                name: "first_name",
-                                label: "First Name",
-                                icon: <UserCircle size={20} className="inline-flex" />,
-                            },
-                            {
-                                name: "last_name",
-                                label: "Last Name",
-                                icon: <UserCircle size={20} className="inline-flex" />,
-                            },
-                            {
-                                name: "job_title",
-                                label: "Job Title",
-                                icon: <Briefcase size={20} className="inline-flex" />,
-                            },
-                            {
-                                name: "address",
-                                label: "Address",
-                                icon: <LocateIcon size={20} className="inline-flex" />,
-                            },
-                            {
-                                name: "phone",
-                                label: "Phone Number",
-                                icon: <PhoneIcon size={20} className="inline-flex" />,
-                            },
-                            {
-                                name: "email",
-                                label: "Email",
-                                icon: <Mail size={20} className="inline-flex" />,
-                            },
-                        ].map(({ name, label, icon }) => (
-                            <div
-                                key={name}
-                                className={
-                                    name === "email" || name === "phone"
-                                        ? "col-span-1"
-                                        : ""
-                                }
-                            >
-                                <Label className="text-sm">
-                                    {label} ({icon}) :
-                                </Label>
-                                <Input
-                                    name={name}
-                                    required
-                                    className="mt-2"
-                                    autoComplete="off"
-                                    placeholder={label}
-                                    value={personalInfo[name] || ""}
-                                    onChange={handleChange}
-                                />
-                                {errors[name] && (
-                                    <p className="text-red-500 text-sm mt-3">
-                                        (
-                                        <AlertCircle
-                                            size={20}
-                                            className="inline-flex"
-                                        />
-                                        ) : {errors[name]}
-                                    </p>
-                                )}
-                            </div>
-                        ))}
-                        <div className="col-span-2">
+                    <div className="border-2 w-full h-auto divide-y-[1px] rounded-md px-3 pb-4 my-5">
+                        {/* First Name and Last Name in the same row */}
+                        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-5 mb-5 pt-4 relative">
+                            {[
+                                {
+                                    name: "first_name",
+                                    label: "First Name",
+                                    icon: (
+                                        <UserCircle size={20} className="inline-flex" />
+                                    ),
+                                },
+                                {
+                                    name: "last_name",
+                                    label: "Last Name",
+                                    icon: (
+                                        <UserCircle size={20} className="inline-flex" />
+                                    ),
+                                },
+                            ].map(({ name, label, icon }) => (
+                                <div key={name} className="col-span-1">
+                                    <Label className="text-sm">
+                                        {label} ({icon}):
+                                    </Label>
+                                    <Input
+                                        name={name}
+                                        required
+                                        className="mt-2 w-full"
+                                        autoComplete="off"
+                                        placeholder={label}
+                                        value={personalInfo[name] || ""}
+                                        onChange={handleChange}
+                                    />
+                                    {errors[name] && (
+                                        <p className="text-red-500 text-sm mt-3">
+                                            (
+                                            <AlertCircle
+                                                size={20}
+                                                className="inline-flex"
+                                            />
+                                            ) : {errors[name]}
+                                        </p>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Job Title and Address in the same row */}
+                        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-5 mb-5 pt-4 relative">
+                            {[
+                                {
+                                    name: "job_title",
+                                    label: "Job Title",
+                                    icon: <Briefcase size={20} className="inline-flex" />,
+                                },
+                                {
+                                    name: "address",
+                                    label: "Address",
+                                    icon: <LocateIcon size={20} className="inline-flex" />,
+                                },
+                            ].map(({ name, label, icon }) => (
+                                <div key={name} className="col-span-1">
+                                    <Label className="text-sm">
+                                        {label} ({icon}):
+                                    </Label>
+                                    <Input
+                                        name={name}
+                                        required
+                                        className="mt-2 w-full"
+                                        autoComplete="off"
+                                        placeholder={label}
+                                        value={personalInfo[name] || ""}
+                                        onChange={handleChange}
+                                    />
+                                    {errors[name] && (
+                                        <p className="text-red-500 text-sm mt-3">
+                                            (
+                                            <AlertCircle
+                                                size={20}
+                                                className="inline-flex"
+                                            />
+                                            ) : {errors[name]}
+                                        </p>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Phone Number and Email in the same row */}
+                        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-5 mb-5 pt-4 relative">
+                            {[
+                                {
+                                    name: "phone",
+                                    label: "Phone Number",
+                                    icon: <PhoneIcon size={20} className="inline-flex" />,
+                                },
+                                {
+                                    name: "email",
+                                    label: "Email",
+                                    icon: <Mail size={20} className="inline-flex" />,
+                                },
+                            ].map(({ name, label, icon }) => (
+                                <div key={name} className="col-span-1">
+                                    <Label className="text-sm">
+                                        {label} ({icon}):
+                                    </Label>
+                                    <Input
+                                        name={name}
+                                        required
+                                        className="mt-2 w-full"
+                                        autoComplete="off"
+                                        placeholder={label}
+                                        value={personalInfo[name] || ""}
+                                        onChange={handleChange}
+                                    />
+                                    {errors[name] && (
+                                        <p className="text-red-500 text-sm mt-3">
+                                            (
+                                            <AlertCircle
+                                                size={20}
+                                                className="inline-flex"
+                                            />
+                                            ) : {errors[name]}
+                                        </p>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Image Input */}
+                        {/* <div className="mb-5 pt-4 relative">
                             <Label className="text-sm">
                                 Image (
-                                <Image size={20} className="inline-flex" />) :
+                                <Image size={20} className="inline-flex" />):
                             </Label>
                             <Input
                                 name="img"
-                                required
-                                className="mt-2"
-                                autoComplete="off"
-                                placeholder="Image"
                                 type="file"
                                 onChange={handleFileChange}
+                                required
+                                className="mt-2 w-full"
                             />
                             {errors.img && (
                                 <p className="text-red-500 text-sm mt-3">
                                     (
-                                    <AlertCircle
-                                        size={20}
-                                        className="inline-flex"
-                                    />
+                                    <AlertCircle size={20} className="inline-flex" />
                                     ) : {errors.img}
                                 </p>
                             )}
-                        </div>
+                        </div> */}
                     </div>
-                    <Button
-                        className="mt-4 mx-auto"
-                        type="submit"
-                        disabled={
-                            !isFormValid || document?.status === "archived"
-                        }
-                    >
-                        {isSaving ? (
-                            <>
-                                <Loader size="15px" className="animate-spin" />
-                                Save Changes
-                            </>
-                        ) : (
-                            "Save Changes"
-                        )}
-                    </Button>
+                    <div className="w-full flex justify-between mt-5">
+                        <Button
+                            type="submit"
+                            disabled={!isFormValid || isSaving}
+                            className="w-full"
+                        >
+                            {isSaving ? (
+                                <Loader className="animate-spin" size={20} />
+                            ) : (
+                                "Save Changes"
+                            )}
+                        </Button>
+                    </div>
                 </form>
             </div>
         </div>
