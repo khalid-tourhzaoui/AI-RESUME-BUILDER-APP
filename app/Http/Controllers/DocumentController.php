@@ -160,42 +160,39 @@ class DocumentController extends Controller
     }
 
     //---------------------------------------------------------------------------
-    public function ArchivedDocument($id){
+    public function updateDocumentStatus($id, $status)
+    {
         try {
+            // Validate the status
+            $validStatuses = ['archived', 'private', 'public'];
+            if (!in_array($status, $validStatuses)) {
+                return redirect()->back()->with('error', 'Invalid status.');
+            }
+
+            // Retrieve the document by its ID
             $document = Document::findOrFail($id);
-            $document->status="archived";
+
+            // Update the status of the document
+            $document->status = $status;
             $document->save();
-            return redirect()->route('documents.edit', $document->document_id)
-            ->with('success','Document archived successfully');
+
+            // Prepare the success message based on the status
+            $statusMessages = [
+                'archived' => 'Document archived successfully.',
+                'private'  => 'Document restored successfully.',
+                'public'   => 'Document updated successfully.'
+            ];
+
+            // Redirect to the document edit page with a success message
+            return redirect()->back()->with('success', $statusMessages[$status]);
+
         } catch (\Exception $ex) {
+            // Handle any exceptions
             return redirect()->back()
-                ->with('error','Error! '.$ex->getMessage());
+                ->with('error', 'An error occurred: ' . $ex->getMessage());
         }
     }
-    //---------------------------------------------------------------------------
-    public function RestoreDocument($id){
-        try{
-            $document = Document::findOrFail($id);
-            $document->status="private";
-            $document->save();
-            return redirect()->route('documents.edit', $document->document_id)
-            ->with('success','Document restored successfully');
-        }catch (\Exception $ex) {
-            return redirect()->back()->with('error','An error occurred while restoring the document. Please try again.');
-        }
-    }
-    //---------------------------------------------------------------------------
-    public function PublicDocument($id){
-        try{
-            $document = Document::findOrFail($id);
-            $document->status="public";
-            $document->save();
-            return redirect()->route('documents.edit', $document->document_id)
-            ->with('success','Document updated successfully');
-        }catch(\Exception $ex){
-            return redirect()->back()->with('error','An error occurred while updating the document. Please try again.');
-        }
-    }
+
     //---------------------------------------------------------------------------
     public function PreviewResume($document_id)
     {
@@ -238,7 +235,7 @@ class DocumentController extends Controller
             return redirect()->route('dashboard')
             ->with('success','Document deleted successfully');
         }catch (\Exception $ex) {
-            return redirect()->back()->with('error','An error occurred while deleting the document. Please try again.');
+            return redirect()->back()->with('error',$ex->getMessage());
         }
     }
 }

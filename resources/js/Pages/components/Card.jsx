@@ -1,23 +1,23 @@
-import { Link } from "@inertiajs/react";
-import { Archive, FileText, Globe, Lock, Trash } from "lucide-react";
 import React, { useMemo } from "react";
-import styled from "styled-components";
 import { format } from "date-fns";
+import { Archive, FileText, Globe, Lock, Trash } from "lucide-react";
+import { Link } from "@inertiajs/react";
+import styled from "styled-components";
 
-const Card = ({
+function Card({
     title,
     status,
-    themeColor,
     thumbnail,
     updatedAt,
     documentId,
     id,
-}) => {
+}) {
     const docDate = useMemo(() => {
         if (!updatedAt) return null;
         const formattedDate = format(new Date(updatedAt), "MMM dd, yyyy");
         return formattedDate;
     }, [updatedAt]);
+
     return (
         <StyledWrapper>
             <div className="card">
@@ -32,8 +32,7 @@ const Card = ({
                         </>
                     ) : (
                         <>
-                            <Archive size="20px" className="inline-flex" />{" "}
-                            Archive
+                            <Archive size="20px" className="inline-flex" /> Archive
                         </>
                     )}
                 </button>
@@ -51,102 +50,49 @@ const Card = ({
                 <div className="bottom">
                     <div className="content">
                         <span className="name">{title}</span>
-                        <span className="about-me">
-                            Last Update : {docDate}
-                        </span>
+                        <span className="about-me">Last Update: {docDate}</span>
                     </div>
                     <div className="bottom-bottom">
                         <div className="social-links-container">
                             {status === "private" ? (
                                 <>
-                                    <Link
-                                        method="delete"
-                                        href={route("documents.delete", id)}
-                                    >
-                                        <Trash
-                                            size="20px"
-                                            className="inline-flex"
-                                        />
+                                    <Link method="delete" href={route("documents.delete", id)}>
+                                        <Trash size="20px" className="inline-flex" />
                                     </Link>
-                                    <Link
-                                        method="patch"
-                                        href={route("documents.public", id)}
-                                    >
-                                        <Globe
-                                            size="20px"
-                                            className="inline-flex"
-                                        />
+                                    <Link method="get" href={route("documents.updateStatus", { id, status: 'public' })}>
+                                        <Globe size="20px" className="inline-flex" />
                                     </Link>
-                                    <Link
-                                        method="patch"
-                                        href={route("documents.archive", id)}
-                                    >
-                                        <Archive
-                                            size="20px"
-                                            className="inline-flex"
-                                        />
+                                    <Link method="get" href={route("documents.updateStatus", { id, status: 'archived' })}>
+                                        <Archive size="20px" className="inline-flex" />
                                     </Link>
                                 </>
                             ) : status === "public" ? (
                                 <>
-                                    <Link
-                                        method="delete"
-                                        href={route("documents.delete", id)}
-                                    >
-                                        <Trash
-                                            size="20px"
-                                            className="inline-flex"
-                                        />
+                                    <Link method="delete" href={route("documents.delete", id)}>
+                                        <Trash size="20px" className="inline-flex" />
                                     </Link>
-                                    <Link method="patch">
-                                        <Lock
-                                            size="20px"
-                                            className="inline-flex"
-                                        />
+                                    <Link method="get">
+                                        <Lock size="20px" className="inline-flex" />
                                     </Link>
-                                    <Link
-                                        method="patch"
-                                        href={route("documents.archive", id)}
-                                    >
-                                        <Archive
-                                            size="20px"
-                                            className="inline-flex"
-                                        />
+                                    <Link method="get" href={route("documents.updateStatus", { id, status: 'archived' })}>
+                                        <Archive size="20px" className="inline-flex" />
                                     </Link>
                                 </>
                             ) : (
                                 <>
-                                    <Link
-                                        method="delete"
-                                        href={route("documents.delete", id)}
-                                    >
-                                        <Trash
-                                            size="20px"
-                                            className="inline-flex"
-                                        />
+                                    <Link method="delete" href={route("documents.delete", id)}>
+                                        <Trash size="20px" className="inline-flex" />
                                     </Link>
-                                    <Link
-                                        method="patch"
-                                        href={route("documents.public", id)}
-                                    >
-                                        <Globe
-                                            size="20px"
-                                            className="inline-flex"
-                                        />
+                                    <Link method="get" href={route("documents.updateStatus", { id, status: 'public' })}>
+                                        <Globe size="20px" className="inline-flex" />
                                     </Link>
-                                    <Link method="patch">
-                                        <Lock
-                                            size="20px"
-                                            className="inline-flex"
-                                        />
+                                    <Link method="get" href={route("documents.updateStatus", { id, status: 'private' })}>
+                                        <Lock size="20px" className="inline-flex" />
                                     </Link>
                                 </>
                             )}
                         </div>
-                        <Link
-                            href={route("documents.edit", documentId)}
-                            className="button"
-                        >
+                        <Link href={route("documents.edit", documentId)} className="button">
                             Edit Me
                         </Link>
                     </div>
@@ -154,7 +100,7 @@ const Card = ({
             </div>
         </StyledWrapper>
     );
-};
+}
 
 const StyledWrapper = styled.div`
     .card {
@@ -164,12 +110,11 @@ const StyledWrapper = styled.div`
         border-radius: 32px;
         padding: 3px;
         position: relative;
-        left:-.5rem;
+        left: -0.5rem;
         margin: 0 1.2rem;
         box-shadow: #604b4a30 0px 70px 30px -50px;
         transition: all 0.5s ease-in-out;
     }
-
 
     .card .mail {
         position: absolute;

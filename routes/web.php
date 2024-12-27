@@ -31,9 +31,7 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::patch('/documents/{document_id}', [DocumentController::class, 'UpdateSummary'])->name('documents.UpdateSummary');
     Route::get('/documents/{id}/updateThemeColor', [DocumentController::class, 'updateThemeColor'])->name('documents.UpdateThemeColor');
     Route::delete('/documents/{document_id}', [DocumentController::class, 'destroy'])->name('documents.delete');
-    Route::patch('/documents/archive/{document_id}', [DocumentController::class, 'ArchivedDocument'])->name('documents.archive');
-    Route::patch('/documents/restore/{document_id}', [DocumentController::class, 'RestoreDocument'])->name('documents.restore');
-    Route::patch('/documents/public/{document_id}', [DocumentController::class, 'PublicDocument'])->name('documents.public');
+    Route::get('document/{id}/status/{status}', [DocumentController::class, 'updateDocumentStatus'])->name('documents.updateStatus');
     Route::get('/preview/{document_id}/resume', [DocumentController::class, 'PreviewResume'])->name('documents.preview');
     // ----------------------------------------------------------------------------------------------------------------------
     Route::post('/profile-details/{document_id}/', [ProfilDetailsController::class, 'store'])->name('profile-details.store');

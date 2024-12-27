@@ -5,7 +5,7 @@ import { HoverEffect } from "@/Components/ui/card-hover-effect";
 import { FileText, CheckCircle, Lock, Archive } from "lucide-react";
 import TrashListBox from "./TrashListBox";
 
-function Page({ document}) {
+function Page({ document }) {
   const [filter, setFilter] = useState(null);
 
   const data = [
@@ -43,7 +43,7 @@ function Page({ document}) {
       id: 4,
       title: "Number of archived resumes",
       description: "Archived resumes for later use",
-      count: document.filter((item) => item.status == "archived").length,
+      count: document.filter((item) => item.status === "archived").length,
       status: "archived",
       icon: Archive,
       backgroundColor: "bg-gradient-to-r from-purple-500 to-purple-700",
@@ -54,41 +54,36 @@ function Page({ document}) {
   const filteredDocuments = filter
     ? document.filter((item) => item.status === filter)
     : document;
-    console.log(filteredDocuments);
+
+  console.log(filteredDocuments);
 
   return (
-      <div className="w-full mx-auto max-w-12xl">
-        <div className="flex items-start justify-between">
-          <div>
-            <HoverEffect
-              items={data}
-              onClick={(item) => setFilter(item.status)}
-            />
-          </div>
-          {/* <div className="shrink-0 flex items-center gap-3">
-                <TrashListBox document={document} />
-            </div> */}
-        </div>
-
-        <div className="w-full">
-          <h5 className="text-xl font-semibold dark:text-inherit text-white my-5">
-            {filter ? `Filtered Resumes (${filter})` : "All Resumes"}
-          </h5>
-          <div className="shrink-0 inline-flex">
-                {/* {Trash List} */}
-                <TrashListBox document={document} />
-            </div>
-          <div className="flex flex-wrap w-full gap-5">
-
-            <AddResume />
-            <ResumeList
-              document={filteredDocuments}
-            />
-            {/* <TrashListBox document={document}/> */}
-          </div>
+    <div className="w-full mx-auto max-w-12xl">
+      <div className="flex items-start justify-between mb-5">
+        <div>
+          <HoverEffect
+            items={data}
+            onClick={(item) => setFilter(item.status)}
+          />
         </div>
       </div>
 
+      <div className="w-full">
+        <div className="flex items-center justify-between mb-5">
+          <h5 className="text-xl font-semibold dark:text-inherit text-white">
+            {filter ? `Filtered Resumes (${filter})` : "All Resumes"}
+          </h5>
+          <div className="shrink-0 flex gap-3">
+            <AddResume /> {/* AddResume component */}
+            <TrashListBox document={document} /> {/* TrashListBox component */}
+          </div>
+        </div>
+
+        <div className="flex flex-wrap w-full gap-5">
+          <ResumeList document={filteredDocuments} />
+        </div>
+      </div>
+    </div>
   );
 }
 
