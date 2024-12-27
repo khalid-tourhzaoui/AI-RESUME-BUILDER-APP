@@ -164,12 +164,12 @@ const StyledWrapper = styled.div`
         border-radius: 32px;
         padding: 3px;
         position: relative;
-        left:2.5rem;
-        margin:auto;
+        left:-.5rem;
+        margin: 0 1.2rem;
         box-shadow: #604b4a30 0px 70px 30px -50px;
         transition: all 0.5s ease-in-out;
     }
-   
+
 
     .card .mail {
         position: absolute;

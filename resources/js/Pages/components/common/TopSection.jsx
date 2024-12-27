@@ -23,10 +23,8 @@ const TopSection = ({ document }) => {
         // Directly use data.title, which is managed by useForm
         put(route("documents.update", document.document_id), {
             title: data.title,
-        })
+        });
     };
-
-
 
     return (
         <>
@@ -44,7 +42,6 @@ const TopSection = ({ document }) => {
                         status={data.status}
                         onSave={handleTitleChange}
                         handleSave={handleSave}
-
                     />
                 </div>
                 <div className="flex items-center gap-2">
@@ -56,12 +53,9 @@ const TopSection = ({ document }) => {
                     />
                     <Share document={document} isLoading={processing} />
                     <MoreOption document={document} isLoading={processing} />
-
-
                 </div>
             </div>
-            <div>
-            </div>
+            {/* <div></div> */}
         </>
     );
 };

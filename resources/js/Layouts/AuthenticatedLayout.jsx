@@ -211,7 +211,7 @@ export default function AuthenticatedLayout({ header, children }) {
                     </div>
                 </header>
             )}
-            
+
 
             <main className="w-full">{children}</main>
         </div>

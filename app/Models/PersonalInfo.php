@@ -17,6 +17,7 @@ class PersonalInfo extends Model
         'address',
         'phone',
         'email',
+        'img',
     ];
 
     public function document()

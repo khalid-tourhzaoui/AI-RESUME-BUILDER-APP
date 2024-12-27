@@ -14,7 +14,7 @@ function AddResume() {
             {
                 onSuccess: (page) => {
                     setIsPending(false);
-                    
+
                 },
                 onError: () => {
                     setIsPending(false);
@@ -45,11 +45,11 @@ function AddResume() {
             {isPending && (
                 <div
                     className="fixed top-0 left-0 z-[9999] right-0 flex flex-col gap-2 items-center justify-center
-                    backdrop-blur bg-black/30 w-full h-full"
+                    backdrop-blur bg-black/30 w-full h-full text-white"
                 >
-                    <Loader size="35px" className="animate-spin" />
+                    <Loader size="35px" className="animate-spin " />
                     <div className="flex items-center gap-2">
-                        <FileText />
+                        <FileText  />
                         Creating Blank Resume...
                     </div>
                 </div>
