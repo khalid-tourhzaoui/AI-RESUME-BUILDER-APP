@@ -25,7 +25,6 @@ function ResumeTitle({ initialTitle, status, isLoading, onSave, handleSave }) {
 
     return (
         <div className="flex items-center gap-1 pr-4">
-            <FileText className=" hidden lg:flex stroke-white" size="30px" />
             <h5
                 className="text-xl px-1 text-white dark:text-gray-300 font-semibold opacity-100 !pointer-events-none"
                 contentEditable={

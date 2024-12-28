@@ -7,7 +7,7 @@ import Card from "./Card";
 export default function ResumeList({document}) {
     const {error,processing} =usePage().props;
     console.log(document);
-    
+
     return (
         <Fragment>
             {processing ? (
@@ -50,7 +50,7 @@ export default function ResumeList({document}) {
                         themeColor={resume.theme_color}
                         thumbnail={resume.thumbnail}/>
                     ))}
-                    
+
                 </>
             )}
         </Fragment>

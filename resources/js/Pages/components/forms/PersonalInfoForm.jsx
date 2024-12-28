@@ -337,7 +337,6 @@ function PersonalInfoForm({ handleNext, document }) {
                         <Button
                             type="submit"
                             disabled={!isFormValid || isSaving}
-                            className="w-full"
                         >
                             {isSaving ? (
                                 <Loader className="animate-spin" size={20} />
