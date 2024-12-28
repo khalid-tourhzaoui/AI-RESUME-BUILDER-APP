@@ -10,7 +10,8 @@ import { colors } from "@/constant/colors";
 import { Vortex } from "@/Components/ui/vortex"; // Importer le composant Vortex
 
 function EditResume() {
-    const { document, success, error } = usePage().props;
+    const { document, success, error,locale,translations} = usePage().props;
+    console.log(locale,translations)
 
     useEffect(() => {
         if (success) {
@@ -67,7 +68,7 @@ function EditResume() {
                         > */}
                             <div className="relative z-10 w-full">
                                 <div className="w-full mx-auto max-w-12xl py-4 px-5">
-                                    <TopSection document={document} />
+                                    <TopSection document={document} locale={locale} translations={translations} />
                                     <div className="w-full mt-1">
                                         <div className="flex flex-col lg:flex-row items-start w-full py-3 gap-10">
                                             {/* {Form Section} */}

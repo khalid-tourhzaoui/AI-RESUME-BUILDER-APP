@@ -1,6 +1,7 @@
 import ApplicationAiLogo from "@/Components/ApplicationAiLogo";
 import ApplicationLogo from "@/Components/ApplicationLogo";
 import Dropdown from "@/Components/Dropdown";
+import LangToggle from "@/Components/LangToggle";
 import NavLink from "@/Components/NavLink";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { Button } from "@/Components/ui/button";
@@ -11,13 +12,11 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
-import { Moon, Sun } from "lucide-react";
-import { useTheme } from "next-themes";
+
 import { useState } from "react";
 
-export default function AuthenticatedLayout({ header, children }) {
+export default function AuthenticatedLayout({ header, children,locale }) {
     const user = usePage().props.auth.user;
-    const { setTheme } = useTheme();
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
 
@@ -44,37 +43,7 @@ export default function AuthenticatedLayout({ header, children }) {
                         </div>
 
                         <div className="hidden sm:ms-6 sm:flex sm:items-center">
-                            {/* --------------------------------------------- */}
-                            <div className="relative ms-3">
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button variant="outline" size="icon">
-                                            <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                                            <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-                                            <span className="sr-only">
-                                                Toggle theme
-                                            </span>
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="end">
-                                        <DropdownMenuItem
-                                            onClick={() => setTheme("light")}
-                                        >
-                                            Light
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem
-                                            onClick={() => setTheme("dark")}
-                                        >
-                                            Dark
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem
-                                            onClick={() => setTheme("system")}
-                                        >
-                                            System
-                                        </DropdownMenuItem>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
-                            </div>
+                        <LangToggle locale={locale} />
                             {/* --------------------------------------------- */}
                             <div className="relative ms-3">
                                 <Dropdown>

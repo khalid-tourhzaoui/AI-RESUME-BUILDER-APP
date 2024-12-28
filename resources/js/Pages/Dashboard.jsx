@@ -8,7 +8,6 @@ import { Vortex } from "@/Components/ui/vortex";
 export default function Dashboard() {
     const { document, success, error } = usePage().props;
     console.log(document);
-
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -33,7 +32,6 @@ export default function Dashboard() {
             });
         }
 
-        // Simulate a delay or when the page finishes loading
         setLoading(false);
     }, [success, error]);
     return (

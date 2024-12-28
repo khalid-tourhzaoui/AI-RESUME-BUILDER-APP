@@ -30,6 +30,29 @@ class DocumentController extends Controller
             ], 500);
         }
     }
+    /*--------------------------------------------------------------------------------------------*/
+    public function updateLanguage(Request $request)
+    {
+        try {
+            $request->validate([
+                'language' => ['required', 'string', 'max:2', 'in:en,fr']
+            ]);
+
+            session(['locale' => $request->language]);
+
+            app()->setLocale($request->language);
+
+            if (session('locale') === $request->language) {
+                return redirect()->back()->with('success', 'La langue a été changée avec succès.');
+            } else {
+                return redirect()->back()->with('error', 'Échec du changement de langue.');
+            }
+        } catch (\Exception $ex) {
+            return redirect()->back()->with('error', $ex->getMessage());
+        }
+    }
+
+
 
 
     /**
@@ -113,6 +136,7 @@ class DocumentController extends Controller
                 'success' => session('success'),
                 'error' => session('error'),
                 'next' => session('next'),
+                'locale' => app()->getLocale(),
             ]);
         }catch (\Exception $ex) {
             return redirect()->route('dashboard')

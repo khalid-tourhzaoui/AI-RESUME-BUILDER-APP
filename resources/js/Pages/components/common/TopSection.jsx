@@ -1,5 +1,5 @@
 import React from "react";
-import { AlertCircle, Loader } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 import { useForm } from "@inertiajs/react";
 import ResumeTitle from "./ResumeTitle";
 import PreviewModal from "../PreviewModal";
@@ -8,6 +8,7 @@ import Share from "./Share";
 import MoreOption from "./MoreOption";
 
 const TopSection = ({ document }) => {
+
     const { data, setData, put, processing } = useForm({
         title: document.title,
         status: document.status,
@@ -55,7 +56,6 @@ const TopSection = ({ document }) => {
                     <MoreOption document={document} isLoading={processing} />
                 </div>
             </div>
-            {/* <div></div> */}
         </>
     );
 };

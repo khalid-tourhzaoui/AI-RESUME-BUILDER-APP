@@ -23,8 +23,10 @@ Route::get('/', function () {
     ]);
 });
 
-// Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
 Route::middleware(['auth','verified'])->group(function () {
+
+    Route::post('documents/languages', [DocumentController::class, 'UpdateLanguage'])->name('language.store');
+    // ----------------------------------------------------------------------------------------------------------------------
     Route::post('documents', [DocumentController::class, 'store'])->name('documents.store');
     Route::get('documents/{document_id}/edit', [DocumentController::class, 'edit'])->name('documents.edit');
     Route::put('/documents/{document_id}', [DocumentController::class, 'update'])->name('documents.update');
@@ -57,7 +59,7 @@ Route::get('/dashboard', function () {
     try {
         $document=Document::where('user_id', Auth::id())->get();
         return Inertia::render('Dashboard')->with(['document'=>$document,'success' => session('success'),
-                'error' => session('error'),]);
+                'error' => session('error'),'locale'=>app()->getLocale(),]);
     } catch (\Exception $ex) {
         // Vérifier si l'exception est due à une connexion refusée
         if ($ex->getCode() == 'HY000') {
