@@ -275,7 +275,7 @@ function ExperienceForm({ handleNext, document }) {
                         </div>
                     ))}
                 </div>
-                <Button className="mt-4" type="submit" disabled={!isFormValid || loading}>
+                <Button className="mt-4 w-full" type="submit" disabled={!isFormValid || loading}>
                     {loading && <Loader size="15px" className="animate-spin" />} Save Changes
                 </Button>
             </form>

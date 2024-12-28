@@ -95,6 +95,7 @@ function SummaryForm({ document, handleNext }) {
                     <Textarea
                         className="mt-5 min-h-36"
                         required
+                        placeholder="Add summary for your resume"
                         max={1000}
                         min={10}
                         value={data.summary}
@@ -142,7 +143,7 @@ function SummaryForm({ document, handleNext }) {
                     )}
 
                     <Button
-                        className="mt-4"
+                        className="mt-4 w-full"
                         type="submit"
                         disabled={loading || document?.status === "archived"}
                     >

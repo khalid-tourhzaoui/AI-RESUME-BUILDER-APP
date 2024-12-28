@@ -13,12 +13,13 @@ import {
     BtnLink,
 } from "react-simple-wysiwyg";
 
-import { Loader, Sparkles } from "lucide-react";
+import { AlignLeft, Loader, Sparkles } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { Label } from "@/Components/ui/label";
 import { Button } from "@/Components/ui/button";
 import { AIChatSession } from "@/lib/google-ai-model";
 import Swal from "sweetalert2";
+
 
 const PROMPT = `Given the job title "{jobTitle}",
  create 6-7 concise and personal bullet points in
@@ -40,6 +41,12 @@ const RichTextEditor = (props) => {
                 toast({
                     title: "Must provide Job Position",
                     variant: "destructive",
+                });
+                Swal.fire({
+                    title: "Must provide Job Position",
+                    text: "Please provide a job position to generate the summary.",
+                    icon: "error",
+                    confirmButtonText: "OK",
                 });
                 return;
             }
@@ -80,23 +87,22 @@ const RichTextEditor = (props) => {
 
         } catch (error) {
             console.error("Error generating summary:", error);
-            toast({
+            Swal.fire({
                 title: "Failed to generate summary",
-                variant: "destructive",
+                text: "Something went wrong while generating the summary.",
+                icon: "error",
+                confirmButtonText: "OK",
             });
         } finally {
             setLoading(false);
         }
     };
 
-
-    //---------------------------------------------------------------------------------
-    //---------------------------------------------------------------------------------
     //---------------------------------------------------------------------------------
     return (
         <div>
             <div className="flex items-center justify-between my-2">
-                <Label>Work Summary</Label>
+                <Label>Work Summary ( {<AlignLeft size={20} className="inline-flex" />} ) :</Label>
                 <Button
                     variant="outline"
                     type="button"

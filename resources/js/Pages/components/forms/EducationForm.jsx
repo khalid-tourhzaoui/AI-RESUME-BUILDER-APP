@@ -12,11 +12,10 @@ import {
 } from "lucide-react";
 import * as Yup from "yup";
 import React, { useEffect, useState } from "react";
-import { Button } from '@/Components/ui/button';
-import { Input } from '@/Components/ui/input';
-import { Label } from '@/Components/ui/label';
+import { Button } from "@/Components/ui/button";
+import { Input } from "@/Components/ui/input";
+import { Label } from "@/Components/ui/label";
 import { Textarea } from "@/Components/ui/textarea";
-
 
 const initialState = {
     university_name: "",
@@ -164,7 +163,7 @@ function EducationForm({ handleNext, document }) {
                 <div className="border-2 w-full h-auto divide-y-[1px] rounded-md px-3 pb-4 my-5">
                     {educationList.map((item, index) => (
                         <div key={index}>
-                            <div className="grid grid-cols-2 sm:grid-cols-1 md:grid-cols-2 gap-5 mb-5 pt-4 relative">
+                            <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-5 mb-5 pt-4 relative">
                                 {educationList.length > 1 && (
                                     <Button
                                         variant="secondary"
@@ -179,93 +178,225 @@ function EducationForm({ handleNext, document }) {
                                         <X size="13px" />
                                     </Button>
                                 )}
-                                {[
-                                    "university_name",
-                                    "degree",
-                                    "major",
-                                    "start_date",
-                                    "end_date",
-                                    "description",
-                                ].map((field, i) => (
-                                    <div
-                                        className={`col-span-${
-                                            field === "description" ||
-                                            field === "university_name"
-                                                ? 2
-                                                : 1
-                                        }`}
-                                        key={i}
-                                    >
-                                        <Label className="text-sm">
-                                            {`${field.replace("_", " ")} :`}{" "}
-                                            <span className="inline-flex">
-                                                {field ===
-                                                    "university_name" && (
-                                                    ( <GraduationCap size={20} className="inline-flex" /> )
-                                                )}
-                                                {field === "degree" && (
-                                                    <Medal size={20} className="inline-flex" />
-                                                )}
-                                                {field === "major" && (
-                                                    <FlaskConical size={20} className="inline-flex" />
-                                                )}
-                                                {field === "start_date" && (
-                                                    <Calendar size={20} className="inline-flex" />
-                                                )}
-                                                {field === "end_date" && (
-                                                    <Calendar size={20} className="inline-flex" />
-                                                )}
-                                                {field === "description" && (
-                                                    <AlignLeft size={20} className="inline-flex" />
-                                                )}
-                                            </span>
-                                        </Label>
-                                        {field === "description" ? (
-                                            <Textarea
-                                                name={field}
-                                                placeholder={`Enter ${field.replace(
-                                                    "_",
-                                                    " "
-                                                )}`}
-                                                className="w-full mt-2"
-                                                value={item[field]}
-                                                onChange={(e) =>
-                                                    handleChange(
-                                                        index,
-                                                        field,
-                                                        e.target.value
-                                                    )
-                                                }
+                                {/* University Name in the one row */}
+                                <div className="col-span-2 sm:col-span-2 md:col-span-2">
+                                    <Label className="text-sm">
+                                        University Name ({" "}
+                                        {
+                                            <GraduationCap
+                                                size={20}
+                                                className="inline-flex"
                                             />
-                                        ) : (
-                                            <Input
-                                                name={field}
-                                                placeholder={`Enter ${field.replace(
-                                                    "_",
-                                                    " "
-                                                )}`}
-                                                className="w-full mt-2"
-                                                value={item[field]}
-                                                onChange={(e) =>
-                                                    handleChange(
-                                                        index,
-                                                        field,
-                                                        e.target.value
-                                                    )
-                                                }
+                                        }{" "}
+                                        ) :
+                                    </Label>
+                                    <Input
+                                        name="university_name"
+                                        placeholder="Enter University Name"
+                                        required
+                                        className="mt-2 w-full"
+                                        value={item.university_name || ""}
+                                        onChange={(e) =>
+                                            handleChange(
+                                                index,
+                                                e.target.name,
+                                                e.target.value
+                                            )
+                                        }
+                                    />
+                                    {errors[index]?.university_name && (
+                                        <p className="text-red-500 text-sm mt-3">
+                                            (
+                                            <AlertCircle
+                                                size={20}
+                                                className="inline-flex"
                                             />
-                                        )}
-                                        {errors[index]?.[field] && (
-                                            <p className="text-red-500 text-sm mt-2">
-                                                <AlertCircle
-                                                    size={20}
-                                                    className="inline-flex"
-                                                />{" "}
-                                                : {errors[index][field]}
-                                            </p>
-                                        )}
-                                    </div>
-                                ))}
+                                            ): {errors[index]?.university_name}
+                                        </p>
+                                    )}
+                                </div>
+                                {/* degree and major in the same row */}
+                                <div className="col-span-2 sm:col-span-2 md:col-span-1">
+                                    <Label className="text-sm">
+                                        Degree ({" "}
+                                        {
+                                            <Medal
+                                                size={20}
+                                                className="inline-flex"
+                                            />
+                                        }{" "}
+                                        ) :
+                                    </Label>
+                                    <Input
+                                        name="degree"
+                                        placeholder="Enter the Degree"
+                                        required
+                                        className="mt-2 w-full"
+                                        value={item.degree || ""}
+                                        onChange={(e) =>
+                                            handleChange(
+                                                index,
+                                                e.target.name,
+                                                e.target.value
+                                            )
+                                        }
+                                    />
+                                    {errors[index]?.degree && (
+                                        <p className="text-red-500 text-sm mt-3">
+                                            (
+                                            <AlertCircle
+                                                size={20}
+                                                className="inline-flex"
+                                            />
+                                            ): {errors[index]?.degree}
+                                        </p>
+                                    )}
+                                </div>
+                                <div className="col-span-2 sm:col-span-2 md:col-span-1">
+                                    <Label className="text-sm">
+                                        Major ({" "}
+                                        {
+                                            <FlaskConical
+                                                size={20}
+                                                className="inline-flex"
+                                            />
+                                        }{" "}
+                                        ) :
+                                    </Label>
+                                    <Input
+                                        name="major"
+                                        placeholder="Enter the Major"
+                                        required
+                                        className="mt-2 w-full"
+                                        value={item.major || ""}
+                                        onChange={(e) =>
+                                            handleChange(
+                                                index,
+                                                e.target.name,
+                                                e.target.value
+                                            )
+                                        }
+                                    />
+                                    {errors[index]?.major && (
+                                        <p className="text-red-500 text-sm mt-3">
+                                            (
+                                            <AlertCircle
+                                                size={20}
+                                                className="inline-flex"
+                                            />
+                                            ): {errors[index]?.major}
+                                        </p>
+                                    )}
+                                </div>
+                                {/* degree and major in the same row */}
+                                <div className="col-span-2 sm:col-span-2 md:col-span-1">
+                                    <Label className="text-sm">
+                                        Start Date ({" "}
+                                        {
+                                            <Calendar
+                                                size={20}
+                                                className="inline-flex"
+                                            />
+                                        }{" "}
+                                        ) :
+                                    </Label>
+                                    <Input
+                                        name="start_date"
+                                        required
+                                        type="date"
+                                        className="mt-2 w-full"
+                                        value={item.start_date || ""}
+                                        onChange={(e) =>
+                                            handleChange(
+                                                index,
+                                                e.target.name,
+                                                e.target.value
+                                            )
+                                        }
+                                    />
+                                    {errors[index]?.start_date && (
+                                        <p className="text-red-500 text-sm mt-3">
+                                            (
+                                            <AlertCircle
+                                                size={20}
+                                                className="inline-flex"
+                                            />
+                                            ): {errors[index]?.start_date}
+                                        </p>
+                                    )}
+                                </div>
+                                <div className="col-span-2 sm:col-span-2 md:col-span-1">
+                                    <Label className="text-sm">
+                                        End Date ({" "}
+                                        {
+                                            <Calendar
+                                                size={20}
+                                                className="inline-flex"
+                                            />
+                                        }{" "}
+                                        ) :
+                                    </Label>
+                                    <Input
+                                        name="end_date"
+                                        required
+                                        type="date"
+                                        className="mt-2 w-full"
+                                        value={item.end_date || ""}
+                                        onChange={(e) =>
+                                            handleChange(
+                                                index,
+                                                e.target.name,
+                                                e.target.value
+                                            )
+                                        }
+                                    />
+                                    {errors[index]?.end_date && (
+                                        <p className="text-red-500 text-sm mt-3">
+                                            (
+                                            <AlertCircle
+                                                size={20}
+                                                className="inline-flex"
+                                            />
+                                            ): {errors[index]?.end_date}
+                                        </p>
+                                    )}
+                                </div>
+                                {/* description in the one row */}
+                                <div className="col-span-2 sm:col-span-2 md:col-span-2">
+                                    <Label className="text-sm">
+                                        Description ({" "}
+                                        {
+                                            <AlignLeft
+                                                size={20}
+                                                className="inline-flex"
+                                            />
+                                        }{" "}
+                                        ) :
+                                    </Label>
+                                    <Textarea
+                                        name="description"
+                                        className="w-full mt-2"
+                                        placeholder="Enter the Description"
+                                        value={item.description || ""}
+                                        onChange={(e) =>
+                                            handleChange(
+                                                index,
+                                                e.target.name,
+                                                e.target.value
+                                            )
+                                        }
+                                    />
+                                    {errors[index]?.description && (
+                                        <p className="text-red-500 text-sm mt-3">
+                                            (
+                                            <AlertCircle
+                                                size={20}
+                                                className="inline-flex"
+                                            />
+                                            ): {errors[index]?.description}
+                                        </p>
+                                    )}
+                                </div>
                             </div>
                             {index === educationList.length - 1 &&
                                 educationList.length < 5 && (

@@ -8,7 +8,6 @@ import EducationForm from "./forms/EducationForm";
 import SkillsForm from "./forms/SkillsForm";
 import LanguageForm from "./forms/LanguageForm";
 import SocialMedia from "./forms/SocialMedia";
-import Hobbies from "./forms/Hobbies";
 
 function ResumeForm({document}) {
     const [activeFormIndex, setActiveFormIndex] = useState(document.current_position);
@@ -42,7 +41,7 @@ function ResumeForm({document}) {
                         size="default"
                         className="!px-2 !py-1 !h-auto"
                         disabled={
-                            activeFormIndex === 8 ||
+                            activeFormIndex === 7 ||
                             document.status === "archived"
                                 ? true
                                 : false
@@ -67,9 +66,7 @@ function ResumeForm({document}) {
                     {/* {Languages} */}
                     {activeFormIndex === 6 && <LanguageForm handleNext={handleNext} document={document} />}
                     {/* {Social Media} */}
-                    {activeFormIndex === 7 && <SocialMedia handleNext={handleNext} document={document} />}
-                    {/* {Hobbies} */}
-                    {activeFormIndex === 8 && <Hobbies document={document} />}
+                    {activeFormIndex === 7 && <SocialMedia document={document} />}
                 </div>
             </div>
         </div>

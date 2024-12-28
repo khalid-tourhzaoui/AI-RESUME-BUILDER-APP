@@ -2,7 +2,7 @@ import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
 import { useForm } from "@inertiajs/react";
-import { Loader, Plus, X } from "lucide-react";
+import { Link, Loader, Network, Plus, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { generateThumbnail } from "@/lib/helper";
 import * as Yup from "yup";
@@ -19,6 +19,7 @@ import { SocialIcon } from "react-social-icons";
 const initialState = {
     name: "",
     link: "",
+    thumbnail:""
 };
 
 function SocialMedia({ document, handleNext }) {
@@ -59,7 +60,7 @@ function SocialMedia({ document, handleNext }) {
             try {
                 // Fetch thumbnail
                 const thumbnail = await generateThumbnail();
-                setData({ social_medias: SocialMediaList, thumbnail });
+                setData({ social_medias: SocialMediaList, thumbnail:thumbnail });
 
                 // Validate the form
                 await Promise.all(
@@ -202,7 +203,7 @@ function SocialMedia({ document, handleNext }) {
                 <div className="border w-full h-auto divide-y-[1px] rounded-md px-3 pb-4 my-5">
                     {SocialMediaList.map((item, index) => (
                         <div key={index}>
-                            <div className="relative flex items-center justify-between mb-5 pt-4 gap-3">
+                            <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-5 mb-5 pt-4 relative">
                                 {SocialMediaList?.length > 1 && (
                                     <Button
                                         variant="secondary"
@@ -219,8 +220,8 @@ function SocialMedia({ document, handleNext }) {
                                     </Button>
                                 )}
 
-                                <div className="flex-1">
-                                    <Label className="text-sm">Name </Label>
+                                <div className="col-span-1 sm:col-span-1 md:col-span-1">
+                                    <Label className="text-sm">Name ( <Network size="20px" className="inline-flex"/> ) :</Label>
 
                                     <Select
                                         name={item.name || ""}
@@ -293,14 +294,15 @@ function SocialMedia({ document, handleNext }) {
                                     )}
                                 </div>
 
-                                <div className="flex-1">
+                                <div className="col-span-1 sm:col-span-1 md:col-span-1">
                                     <Label className="text-sm">
-                                        Link
+                                        Link ( <Link size="20px" className="inline-flex"/> ) :
                                     </Label>
                                     <Input
                                         name="link"
                                         placeholder="www.example.com"
                                         required
+                                        className="mt-3"
                                         autoComplete="off"
                                         value={item.link || ""}
                                         onChange={(e) =>
@@ -337,7 +339,7 @@ function SocialMedia({ document, handleNext }) {
                     ))}
                 </div>
                 <Button
-                    className="mt-4"
+                    className="mt-4 w-full"
                     type="submit"
                     disabled={!isFormValid || processing}
                 >
