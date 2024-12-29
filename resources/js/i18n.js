@@ -1,32 +1,24 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+import LanguageDetector from 'i18next-browser-languagedetector';
+import HttpBackend from 'i18next-http-backend';
 
-const resources = {
-    en: {
-        translation: {
-            welcome: "Welcome",
-            logout: "Logout",
-            frensh: "Frensh",
-            english: "English",
-        },
-    },
-    fr: {
-        translation: {
-            welcome: "Bienvenue",
-            logout: "Déconnexion",
-            frensh: "Français",
-            english:"Anglais"
-        },
-    },
-};
-
-i18n.use(initReactI18next).init({
-    resources,
-    lng: 'en', // Langue par défaut
-    fallbackLng: 'en', // Langue de secours
+i18n
+  .use(LanguageDetector)
+  .use(HttpBackend)
+  .use(initReactI18next)
+  .init({
+    fallbackLng: 'en',
+    debug: true,
     interpolation: {
-        escapeValue: false, // React gère déjà l'échappement
+      escapeValue: false,
     },
-});
+    react: {
+      useSuspense: false,
+    },
+    backend: {
+      loadPath: '/locales/{{lng}}.json',
+    },
+  });
 
 export default i18n;

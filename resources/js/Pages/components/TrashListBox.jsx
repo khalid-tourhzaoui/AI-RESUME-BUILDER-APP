@@ -11,7 +11,7 @@ import React, {  useState } from "react";
 import { format } from "date-fns"; // Ensure you have the date-fns package if you're using `format`
 
 function TrashListBox({ document }) {
-    const {  patch ,delete:destroy} = useForm();
+    const {  get ,delete:destroy} = useForm();
     const [search, setSearch] = useState("");
 
     // Filter documents based on the archived status
@@ -22,7 +22,7 @@ function TrashListBox({ document }) {
     // Handle the restoration of a document
     const onRestore = (e, documentId) => {
         e.stopPropagation();
-        patch(route("documents.restore", { id: documentId }), {
+        get(route("documents.updateStatus", { id:documentId ,status:"private"}), {
             onSuccess: () => {
                 console.log("Document restored successfully");
             },

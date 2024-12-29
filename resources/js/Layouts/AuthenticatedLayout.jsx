@@ -5,6 +5,7 @@ import LangToggle from "@/Components/LangToggle";
 import NavLink from "@/Components/NavLink";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { Button } from "@/Components/ui/button";
+import { Inertia } from "@inertiajs/inertia";
 import { Link, usePage } from "@inertiajs/react";
 import {
     DropdownMenu,
@@ -12,14 +13,23 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
+
 import { LogOut, User } from "lucide-react";
 
 import { useState } from "react";
 
-export default function AuthenticatedLayout({ header, children, locale }) {
+export default function AuthenticatedLayout({ header, children }) {
     const user = usePage().props.auth.user;
-    const [showingNavigationDropdown, setShowingNavigationDropdown] =
-        useState(false);
+    const [showingNavigationDropdown, setShowingNavigationDropdown] =useState(false);
+
+    const changeLanguage = (lang) => {
+        Inertia.post(route('change-language', { language: lang }), {}, {
+          onSuccess: () => {
+            i18n.changeLanguage(lang);
+          },
+        });
+      };
+
 
     return (
         <div className="min-h-screen bg-black">
@@ -89,14 +99,14 @@ export default function AuthenticatedLayout({ header, children, locale }) {
 
                                     <Dropdown.Content>
                                         <Dropdown.Link
-                                            href={route("profile.edit")}
+                                            onClick={() => changeLanguage('en')}
+                                            as="button"
                                         >
                                             <span className="fi fi-us"></span>
                                             <span className="m-5">English</span>
                                         </Dropdown.Link>
                                         <Dropdown.Link
-                                            href={route("logout")}
-                                            method="post"
+                                            onClick={() => changeLanguage('fr')}
                                             as="button"
                                         >
                                             <span className="fi fi-fr"></span>

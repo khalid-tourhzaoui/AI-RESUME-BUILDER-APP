@@ -13,7 +13,8 @@ use App\Http\Controllers\SkillController;
 use App\Http\Controllers\ExperienceController;
 use App\Http\Controllers\ProfilDetailsController;
 use App\Models\Document;
-
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Session;
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
@@ -25,7 +26,14 @@ Route::get('/', function () {
 
 Route::middleware(['auth','verified'])->group(function () {
 
-    Route::post('documents/languages', [DocumentController::class, 'UpdateLanguage'])->name('language.store');
+    // Route::post('/change-language/{lang}', function ($lang) {
+    //     if (in_array($lang, ['en', 'fr', 'ar'])) {
+    //         Session::put('locale', $lang);
+    //         App::setLocale($lang);
+    //     }
+    //     return back();
+    // })->name('change-language');
+    Route::post('/change-language',[DocumentController::class,'UpdateLanguage'])->name('change-language');
     // ----------------------------------------------------------------------------------------------------------------------
     Route::post('documents', [DocumentController::class, 'store'])->name('documents.store');
     Route::get('documents/{document_id}/edit', [DocumentController::class, 'edit'])->name('documents.edit');

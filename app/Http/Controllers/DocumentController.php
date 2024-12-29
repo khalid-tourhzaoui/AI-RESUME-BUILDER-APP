@@ -7,6 +7,9 @@ use Illuminate\Support\Str;
 use App\Models\Document;
 use Inertia\Inertia;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Session;
+
 
 class DocumentController extends Controller
 {
@@ -31,16 +34,15 @@ class DocumentController extends Controller
         }
     }
     /*--------------------------------------------------------------------------------------------*/
-    public function updateLanguage(Request $request)
+    public function UpdateLanguage(Request $request)
     {
         try {
             $request->validate([
                 'language' => ['required', 'string', 'max:2', 'in:en,fr']
             ]);
 
-            session(['locale' => $request->language]);
-
-            app()->setLocale($request->language);
+            Session::put('locale', $request->language);
+            App::setLocale($request->language);
 
             if (session('locale') === $request->language) {
                 return redirect()->back()->with('success', 'La langue a été changée avec succès.');

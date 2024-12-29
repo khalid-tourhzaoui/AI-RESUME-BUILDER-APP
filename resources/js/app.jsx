@@ -1,11 +1,10 @@
 import '../css/app.css';
 import './bootstrap';
-
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
-import { ThemeProvider } from './Components/ThemeContext';
-import './i18n';
+import { I18nextProvider } from 'react-i18next';
+import i18n from './i18n';
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 createInertiaApp({
@@ -19,13 +18,7 @@ createInertiaApp({
         const root = createRoot(el);
 
         root.render(
-            <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange>
-                <App {...props} />
-            </ThemeProvider>
+            <App {...props} />
         );
     },
     progress: {

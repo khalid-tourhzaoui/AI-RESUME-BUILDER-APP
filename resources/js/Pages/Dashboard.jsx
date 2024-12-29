@@ -5,10 +5,14 @@ import { useEffect,useState } from "react";
 import Swal from "sweetalert2";
 import { Loader} from "lucide-react";
 import { Vortex } from "@/Components/ui/vortex";
+import DateTimeDisplay from "./components/common/DateTimeDisplay ";
+import { useTranslation } from 'react-i18next';
 export default function Dashboard() {
     const { document, success, error } = usePage().props;
     console.log(document);
     const [loading, setLoading] = useState(true);
+    const { t } = useTranslation();
+
 
     useEffect(() => {
         if (success) {
@@ -36,11 +40,20 @@ export default function Dashboard() {
     }, [success, error]);
     return (
         <AuthenticatedLayout
-            header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                    Dashboard
-                </h2>
-            }
+        header={
+            <div className="flex items-center justify-between flex-wrap">
+                <div className="flex items-center space-x-2">
+                    {/* <FaTachometerAlt className="text-gray-800 text-2xl" /> */}
+                    <h2 className="text-xl font-semibold leading-tight text-gray-800">
+                        {t('dashboard')}
+                    </h2>
+                </div>
+
+                <div>
+                    <DateTimeDisplay />
+                </div>
+            </div>
+        }
         >
             {loading && (
                 <div className="loader">

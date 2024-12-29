@@ -69,7 +69,7 @@ function Page({ document }) {
       </div>
 
       <div className="w-full">
-        <div className="flex items-center justify-between mb-5">
+        <div className="flex items-center justify-between mb-5 flex-wrap">
           <h5 className="text-xl font-semibold dark:text-inherit text-white">
             {filter ? `Filtered Resumes (${filter})` : "All Resumes"}
           </h5>
