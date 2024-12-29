@@ -36,7 +36,7 @@ function MoreOption({ document, isLoading }) {
                 <Button
                     variant="secondary"
                     size="icon"
-                    className="bg-white border dark:bg-gray-800"
+                    className="bg-white hover:bg-[#f68c09] hover:text-white"
                 >
                     <MoreHorizontal />
                 </Button>

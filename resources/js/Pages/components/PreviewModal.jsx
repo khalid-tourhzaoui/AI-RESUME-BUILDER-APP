@@ -16,7 +16,7 @@ function PreviewModal({document, isLoading}) {
                                 : false
                         }
                         variant="secondary"
-                        className="bg-white border gap-1 dark:bg-gray-800 !p-2 w-9 lg:w-auto lg:p-4">
+                        className="bg-white hover:bg-[#f68c09] hover:text-white !p-2 w-9 lg:w-auto lg:p-4">
                         <div className="flex items-center gap-1">
                             <Eye size="17px" />
                             <span className="hidden  lg:flex">Preview</span>

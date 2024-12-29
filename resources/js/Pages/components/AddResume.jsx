@@ -35,9 +35,9 @@ function AddResume() {
                 <PopoverTrigger>
                     <Button
                         onClick={onCreate}
-                        className="text-[15px] gap-[2px] items-center"
+                        className="text-[15px] gap-[2px] items-center hover:bg-[#f68c09] hover:text-white hover:border-[#f68c09]"
                         variant="outline"
-                        disabled={isPending} // Disable button while pending
+                        disabled={isPending}
                     >
                         <Plus size="30px" />
                         <span className="text-sm font-semibold">
@@ -49,7 +49,7 @@ function AddResume() {
             {isPending && (
                 <div
                     className="fixed top-0 left-0 z-[9999] right-0 flex flex-col gap-2 items-center justify-center
-                    backdrop-blur bg-black/30 w-full h-full text-white"
+                    backdrop-blur bg-black/30 w-full h-full text-black"
                 >
                     <Loader size="35px" className="animate-spin" />
                     <div className="flex items-center gap-2">

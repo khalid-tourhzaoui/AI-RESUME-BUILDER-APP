@@ -54,7 +54,7 @@ function Share({document,isLoading}) {
                             : false
                     }
                     variant="secondary"
-                    className="bg-white border gap-1 dark:bg-gray-800 !p-2 lg:w-auto lg:p-4">
+                    className="bg-white hover:bg-[#f68c09] hover:text-white !p-2 lg:w-auto lg:p-4">
                     <div className="flex items-center gap-1">
                         <ShareIcon size="17px" />
                         <span className="hidden lg:flex">Share</span>
@@ -73,9 +73,9 @@ function Share({document,isLoading}) {
                         <div className="flex gap-x-2 items-center">
                             <Globe
                                 size="15px"
-                                className="text-primary animate-pulse"
+                                className="text-[#f68c09] animate-pulse"
                             />
-                            <p className="font-medium text-xs text-primary">
+                            <p className="font-medium text-xs text-[#f68c09]">
                                 This resume is shareable, copy the link!
                             </p>
                         </div>
@@ -100,7 +100,7 @@ function Share({document,isLoading}) {
                         <Button
                             size="sm"
                             variant="outline"
-                            className="w-full border-primary text-primary text-xs font-semibold"
+                            className="w-full border-[#f68c09] text-[#f68c09] text-xs font-semibold"
                             onClick={() => handleClick("private")}
                             disabled={processing}
                         >

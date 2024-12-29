@@ -12,16 +12,17 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
+import { LogOut, User } from "lucide-react";
 
 import { useState } from "react";
 
-export default function AuthenticatedLayout({ header, children,locale }) {
+export default function AuthenticatedLayout({ header, children, locale }) {
     const user = usePage().props.auth.user;
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
 
     return (
-        <div className="min-h-screen bg-gray-100">
+        <div className="min-h-screen bg-black">
             <nav className="border-b border-gray-100 bg-white">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="flex h-16 justify-between">
@@ -43,7 +44,7 @@ export default function AuthenticatedLayout({ header, children,locale }) {
                         </div>
 
                         <div className="hidden sm:ms-6 sm:flex sm:items-center">
-                        <LangToggle locale={locale} />
+                            {/* <LangToggle locale={locale} /> */}
                             {/* --------------------------------------------- */}
                             <div className="relative ms-3">
                                 <Dropdown>
@@ -51,7 +52,69 @@ export default function AuthenticatedLayout({ header, children,locale }) {
                                         <span className="inline-flex rounded-md">
                                             <button
                                                 type="button"
-                                                className="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
+                                                className="inline-flex items-center rounded-md border border-transparent bg-black
+                                                 px-3 py-[6px] text-md font-medium leading-4 text-[#f68c09] transition duration-150
+                                                  ease-in-out hover:text-white hover:bg-[#f68c09] focus:outline-none"
+                                            >
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    fill="none"
+                                                    viewBox="0 0 24 24"
+                                                    strokeWidth={1.5}
+                                                    stroke="currentColor"
+                                                    className="w-5 h-5"
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        d="M10.5 21l5.25-11.25L21 21m-9-3h7.5M3 5.621a48.474 48.474 0 016-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364C11.176 10.658 7.69 15.08 3 17.502m9.334-12.138c.896.061 1.785.147 2.666.257m-4.589 8.495a18.023 18.023 0 01-3.827-5.802"
+                                                    />
+                                                </svg>
+
+                                                <svg
+                                                    className="-me-0.5 ms-2 h-4 w-4"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 20 20"
+                                                    fill="currentColor"
+                                                >
+                                                    <path
+                                                        fillRule="evenodd"
+                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                        clipRule="evenodd"
+                                                    />
+                                                </svg>
+                                            </button>
+                                        </span>
+                                    </Dropdown.Trigger>
+
+                                    <Dropdown.Content>
+                                        <Dropdown.Link
+                                            href={route("profile.edit")}
+                                        >
+                                            <span className="fi fi-us"></span>
+                                            <span className="m-5">English</span>
+                                        </Dropdown.Link>
+                                        <Dropdown.Link
+                                            href={route("logout")}
+                                            method="post"
+                                            as="button"
+                                        >
+                                            <span className="fi fi-fr"></span>
+                                            <span className="m-5">Frensh</span>
+                                        </Dropdown.Link>
+                                    </Dropdown.Content>
+                                </Dropdown>
+                            </div>
+                            {/* --------------------------------------------- */}
+                            <div className="relative ms-3">
+                                <Dropdown>
+                                    <Dropdown.Trigger>
+                                        <span className="inline-flex rounded-md">
+                                            <button
+                                                type="button"
+                                                className="inline-flex items-center rounded-md border border-transparent bg-black
+                                                 px-3 py-[9px] text-md font-medium leading-4 text-[#f68c09] transition duration-150
+                                                  ease-in-out hover:text-white hover:bg-[#f68c09] focus:outline-none"
                                             >
                                                 {user.name}
 
@@ -75,18 +138,19 @@ export default function AuthenticatedLayout({ header, children,locale }) {
                                         <Dropdown.Link
                                             href={route("profile.edit")}
                                         >
-                                            Profile
+                                            <User size="20px" className="inline-flex"/> Profile
                                         </Dropdown.Link>
                                         <Dropdown.Link
                                             href={route("logout")}
                                             method="post"
                                             as="button"
                                         >
-                                            Log Out
+                                            <LogOut size="20px" className="inline-flex"/> Log Out
                                         </Dropdown.Link>
                                     </Dropdown.Content>
                                 </Dropdown>
                             </div>
+
                         </div>
 
                         <div className="-me-2 flex items-center sm:hidden">
@@ -180,7 +244,6 @@ export default function AuthenticatedLayout({ header, children,locale }) {
                     </div>
                 </header>
             )}
-
 
             <main className="w-full">{children}</main>
         </div>

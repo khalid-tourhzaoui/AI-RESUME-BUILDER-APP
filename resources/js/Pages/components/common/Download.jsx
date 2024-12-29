@@ -61,9 +61,7 @@ function Download(props) {
                 isLoading || loading || status === "archived" ? true : false
             }
             variant="secondary"
-            className="bg-white border gap-1
-                   dark:bg-gray-800 !p-2
-                    min-w-9 lg:min-w-auto lg:p-4"
+            className="bg-white hover:bg-[#f68c09] hover:text-white gap-1 !p-2 min-w-9 lg:min-w-auto lg:p-4"
             onClick={handleDownload}
         >
             <div className="flex items-center gap-1">

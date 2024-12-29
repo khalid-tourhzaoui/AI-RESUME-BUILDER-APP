@@ -48,7 +48,7 @@ function TrashListBox({ document }) {
         <Popover>
             <PopoverTrigger>
                 <Button
-                    className="text-[15px] gap-[2px] items-center"
+                    className="text-[15px] gap-[2px] items-center hover:bg-[#f68c09] hover:text-white hover:border-[#f68c09]"
                     variant="outline"
                 >
                     <Trash2 size="15px" />
