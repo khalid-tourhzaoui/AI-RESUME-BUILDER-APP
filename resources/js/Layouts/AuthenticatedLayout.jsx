@@ -1,34 +1,21 @@
 import ApplicationAiLogo from "@/Components/ApplicationAiLogo";
-import ApplicationLogo from "@/Components/ApplicationLogo";
 import Dropdown from "@/Components/Dropdown";
-import LangToggle from "@/Components/LangToggle";
 import NavLink from "@/Components/NavLink";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
-import { Button } from "@/Components/ui/button";
-import { Inertia } from "@inertiajs/inertia";
+import { useTranslation } from 'react-i18next';
 import { Link, usePage } from "@inertiajs/react";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "@radix-ui/react-dropdown-menu";
-
 import { LogOut, User } from "lucide-react";
-
 import { useState } from "react";
-
 export default function AuthenticatedLayout({ header, children }) {
     const user = usePage().props.auth.user;
     const [showingNavigationDropdown, setShowingNavigationDropdown] =useState(false);
 
-    const changeLanguage = (lang) => {
-        Inertia.post(route('change-language', { language: lang }), {}, {
-          onSuccess: () => {
-            i18n.changeLanguage(lang);
-          },
-        });
-      };
+    const { i18n } = useTranslation();
+
+    const handleLanguageChange = (language) => {
+        i18n.changeLanguage(language);
+        localStorage.setItem('language', language);
+    };
 
 
     return (
@@ -99,14 +86,14 @@ export default function AuthenticatedLayout({ header, children }) {
 
                                     <Dropdown.Content>
                                         <Dropdown.Link
-                                            onClick={() => changeLanguage('en')}
+                                            onClick={() => handleLanguageChange('en')}
                                             as="button"
                                         >
                                             <span className="fi fi-us"></span>
                                             <span className="m-5">English</span>
                                         </Dropdown.Link>
                                         <Dropdown.Link
-                                            onClick={() => changeLanguage('fr')}
+                                            onClick={() => handleLanguageChange('fr')}
                                             as="button"
                                         >
                                             <span className="fi fi-fr"></span>

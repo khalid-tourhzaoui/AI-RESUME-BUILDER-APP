@@ -4,14 +4,16 @@ import ResumeList from "./ResumeList";
 import { HoverEffect } from "@/Components/ui/card-hover-effect";
 import { FileText, CheckCircle, Lock, Archive } from "lucide-react";
 import TrashListBox from "./TrashListBox";
+import { useTranslation } from "react-i18next";
 
 function Page({ document }) {
   const [filter, setFilter] = useState(null);
+  const { t } = useTranslation();
 
   const data = [
     {
       id: 1,
-      title: "Number of all resumes",
+      title: t("Number_of_all_resumes"),
       description: "Total resumes in the system",
       count: document.length,
       status: null,
@@ -67,6 +69,8 @@ function Page({ document }) {
           />
         </div>
       </div>
+
+
 
       <div className="w-full">
         <div className="flex items-center justify-between mb-5 flex-wrap">
