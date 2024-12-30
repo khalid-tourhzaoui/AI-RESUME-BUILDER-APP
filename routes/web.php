@@ -25,15 +25,6 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth','verified'])->group(function () {
-
-    // Route::post('/change-language/{lang}', function ($lang) {
-    //     if (in_array($lang, ['en', 'fr', 'ar'])) {
-    //         Session::put('locale', $lang);
-    //         App::setLocale($lang);
-    //     }
-    //     return back();
-    // })->name('change-language');
-    Route::post('/change-language',[DocumentController::class,'UpdateLanguage'])->name('change-language');
     // ----------------------------------------------------------------------------------------------------------------------
     Route::post('documents', [DocumentController::class, 'store'])->name('documents.store');
     Route::get('documents/{document_id}/edit', [DocumentController::class, 'edit'])->name('documents.edit');

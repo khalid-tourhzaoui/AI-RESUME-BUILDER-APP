@@ -1,5 +1,23 @@
 {
     "dashboard": "Tableau de bord",
     "welcome": "Bienvenue",
-    "Number_of_all_resumes": "Nombre de tous les CV"
+    "english":"Anglais",
+    "frensh":"Francais",
+    "Total_resumes_in_the_system": "Total des CV dans le système",
+    "Number_of_public_resumes": "Nombre de CV publics",
+    "Currently_active_resumes": "CV actifs actuellement",
+    "Number_of_private_resumes": "Nombre de CV privés",
+    "Resumes_marked_as_private": "CV marqués comme privés",
+    "Number_of_archived_resumes": "Nombre de CV archivés",
+    "Archived_resumes_for_later_use": "CV archivés pour une utilisation ultérieure",
+    "public": "Public",
+    "private": "Privé",
+    "archived": "Archivé",
+    "Filtered_Resumes": "CV filtrés",
+    "All_Resumes": "Tous les CV",
+    "Blank_Resume": "CV vierge",
+    "Creating_Blank_Resume...": "Création d'un CV vierge...",
+    "All_Trash": "Toute la corbeille",
+    "Filter_by_document_title": "Filtrer par titre du document",
+    "No_documents_found": "Aucun document trouvé"
   }

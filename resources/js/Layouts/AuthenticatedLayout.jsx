@@ -10,7 +10,7 @@ export default function AuthenticatedLayout({ header, children }) {
     const user = usePage().props.auth.user;
     const [showingNavigationDropdown, setShowingNavigationDropdown] =useState(false);
 
-    const { i18n } = useTranslation();
+    const { i18n,t } = useTranslation();
 
     const handleLanguageChange = (language) => {
         i18n.changeLanguage(language);
@@ -19,7 +19,7 @@ export default function AuthenticatedLayout({ header, children }) {
 
 
     return (
-        <div className="min-h-screen bg-black">
+        <div className="min-h-screen bg-gray-100">
             <nav className="border-b border-gray-100 bg-white">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="flex h-16 justify-between">
@@ -35,7 +35,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                     href={route("dashboard")}
                                     active={route().current("dashboard")}
                                 >
-                                    Dashboard
+                                    {t('dashboard')}
                                 </NavLink>
                             </div>
                         </div>
@@ -90,14 +90,14 @@ export default function AuthenticatedLayout({ header, children }) {
                                             as="button"
                                         >
                                             <span className="fi fi-us"></span>
-                                            <span className="m-5">English</span>
+                                            <span className="m-5">{t('english')}</span>
                                         </Dropdown.Link>
                                         <Dropdown.Link
                                             onClick={() => handleLanguageChange('fr')}
                                             as="button"
                                         >
                                             <span className="fi fi-fr"></span>
-                                            <span className="m-5">Frensh</span>
+                                            <span className="m-5">{t('frensh')}</span>
                                         </Dropdown.Link>
                                     </Dropdown.Content>
                                 </Dropdown>

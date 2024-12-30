@@ -6,7 +6,6 @@ import { CheckCircle, Languages, Loader, Plus, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { generateThumbnail } from "@/lib/helper";
 import * as Yup from "yup";
-import "/node_modules/flag-icons/css/flag-icons.min.css";
 import {
     Select,
     SelectContent,

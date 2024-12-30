@@ -5,6 +5,8 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
 import { I18nextProvider } from 'react-i18next';
 import i18n from './i18n';
+import "/node_modules/flag-icons/css/flag-icons.min.css";
+
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 createInertiaApp({

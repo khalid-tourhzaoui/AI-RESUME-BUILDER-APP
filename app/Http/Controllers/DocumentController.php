@@ -34,29 +34,6 @@ class DocumentController extends Controller
         }
     }
     /*--------------------------------------------------------------------------------------------*/
-    public function UpdateLanguage(Request $request)
-    {
-        try {
-            $request->validate([
-                'language' => ['required', 'string', 'max:2', 'in:en,fr']
-            ]);
-
-            Session::put('locale', $request->language);
-            App::setLocale($request->language);
-
-            if (session('locale') === $request->language) {
-                return redirect()->back()->with('success', 'La langue a été changée avec succès.');
-            } else {
-                return redirect()->back()->with('error', 'Échec du changement de langue.');
-            }
-        } catch (\Exception $ex) {
-            return redirect()->back()->with('error', $ex->getMessage());
-        }
-    }
-
-
-
-
     /**
      * Show the form for creating a new resource.
      */

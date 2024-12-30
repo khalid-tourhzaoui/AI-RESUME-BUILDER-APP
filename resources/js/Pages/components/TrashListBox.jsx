@@ -9,11 +9,12 @@ import { useForm } from "@inertiajs/react";
 import { Dot, FileText, Search, Trash, Trash2, Undo } from "lucide-react";
 import React, {  useState } from "react";
 import { format } from "date-fns"; // Ensure you have the date-fns package if you're using `format`
+import { useTranslation } from "react-i18next";
 
 function TrashListBox({ document }) {
     const {  get ,delete:destroy} = useForm();
     const [search, setSearch] = useState("");
-
+    const {t}=useTranslation();
     // Filter documents based on the archived status
     const filteredDocuments = document.filter(
         (doc) => doc.status === "archived"
@@ -52,7 +53,7 @@ function TrashListBox({ document }) {
                     variant="outline"
                 >
                     <Trash2 size="15px" />
-                    <span>All Trash</span>
+                    <span>{t('All_Trash')}</span>
                 </Button>
             </PopoverTrigger>
             <PopoverContent
@@ -68,13 +69,13 @@ function TrashListBox({ document }) {
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                             className="h-7 px-2 bg-secondary"
-                            placeholder="Filter by document title"
+                            placeholder={t('Filter_by_document_title')}
                         />
                     </div>
                     <div className="mt-2 px-1 pb-1">
                         {filteredDocuments.length === 0 ? (
                             <p className="text-xs text-center text-muted-foreground">
-                                No documents found
+                                {t('No_documents_found')}
                             </p>
                         ) : (
                             filteredDocuments

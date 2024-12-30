@@ -1,13 +1,14 @@
 import { FileText, Loader, Plus } from "lucide-react";
 import React from "react";
-import { Inertia } from "@inertiajs/inertia";
 import { Popover, PopoverTrigger } from "@/Components/ui/popover";
 import { Button } from "@/Components/ui/button";
 import { useForm } from "@inertiajs/react";
+import { useTranslation } from "react-i18next";
 
 function AddResume() {
     const [isPending, setIsPending] = React.useState(false);
     const { post } = useForm();
+    const {t} = useTranslation();
 
     const onCreate = async () => {
         if (isPending) return; // Prevent multiple submissions
@@ -41,7 +42,7 @@ function AddResume() {
                     >
                         <Plus size="30px" />
                         <span className="text-sm font-semibold">
-                            Blank Resume
+                            {t('Blank_Resume')}
                         </span>
                     </Button>
                 </PopoverTrigger>
@@ -54,7 +55,7 @@ function AddResume() {
                     <Loader size="35px" className="animate-spin" />
                     <div className="flex items-center gap-2">
                         <FileText />
-                        Creating Blank Resume...
+                        {t('Creating_Blank_Resume...')}
                     </div>
                 </div>
             )}

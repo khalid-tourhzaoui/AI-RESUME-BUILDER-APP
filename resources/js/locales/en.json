@@ -1,6 +1,26 @@
 {
     "dashboard": "Dashboard",
     "welcome": "Welcome",
-    "Number_of_all_resumes": "Number of all resumes"
+    "english":"English",
+    "frensh":"Frensh",
+    "Number_of_all_resumes": "Number of all resumes",
+    "Total_resumes_in_the_system": "Total resumes in the system",
+    "Number_of_public_resumes": "Number of public resumes",
+    "Currently_active_resumes": "Currently active resumes",
+    "Number_of_private_resumes": "Number of private resumes",
+    "Resumes_marked_as_private": "Resumes marked as private",
+    "Number_of_archived_resumes": "Number of archived resumes",
+    "Archived_resumes_for_later_use": "Archived resumes for later use",
+    "public": "Public",
+    "private": "Private",
+    "archived": "Archived",
+    "Filtered_Resumes": "Filtered Resumes",
+    "All_Resumes": "All Resumes",
+    "Blank_Resume": "Blank Resume",
+    "Creating_Blank_Resume...": "Creating Blank Resume...",
+    "All_Trash": "All Trash",
+    "Filter_by_document_title": "Filter by document title",
+    "No_documents_found": "No documents found"
+
 
   }
