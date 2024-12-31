@@ -7,7 +7,6 @@ import GuestLayout from "@/Layouts/GuestLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
 import { Loader, Mail } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
 import InputLabel from "@/Components/InputLabel";
 
 export default function ForgotPassword({ status }) {
@@ -16,28 +15,10 @@ export default function ForgotPassword({ status }) {
     });
     const { t } = useTranslation();
 
-    // State to hold the email validation error
-    const [emailError, setEmailError] = useState("");
-
-    // Handler to validate email
-    const validateEmail = () => {
-        if (!data.email || !/\S+@\S+\.\S+/.test(data.email)) {
-            setEmailError("Please enter a valid email address.");
-        } else {
-            setEmailError("");
-        }
-    };
-
     const submit = (e) => {
         e.preventDefault();
 
-        // Validate email before submitting the form
-        validateEmail();
-
-        // Only submit if there are no errors
-        if (!emailError) {
-            post(route("password.email"));
-        }
+        post(route("password.email"));
     };
 
     return (
@@ -75,11 +56,10 @@ export default function ForgotPassword({ status }) {
                             isFocused={true}
                             onChange={(e) => {
                                 setData("email", e.target.value);
-                                validateEmail();
                             }}
                         />
                         <Mail className="absolute right-2 top-[37px] cursor-pointer" />
-                        <InputError message={emailError || errors.email} className="mt-2" />
+                        <InputError message={errors.email} className="mt-2" />
                     </div>
 
                     <div className="mt-4 flex items-center justify-between">

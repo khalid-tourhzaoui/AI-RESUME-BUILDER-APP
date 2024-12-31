@@ -5,7 +5,7 @@ import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
 import GuestLayout from "@/Layouts/GuestLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
-import { Loader, User, Mail, Lock, EyeOff, Eye } from "lucide-react"; // Import des icônes
+import { Loader, User, Mail, EyeOff, Eye, Lock } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -17,14 +17,20 @@ export default function Register() {
         password_confirmation: "",
     });
     const [showPassword, setShowPassword] = useState(false);
-    const { t } =useTranslation();
-    // Validation de l'email
-    const validateEmail = () => {
-        const regex = /\S+@\S+\.\S+/;
-        if (!data.email || !regex.test(data.email)) {
-            errors.email = "Veuillez entrer un email valide.";
+    const { t } = useTranslation();
+
+    // Validation du mot de passe
+    const validatePassword = () => {
+        if (
+            (data.password && data.password.length < 8) ||
+            !/[A-Z]/.test(data.password) ||
+            !/[a-z]/.test(data.password) ||
+            !/[0-9]/.test(data.password)
+        ) {
+            errors.password =
+                "Le mot de passe doit respecter les conditions au dessous.";
         } else {
-            delete errors.email;
+            delete errors.password;
         }
     };
 
@@ -36,14 +42,9 @@ export default function Register() {
         hasNumber: /[0-9]/.test(data.password),
     };
 
-
-
     const submit = (e) => {
         e.preventDefault();
-
-        // Validation avant soumission
-        validateEmail();
-        console.log(errors.password_confirmation)
+        validatePassword();
 
         if (Object.keys(errors).length === 0) {
             post(route("register"), {
@@ -94,10 +95,7 @@ export default function Register() {
                             className="mt-1 block w-full"
                             autoComplete="username"
                             placeholder={t("Enter_your_email")}
-                            onChange={(e) => {
-                                setData("email", e.target.value);
-                                validateEmail();
-                            }}
+                            onChange={(e) => setData("email", e.target.value)}
                             required
                         />
                         <Mail className="absolute right-2 top-[38px] cursor-pointer" />
@@ -117,10 +115,13 @@ export default function Register() {
                             placeholder={t("Enter_your_password")}
                             onChange={(e) => {
                                 setData("password", e.target.value);
+                                validatePassword();
                             }}
+                            onKeyUp={validatePassword}
                             required
                         />
-                        <Lock className="absolute right-2 top-[37px] cursor-pointer" />
+                        <Lock className="absolute right-2 top-[38px] cursor-pointer" />
+                        <InputError message={errors.password} className="mt-2" />
                     </div>
 
                     {/* Champ Confirmation Mot de Passe */}
@@ -134,7 +135,9 @@ export default function Register() {
                             className="mt-1 block w-full"
                             autoComplete="new-password"
                             placeholder={t("Confirm_your_password")}
-                            onChange={(e) => setData("password_confirmation", e.target.value)}
+                            onChange={(e) => {
+                                setData("password_confirmation", e.target.value);
+                            }}
                             required
                         />
                         {showPassword ? (
@@ -148,7 +151,7 @@ export default function Register() {
                                 onClick={() => setShowPassword(!showPassword)}
                             />
                         )}
-                        <InputError message={errors.password} className="mt-2" />
+                        <InputError message={errors.password_confirmation} className="mt-2" />
                     </div>
 
                     {/* Conditions de mot de passe */}
@@ -170,7 +173,6 @@ export default function Register() {
                         </ul>
                     </div>
 
-                    {/* Boutons */}
                     <div className="mt-4 flex items-center justify-end">
                         <Link
                             href={route("login")}

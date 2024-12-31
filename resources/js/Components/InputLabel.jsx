@@ -1,4 +1,4 @@
-import { BadgeCheck, Contact, KeySquare, Lock, Mail, Mails, User } from "lucide-react";
+import { BadgeCheck, Contact, KeySquare,Mails } from "lucide-react";
 
 export default function InputLabel({
     value,

@@ -39,5 +39,11 @@
     "Contenir_au_moins_une_minuscule" : "Contain at least one lowercase",
     "Contenir_au_moins_un_chiffre" : "Contain at least one number",
     "Déjà_inscrit" : "Already registered",
-    "S'inscrire" : "Sign up"
+    "S'inscrire" : "Sign up",
+    "Reset_Password":"Reset_Password",
+    "Log_Out":"Log Out",
+    "Profile":"Profile",
+    "Resend_Verification_Email":"Resend Verification Email",
+    "verification-link-sent":"A new verification link has been sent to the email address you provided during registration.",
+    "verify-email-check-your-email":"Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn't receive the email, we will gladly send you another."
 }

@@ -16,33 +16,12 @@ export default function Login({ status, canResetPassword }) {
         password: "",
         remember: false,
     });
-    const {t} =useTranslation();
-
-    // Handler to validate email
-    const validateEmail = () => {
-        if (!data.email || !/\S+@\S+\.\S+/.test(data.email)) {
-            errors.email = "Please enter a valid email address.";
-        } else {
-            delete errors.email;
-        }
-    };
-
-    // Handler to validate password dynamically
-    const validatePassword = (password) => {
-        if (password.length < 8) {
-            errors.password = "Password must be at least 6 characters long.";
-        } else {
-            delete errors.password;
-        }
-    };
+    const { t } = useTranslation();
 
     const [showPassword, setShowPassword] = useState(false);
 
     const submit = (e) => {
         e.preventDefault();
-        // Validate email and password before submitting
-        validateEmail();
-        validatePassword(data.password);
 
         // If no errors, submit the form
         if (Object.keys(errors).length === 0) {
@@ -57,9 +36,6 @@ export default function Login({ status, canResetPassword }) {
     return (
         <GuestLayout>
             <Head title="Log in" />
-            {status && (
-                <div className="mb-4 text-sm font-medium text-green-600">{status}</div>
-            )}
             <div className="max-w-md w-full mx-auto">
                 <form
                     onSubmit={submit}
@@ -70,8 +46,17 @@ export default function Login({ status, canResetPassword }) {
                             <ApplicationAiLogo className="h-20 w-40 fill-current text-gray-500 mx-auto" />
                         </Link>
                     </div>
+                    {status && (
+                        <div className="mb-4 text-sm font-medium text-green-600">
+                            {status}
+                        </div>
+                    )}
                     <div className="relative">
-                        <InputLabel htmlFor="email" value="Email-Address" className="text-sm text-gray-800"/>
+                        <InputLabel
+                            htmlFor="email"
+                            value="Email-Address"
+                            className="text-sm text-gray-800"
+                        />
                         <TextInput
                             type="email"
                             name="email"
@@ -83,14 +68,17 @@ export default function Login({ status, canResetPassword }) {
                             isFocused={true}
                             onChange={(e) => {
                                 setData("email", e.target.value);
-                                validateEmail();
                             }}
                         />
                         <Mail className="absolute right-2 top-[35px] cursor-pointer" />
                         <InputError message={errors.email} className="mt-2" />
                     </div>
                     <div className="relative mt-4">
-                        <InputLabel htmlFor="password" value="Password" className="text-sm text-gray-800"/>
+                        <InputLabel
+                            htmlFor="password"
+                            value="Password"
+                            className="text-sm text-gray-800"
+                        />
                         <TextInput
                             id="password"
                             type={showPassword ? "text" : "password"}
@@ -101,7 +89,6 @@ export default function Login({ status, canResetPassword }) {
                             autoComplete="current-password"
                             onChange={(e) => {
                                 setData("password", e.target.value);
-                                validatePassword(e.target.value);
                             }}
                         />
                         {showPassword ? (
@@ -115,16 +102,23 @@ export default function Login({ status, canResetPassword }) {
                                 onClick={() => setShowPassword(!showPassword)}
                             />
                         )}
-                        <InputError message={errors.password} className="mt-2" />
+                        <InputError
+                            message={errors.password}
+                            className="mt-2"
+                        />
                     </div>
                     <div className="flex items-center justify-between gap-4 mt-6">
                         <label className="flex items-center">
                             <Checkbox
                                 name="remember"
                                 checked={data.remember}
-                                onChange={(e) => setData("remember", e.target.checked)}
+                                onChange={(e) =>
+                                    setData("remember", e.target.checked)
+                                }
                             />
-                            <span className="ms-2 text-sm text-gray-600">{t("Remember_me")}</span>
+                            <span className="ms-2 text-sm text-gray-600">
+                                {t("Remember_me")}
+                            </span>
                         </label>
                         {canResetPassword && (
                             <Link
@@ -141,7 +135,12 @@ export default function Login({ status, canResetPassword }) {
                             disabled={processing}
                             className="w-full py-2.5 px-4 text-sm font-semibold tracking-wider rounded-full text-white bg-gray-800 hover:bg-[#222] flex items-center justify-center"
                         >
-                            {processing && <Loader size={20} className="animate-spin mr-2" />}
+                            {processing && (
+                                <Loader
+                                    size={20}
+                                    className="animate-spin mr-2"
+                                />
+                            )}
                             {t("Sign_in")}
                         </PrimaryButton>
                         <p className="text-gray-800 text-sm text-center mt-6">

@@ -38,5 +38,6 @@
     "Contenir_au_moins_une_minuscule" : "Contenir au moins une minuscule",
     "Contenir_au_moins_un_chiffre" : "Contenir au moins un chiffre",
     "Déjà_inscrit" : "Déjà inscrit",
-    "S'inscrire" : "S'inscrire"
+    "S'inscrire" : "S'inscrire",
+    "Reset_Password":"Réinitialiser le mot de passe"
   }
