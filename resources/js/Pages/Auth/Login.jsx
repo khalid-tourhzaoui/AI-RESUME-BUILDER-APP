@@ -5,9 +5,10 @@ import Checkbox from "@/Components/Checkbox";
 import PrimaryButton from "@/Components/PrimaryButton";
 import GuestLayout from "@/Layouts/GuestLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
-import { Eye, EyeOff, Loader, Mail, User } from "lucide-react";
+import { Eye, EyeOff, Loader, Mail } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import InputLabel from "@/Components/InputLabel";
 
 export default function Login({ status, canResetPassword }) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -28,7 +29,7 @@ export default function Login({ status, canResetPassword }) {
 
     // Handler to validate password dynamically
     const validatePassword = (password) => {
-        if (password.length < 6) {
+        if (password.length < 8) {
             errors.password = "Password must be at least 6 characters long.";
         } else {
             delete errors.password;
@@ -70,6 +71,7 @@ export default function Login({ status, canResetPassword }) {
                         </Link>
                     </div>
                     <div className="relative">
+                        <InputLabel htmlFor="email" value="Email-Address" className="text-sm text-gray-800"/>
                         <TextInput
                             type="email"
                             name="email"
@@ -84,10 +86,11 @@ export default function Login({ status, canResetPassword }) {
                                 validateEmail();
                             }}
                         />
-                        <Mail className="absolute right-2 top-2.5 cursor-pointer" />
+                        <Mail className="absolute right-2 top-[35px] cursor-pointer" />
                         <InputError message={errors.email} className="mt-2" />
                     </div>
                     <div className="relative mt-4">
+                        <InputLabel htmlFor="password" value="Password" className="text-sm text-gray-800"/>
                         <TextInput
                             id="password"
                             type={showPassword ? "text" : "password"}
@@ -103,12 +106,12 @@ export default function Login({ status, canResetPassword }) {
                         />
                         {showPassword ? (
                             <EyeOff
-                                className="absolute right-2 top-2.5 cursor-pointer"
+                                className="absolute right-2 top-[35px] cursor-pointer"
                                 onClick={() => setShowPassword(!showPassword)}
                             />
                         ) : (
                             <Eye
-                                className="absolute right-2 top-2.5 cursor-pointer"
+                                className="absolute right-2 top-[35px] cursor-pointer"
                                 onClick={() => setShowPassword(!showPassword)}
                             />
                         )}

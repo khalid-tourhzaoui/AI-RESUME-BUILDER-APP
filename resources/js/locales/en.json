@@ -21,8 +21,8 @@
     "All_Trash": "All Trash",
     "Filter_by_document_title": "Filter by document title",
     "No_documents_found": "No documents found",
-    "Enter_your_email" : "Enter your email",
-    "Enter_your_password" : "Enter your password",
+    "Enter_your_email" : "Enter Your Email",
+    "Enter_your_password" : "Enter Your Password",
     "Remember_me" : "Remember me",
     "Forgot_your_password" : "Forgot your password ?",
     "Don't_have_an_account" : "Don't have an account",
@@ -30,5 +30,14 @@
     "Sign_in" : "Sign in",
     "Forgot_message":"Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.",
     "Login_Page":"Login Page",
-    "Email_Password_Reset_Link" :"Email Password Reset Link"
+    "Email_Password_Reset_Link" :"Email Password Reset Link",
+    "Enter_your_name" : "Enter Your Name",
+    "Confirm_your_password" : "Confirm Your Password",
+    "Votre_mot_de_passe_doit_respecter_les_conditions_suivantes" : "Your password must meet the following conditions",
+    "Au_moins_8_caractères" : "At least 8 characters",
+    "Contenir_au_moins_une_majuscule" : "Contain at least one uppercase",
+    "Contenir_au_moins_une_minuscule" : "Contain at least one lowercase",
+    "Contenir_au_moins_un_chiffre" : "Contain at least one number",
+    "Déjà_inscrit" : "Already registered",
+    "S'inscrire" : "Sign up"
 }

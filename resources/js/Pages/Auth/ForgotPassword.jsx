@@ -8,6 +8,7 @@ import { Head, Link, useForm } from "@inertiajs/react";
 import { Loader, Mail } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
+import InputLabel from "@/Components/InputLabel";
 
 export default function ForgotPassword({ status }) {
     const { data, setData, post, processing, errors } = useForm({
@@ -62,6 +63,7 @@ export default function ForgotPassword({ status }) {
 
                 <form onSubmit={submit}>
                     <div className="relative">
+                        <InputLabel htmlFor="email" value="Email-Address" className="text-sm text-gray-800"/>
                         <TextInput
                             type="email"
                             name="email"
@@ -76,7 +78,7 @@ export default function ForgotPassword({ status }) {
                                 validateEmail();
                             }}
                         />
-                        <Mail className="absolute right-2 top-2.5 cursor-pointer" />
+                        <Mail className="absolute right-2 top-[37px] cursor-pointer" />
                         <InputError message={emailError || errors.email} className="mt-2" />
                     </div>
 

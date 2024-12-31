@@ -29,5 +29,14 @@
     "Sign_in" : "Se connecter",
     "Forgot_message":"Mot de passe oublié ? Pas de problème. Faites-nous simplement savoir votre adresse e-mail et nous vous enverrons un lien de réinitialisation du mot de passe qui vous permettra d'en choisir un nouveau.",
     "Login_Page":"Page de connexion",
-    "Email_Password_Reset_Link" :"Réinitialiser le mot de passe"
+    "Email_Password_Reset_Link" :"Réinitialiser le mot de passe",
+    "Enter_your_name" : "Entrez votre nom",
+    "Confirm_your_password" : "Confirmez votre mot de passe",
+    "Votre_mot_de_passe_doit_respecter_les_conditions_suivantes" : "Votre mot de passe doit respecter les conditions suivantes",
+    "Au_moins_8_caractères" : "Au moins 8 caractères",
+    "Contenir_au_moins_une_majuscule" : "Contenir au moins une majuscule",
+    "Contenir_au_moins_une_minuscule" : "Contenir au moins une minuscule",
+    "Contenir_au_moins_un_chiffre" : "Contenir au moins un chiffre",
+    "Déjà_inscrit" : "Déjà inscrit",
+    "S'inscrire" : "S'inscrire"
   }
