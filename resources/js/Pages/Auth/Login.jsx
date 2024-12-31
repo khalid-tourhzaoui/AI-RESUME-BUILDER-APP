@@ -8,6 +8,7 @@ import TextInput from "@/Components/TextInput";
 import GuestLayout from "@/Layouts/GuestLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
 import { Loader } from "lucide-react";
+import { useState } from "react";
 
 export default function Login({ status, canResetPassword }) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -15,6 +16,7 @@ export default function Login({ status, canResetPassword }) {
         password: "",
         remember: false,
     });
+    const [showPassword, setShowPassword] = useState(false);
 
     const submit = (e) => {
         e.preventDefault();
@@ -38,102 +40,15 @@ export default function Login({ status, canResetPassword }) {
                 </div>
             )}
 
-            {/* <form onSubmit={submit}>
-                <div>
-                    <InputLabel htmlFor="email" value="Email" />
-
-                    <TextInput
-                        id="email"
-                        type="email"
-                        name="email"
-                        value={data.email}
-                        className="mt-1 block w-full"
-                        autoComplete="username"
-                        isFocused={true}
-                        onChange={(e) => setData('email', e.target.value)}
-                    />
-
-                    <InputError message={errors.email} className="mt-2" />
-                </div>
-
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
-
-                    <TextInput
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full"
-                        autoComplete="current-password"
-                        onChange={(e) => setData('password', e.target.value)}
-                    />
-
-                    <InputError message={errors.password} className="mt-2" />
-                </div>
-
-                <div className="mt-4 block">
-                    <label className="flex items-center">
-                        <Checkbox
-                            name="remember"
-                            checked={data.remember}
-                            onChange={(e) =>
-                                setData('remember', e.target.checked)
-                            }
-                        />
-                        <span className="ms-2 text-sm text-gray-600">
-                            Remember me
-                        </span>
-                    </label>
-                </div>
-
-                <div className="mt-4 flex items-center justify-end">
-                    {canResetPassword && (
-                        <Link
-                            href={route('password.request')}
-                            className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                        >
-                            Forgot your password?
-                        </Link>
-                    )}
-
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Log in
-                    </PrimaryButton>
-
-                    <button
-                        type="button"
-                        onClick={() => handleSocialLogin('google')}
-                        className="ms-4 p-2 bg-blue-500 text-white rounded"
-                    >
-                        Connect with Google
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => handleSocialLogin('github')}
-                        className="ms-4 p-2 bg-gray-800 text-white rounded"
-                    >
-                        Connect with GitHub
-                    </button>
-                </div>
-            </form> */}
-            {/* <div
-                className="flex justify-center items-center font-[sans-serif] h-full min-h-screen p-4"
-                style={{
-                    backgroundImage: "url(https://readymadeui.com/background-image.webp)",
-                    backgroundRepeat: "no-repeat",
-                    backgroundSize: "cover"
-                }}
-            > */}
             <div className="max-w-md w-full mx-auto">
                 <form
                     onSubmit={submit}
-                    className="bg-opacity-70 bg-white rounded-2xl p-6 shadow-[0_2px_16px_-3px_rgba(6,81,237,0.3)]"
+                    className="bg-opacity-90 bg-white rounded-2xl p-6 shadow-[0_2px_16px_-3px_rgba(6,81,237,0.3)]"
                 >
-                    <div className="mb-12">
-                        <h3 className="text-3xl font-extrabold items-center">
+                    <div className="mb-5">
+                        <h3 className="text-3xl font-extrabold">
                             <Link href="/">
-                                <ApplicationAiLogo className="h-20 w-40 fill-current text-gray-500" />
+                                <ApplicationAiLogo className="h-20 w-40 fill-current text-gray-500 mx-auto" />
                             </Link>
                         </h3>
                     </div>
@@ -146,7 +61,7 @@ export default function Login({ status, canResetPassword }) {
                                 name="email"
                                 placeholder="Enter your email"
                                 value={data.email}
-                                className="mt-1 block bg-transparent w-full text-sm text-gray-800 border-b border-gray-400
+                                className="mt-1 block bg-white w-full text-sm text-gray-800 border-b border-gray-400
                                             focus:border-gray-800 px-2 py-3 outline-none placeholder:text-gray-800"
                                 autoComplete="username"
                                 isFocused={true}
@@ -190,17 +105,18 @@ export default function Login({ status, canResetPassword }) {
                                 </g>
                             </svg>
                         </div>
+                        <InputError message={errors.email} className="mt-2" />
                     </div>
 
-                    <div className="mt-6">
+                    <div className="mt-4">
                         <div className="relative flex items-center">
                             <TextInput
                                 id="password"
-                                type="password"
+                                type={showPassword ? "text" : "password"}
                                 name="password"
                                 placeholder="Enter your password"
                                 value={data.password}
-                                className="mt-1 block w-full bg-transparent text-sm text-gray-800 border-b border-gray-400
+                                className="mt-1 block w-full bg-white text-sm text-gray-800 border-b border-gray-400
                                              focus:border-gray-800 px-2 py-3 outline-none placeholder:text-gray-800"
                                 autoComplete="current-password"
                                 onChange={(e) =>
@@ -211,37 +127,42 @@ export default function Login({ status, canResetPassword }) {
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="#333"
                                 stroke="#333"
+                                onClick={() => setShowPassword(!showPassword)}
                                 className="w-[18px] h-[18px] absolute right-2 cursor-pointer"
                                 viewBox="0 0 128 128"
                             >
+                                {
+                                    showPassword ? (<path
+                                        d="M64 104C22.127 104 1.367 67.496.504 65.943a4 4 0 0 1 0-3.887C1.367 60.504 22.127 24 64 24s62.633 36.504 63.496 38.057a4 4 0 0 1 0 3.887C126.633 67.496 105.873 104 64 104zM8.707 63.994C13.465 71.205 32.146 96 64 96c31.955 0 50.553-24.775 55.293-31.994C114.535 56.795 95.854 32 64 32 32.045 32 13.447 56.775 8.707 63.994zM64 88c-13.234 0-24-10.766-24-24s10.766-24 24-24 24 10.766 24 24-10.766 24-24 24zm0-40c-8.822 0-16 7.178-16 16s7.178 16 16 16 16-7.178 16-16-7.178-16-16-16z"
+                                        data-original="#000000"
+                                    ></path>)
+                                    :(<path
+                                        d="M64 104C22.127 104 1.367 67.496.504 65.943a4 4 0 0 1 0-3.887C1.367 60.504 22.127 24 64 24s62.633 36.504 63.496 38.057a4 4 0 0 1 0 3.887C126.633 67.496 105.873 104 64 104zM8.707 63.994C13.465 71.205 32.146 96 64 96c31.955 0 50.553-24.775 55.293-31.994C114.535 56.795 95.854 32 64 32 32.045 32 13.447 56.775 8.707 63.994zM64 88c-13.234 0-24-10.766-24-24s10.766-24 24-24 24 10.766 24 24-10.766 24-24 24zm0-40c-8.822 0-16 7.178-16 16s7.178 16 16 16 16-7.178 16-16-7.178-16-16-16z"
+                                        data-original="#000000"
+                                    ></path>)
+                                }
                                 <path
                                     d="M64 104C22.127 104 1.367 67.496.504 65.943a4 4 0 0 1 0-3.887C1.367 60.504 22.127 24 64 24s62.633 36.504 63.496 38.057a4 4 0 0 1 0 3.887C126.633 67.496 105.873 104 64 104zM8.707 63.994C13.465 71.205 32.146 96 64 96c31.955 0 50.553-24.775 55.293-31.994C114.535 56.795 95.854 32 64 32 32.045 32 13.447 56.775 8.707 63.994zM64 88c-13.234 0-24-10.766-24-24s10.766-24 24-24 24 10.766 24 24-10.766 24-24 24zm0-40c-8.822 0-16 7.178-16 16s7.178 16 16 16 16-7.178 16-16-7.178-16-16-16z"
                                     data-original="#000000"
                                 ></path>
                             </svg>
-                            <InputError
-                                message={errors.password}
-                                className="mt-2"
-                            />
                         </div>
+                        <InputError message={errors.password} className="mt-2" />
                     </div>
 
-                    <div className="flex flex-wrap items-center justify-between gap-4 mt-6">
-                        <div className="flex items-center">
+                    <div className="flex  items-center justify-between gap-4 mt-6">
+                        <label className="flex items-center">
                             <Checkbox
                                 name="remember"
                                 checked={data.remember}
                                 onChange={(e) =>
-                                    setData("remember", e.target.checked)
+                                    setData('remember', e.target.checked)
                                 }
                             />
-                            <label
-                                for="remember-me"
-                                className="ml-3 block text-sm text-gray-800"
-                            >
+                            <span className="ms-2 text-sm text-gray-600">
                                 Remember me
-                            </label>
-                        </div>
+                            </span>
+                        </label>
                         <div>
                             {canResetPassword && (
                                 <Link
@@ -249,18 +170,19 @@ export default function Login({ status, canResetPassword }) {
                                     href={route("password.request")}
                                     className="text-sm text-blue-600 underline hover:text-blue-900 font-semibold"
                                 >
+
                                     Forgot your password?
                                 </Link>
                             )}
                         </div>
                     </div>
 
-                    <div className="mt-12">
+                    <div className="mt-5 mx-auto">
                         <PrimaryButton
                             type="submit"
                             disabled={processing}
                             className="w-full py-2.5 px-4  text-sm font-semibold tracking-wider rounded-full text-white
-                             bg-gray-800 hover:bg-[#222] focus:outline-none"
+                             bg-gray-800 hover:bg-[#222] flex items-center justify-center"
                         >
                             {processing && (
                                 <Loader size={20} className="animate-spin mr-2"/>
@@ -269,12 +191,13 @@ export default function Login({ status, canResetPassword }) {
                         </PrimaryButton>
                         <p className="text-gray-800 text-sm text-center mt-6">
                             Don't have an account{" "}
-                            <a
-                                href="javascript:void(0);"
-                                className="text-blue-600 font-semibold hover:underline ml-1 whitespace-nowrap"
+                            <Link
+                                as="a"
+                                href={route("register")}
+                                className="text-sm text-blue-600 underline hover:text-blue-900 font-semibold whitespace-nowrap"
                             >
                                 Register here
-                            </a>
+                            </Link>
                         </p>
                     </div>
 
