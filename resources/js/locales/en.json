@@ -27,5 +27,8 @@
     "Forgot_your_password" : "Forgot your password ?",
     "Don't_have_an_account" : "Don't have an account",
     "Register_here" : "Register here",
-    "Sign_in" : "Sign in"
+    "Sign_in" : "Sign in",
+    "Forgot_message":"Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.",
+    "Login_Page":"Login Page",
+    "Email_Password_Reset_Link" :"Email Password Reset Link"
 }

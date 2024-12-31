@@ -5,17 +5,38 @@ import PrimaryButtonLink from "@/Components/PrimaryButtonLink";
 import TextInput from "@/Components/TextInput";
 import GuestLayout from "@/Layouts/GuestLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
-import { Loader } from "lucide-react";
+import { Loader, Mail } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { useState } from "react";
 
 export default function ForgotPassword({ status }) {
     const { data, setData, post, processing, errors } = useForm({
         email: "",
     });
+    const { t } = useTranslation();
+
+    // State to hold the email validation error
+    const [emailError, setEmailError] = useState("");
+
+    // Handler to validate email
+    const validateEmail = () => {
+        if (!data.email || !/\S+@\S+\.\S+/.test(data.email)) {
+            setEmailError("Please enter a valid email address.");
+        } else {
+            setEmailError("");
+        }
+    };
 
     const submit = (e) => {
         e.preventDefault();
 
-        post(route("password.email"));
+        // Validate email before submitting the form
+        validateEmail();
+
+        // Only submit if there are no errors
+        if (!emailError) {
+            post(route("password.email"));
+        }
     };
 
     return (
@@ -30,9 +51,7 @@ export default function ForgotPassword({ status }) {
                     </h3>
                 </div>
                 <div className="mb-4 text-sm text-gray-600">
-                    Forgot your password? No problem. Just let us know your
-                    email address and we will email you a password reset link
-                    that will allow you to choose a new one.
+                    {t("Forgot_message")}
                 </div>
 
                 {status && (
@@ -42,61 +61,31 @@ export default function ForgotPassword({ status }) {
                 )}
 
                 <form onSubmit={submit}>
-                    <div className="relative flex items-center">
-
+                    <div className="relative">
                         <TextInput
-                            id="email"
                             type="email"
                             name="email"
+                            required
+                            placeholder={t("Enter_your_email")}
                             value={data.email}
                             className="mt-1 block w-full"
+                            autoComplete="username"
                             isFocused={true}
-                            required
-                            placeholder="Enter your email"
-                            onChange={(e) => setData("email", e.target.value)}
+                            onChange={(e) => {
+                                setData("email", e.target.value);
+                                validateEmail();
+                            }}
                         />
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="#333"
-                            stroke="#333"
-                            className="w-[18px] h-[18px] absolute right-2"
-                            viewBox="0 0 682.667 682.667"
-                        >
-                            <defs>
-                                <clipPath id="a" clipPathUnits="userSpaceOnUse">
-                                    <path
-                                        d="M0 512h512V0H0Z"
-                                        data-original="#000000"
-                                    ></path>
-                                </clipPath>
-                            </defs>
-                            <g
-                                clip-path="url(#a)"
-                                transform="matrix(1.33 0 0 -1.33 0 682.667)"
-                            >
-                                <path
-                                    fill="none"
-                                    stroke-miterlimit="10"
-                                    stroke-width="40"
-                                    d="M452 444H60c-22.091 0-40-17.909-40-40v-39.446l212.127-157.782c14.17-10.54 33.576-10.54 47.746 0L492 364.554V404c0 22.091-17.909 40-40 40Z"
-                                    data-original="#000000"
-                                ></path>
-                                <path
-                                    d="M472 274.9V107.999c0-11.027-8.972-20-20-20H60c-11.028 0-20 8.973-20 20V274.9L0 304.652V107.999c0-33.084 26.916-60 60-60h392c33.084 0 60 26.916 60 60v196.653Z"
-                                    data-original="#000000"
-                                ></path>
-                            </g>
-                        </svg>
+                        <Mail className="absolute right-2 top-2.5 cursor-pointer" />
+                        <InputError message={emailError || errors.email} className="mt-2" />
                     </div>
-
-                    <InputError message={errors.email} className="mt-2" />
 
                     <div className="mt-4 flex items-center justify-between">
                         <PrimaryButtonLink
                             href={route("login")}
                             className="ms-1"
                         >
-                            Return to login
+                            {t("Sign_in")}
                         </PrimaryButtonLink>
                         <PrimaryButton className="ms-1" disabled={processing}>
                             {processing && (
@@ -105,7 +94,7 @@ export default function ForgotPassword({ status }) {
                                     className="animate-spin mr-2"
                                 />
                             )}
-                            Email Password Reset Link
+                            {t("Email_Password_Reset_Link")}
                         </PrimaryButton>
                     </div>
                 </form>

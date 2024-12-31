@@ -5,7 +5,7 @@ import Checkbox from "@/Components/Checkbox";
 import PrimaryButton from "@/Components/PrimaryButton";
 import GuestLayout from "@/Layouts/GuestLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
-import { Eye, EyeOff, Loader, User } from "lucide-react";
+import { Eye, EyeOff, Loader, Mail, User } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -84,7 +84,7 @@ export default function Login({ status, canResetPassword }) {
                                 validateEmail();
                             }}
                         />
-                        <User className="absolute right-2 top-2.5 cursor-pointer" />
+                        <Mail className="absolute right-2 top-2.5 cursor-pointer" />
                         <InputError message={errors.email} className="mt-2" />
                     </div>
                     <div className="relative mt-4">

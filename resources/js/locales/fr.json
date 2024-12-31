@@ -26,5 +26,8 @@
     "Forgot_your_password" : "Mot de passe oublié ?",
     "Don't_have_an_account" : "Vous n'avez pas de compte",
     "Register_here" : "Inscrivez-vous ici",
-    "Sign_in" : "Se connecter"
+    "Sign_in" : "Se connecter",
+    "Forgot_message":"Mot de passe oublié ? Pas de problème. Faites-nous simplement savoir votre adresse e-mail et nous vous enverrons un lien de réinitialisation du mot de passe qui vous permettra d'en choisir un nouveau.",
+    "Login_Page":"Page de connexion",
+    "Email_Password_Reset_Link" :"Réinitialiser le mot de passe"
   }
