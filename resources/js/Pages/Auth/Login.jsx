@@ -1,14 +1,13 @@
 import ApplicationAiLogo from "@/Components/ApplicationAiLogo";
-import ApplicationLogo from "@/Components/ApplicationLogo";
-import Checkbox from "@/Components/Checkbox";
-import InputError from "@/Components/InputError";
-import InputLabel from "@/Components/InputLabel";
-import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
+import InputError from "@/Components/InputError";
+import Checkbox from "@/Components/Checkbox";
+import PrimaryButton from "@/Components/PrimaryButton";
 import GuestLayout from "@/Layouts/GuestLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
-import { Loader } from "lucide-react";
+import { Eye, EyeOff, Loader, User } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function Login({ status, canResetPassword }) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -16,14 +15,38 @@ export default function Login({ status, canResetPassword }) {
         password: "",
         remember: false,
     });
+    const {t} =useTranslation();
+
+    // Handler to validate email
+    const validateEmail = () => {
+        if (!data.email || !/\S+@\S+\.\S+/.test(data.email)) {
+            errors.email = "Please enter a valid email address.";
+        } else {
+            delete errors.email;
+        }
+    };
+
+    // Handler to validate password dynamically
+    const validatePassword = (password) => {
+        if (password.length < 6) {
+            errors.password = "Password must be at least 6 characters long.";
+        } else {
+            delete errors.password;
+        }
+    };
+
     const [showPassword, setShowPassword] = useState(false);
 
     const submit = (e) => {
         e.preventDefault();
+        // Validate email and password before submitting
+        validateEmail();
+        validatePassword(data.password);
 
-        post(route("login"), {
-            onFinish: () => reset("password"),
-        });
+        // If no errors, submit the form
+        if (Object.keys(errors).length === 0) {
+            post(route("login"), { onFinish: () => reset("password") });
+        }
     };
 
     const handleSocialLogin = (provider) => {
@@ -33,174 +56,102 @@ export default function Login({ status, canResetPassword }) {
     return (
         <GuestLayout>
             <Head title="Log in" />
-
             {status && (
-                <div className="mb-4 text-sm font-medium text-green-600">
-                    {status}
-                </div>
+                <div className="mb-4 text-sm font-medium text-green-600">{status}</div>
             )}
-
             <div className="max-w-md w-full mx-auto">
                 <form
                     onSubmit={submit}
                     className="bg-opacity-90 bg-white rounded-2xl p-6 shadow-[0_2px_16px_-3px_rgba(6,81,237,0.3)]"
                 >
-                    <div className="mb-5">
-                        <h3 className="text-3xl font-extrabold">
-                            <Link href="/">
-                                <ApplicationAiLogo className="h-20 w-40 fill-current text-gray-500 mx-auto" />
-                            </Link>
-                        </h3>
+                    <div className="mb-5 text-center">
+                        <Link href="/">
+                            <ApplicationAiLogo className="h-20 w-40 fill-current text-gray-500 mx-auto" />
+                        </Link>
                     </div>
-
-                    <div>
-                        <div className="relative flex items-center">
-                            <TextInput
-                                id="email"
-                                type="email"
-                                name="email"
-                                placeholder="Enter your email"
-                                value={data.email}
-                                className="mt-1 block w-full"
-                                autoComplete="username"
-                                isFocused={true}
-                                onChange={(e) =>
-                                    setData("email", e.target.value)
-                                }
-                            />
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="#333"
-                                stroke="#333"
-                                className="w-[18px] h-[18px] absolute right-2"
-                                viewBox="0 0 682.667 682.667"
-                            >
-                                <defs>
-                                    <clipPath
-                                        id="a"
-                                        clipPathUnits="userSpaceOnUse"
-                                    >
-                                        <path
-                                            d="M0 512h512V0H0Z"
-                                            data-original="#000000"
-                                        ></path>
-                                    </clipPath>
-                                </defs>
-                                <g
-                                    clip-path="url(#a)"
-                                    transform="matrix(1.33 0 0 -1.33 0 682.667)"
-                                >
-                                    <path
-                                        fill="none"
-                                        stroke-miterlimit="10"
-                                        stroke-width="40"
-                                        d="M452 444H60c-22.091 0-40-17.909-40-40v-39.446l212.127-157.782c14.17-10.54 33.576-10.54 47.746 0L492 364.554V404c0 22.091-17.909 40-40 40Z"
-                                        data-original="#000000"
-                                    ></path>
-                                    <path
-                                        d="M472 274.9V107.999c0-11.027-8.972-20-20-20H60c-11.028 0-20 8.973-20 20V274.9L0 304.652V107.999c0-33.084 26.916-60 60-60h392c33.084 0 60 26.916 60 60v196.653Z"
-                                        data-original="#000000"
-                                    ></path>
-                                </g>
-                            </svg>
-                        </div>
+                    <div className="relative">
+                        <TextInput
+                            type="email"
+                            name="email"
+                            required
+                            placeholder={t("Enter_your_email")}
+                            value={data.email}
+                            className="mt-1 block w-full"
+                            autoComplete="username"
+                            isFocused={true}
+                            onChange={(e) => {
+                                setData("email", e.target.value);
+                                validateEmail();
+                            }}
+                        />
+                        <User className="absolute right-2 top-2.5 cursor-pointer" />
                         <InputError message={errors.email} className="mt-2" />
                     </div>
-
-                    <div className="mt-4">
-                        <div className="relative flex items-center">
-                            <TextInput
-                                id="password"
-                                type={showPassword ? "text" : "password"}
-                                name="password"
-                                placeholder="Enter your password"
-                                value={data.password}
-                                className="mt-1 block w-full"
-                                autoComplete="current-password"
-                                onChange={(e) =>
-                                    setData("password", e.target.value)
-                                }
-                            />
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="#333"
-                                stroke="#333"
+                    <div className="relative mt-4">
+                        <TextInput
+                            id="password"
+                            type={showPassword ? "text" : "password"}
+                            name="password"
+                            placeholder={t("Enter_your_password")}
+                            value={data.password}
+                            className="mt-1 block w-full"
+                            autoComplete="current-password"
+                            onChange={(e) => {
+                                setData("password", e.target.value);
+                                validatePassword(e.target.value);
+                            }}
+                        />
+                        {showPassword ? (
+                            <EyeOff
+                                className="absolute right-2 top-2.5 cursor-pointer"
                                 onClick={() => setShowPassword(!showPassword)}
-                                className="w-[18px] h-[18px] absolute right-2 cursor-pointer"
-                                viewBox="0 0 128 128"
-                            >
-                                {
-                                    showPassword ? (<path
-                                        d="M64 104C22.127 104 1.367 67.496.504 65.943a4 4 0 0 1 0-3.887C1.367 60.504 22.127 24 64 24s62.633 36.504 63.496 38.057a4 4 0 0 1 0 3.887C126.633 67.496 105.873 104 64 104zM8.707 63.994C13.465 71.205 32.146 96 64 96c31.955 0 50.553-24.775 55.293-31.994C114.535 56.795 95.854 32 64 32 32.045 32 13.447 56.775 8.707 63.994zM64 88c-13.234 0-24-10.766-24-24s10.766-24 24-24 24 10.766 24 24-10.766 24-24 24zm0-40c-8.822 0-16 7.178-16 16s7.178 16 16 16 16-7.178 16-16-7.178-16-16-16z"
-                                        data-original="#000000"
-                                    ></path>)
-                                    :(<path
-                                        d="M64 104C22.127 104 1.367 67.496.504 65.943a4 4 0 0 1 0-3.887C1.367 60.504 22.127 24 64 24s62.633 36.504 63.496 38.057a4 4 0 0 1 0 3.887C126.633 67.496 105.873 104 64 104zM8.707 63.994C13.465 71.205 32.146 96 64 96c31.955 0 50.553-24.775 55.293-31.994C114.535 56.795 95.854 32 64 32 32.045 32 13.447 56.775 8.707 63.994zM64 88c-13.234 0-24-10.766-24-24s10.766-24 24-24 24 10.766 24 24-10.766 24-24 24zm0-40c-8.822 0-16 7.178-16 16s7.178 16 16 16 16-7.178 16-16-7.178-16-16-16z"
-                                        data-original="#000000"
-                                    ></path>)
-                                }
-                                <path
-                                    d="M64 104C22.127 104 1.367 67.496.504 65.943a4 4 0 0 1 0-3.887C1.367 60.504 22.127 24 64 24s62.633 36.504 63.496 38.057a4 4 0 0 1 0 3.887C126.633 67.496 105.873 104 64 104zM8.707 63.994C13.465 71.205 32.146 96 64 96c31.955 0 50.553-24.775 55.293-31.994C114.535 56.795 95.854 32 64 32 32.045 32 13.447 56.775 8.707 63.994zM64 88c-13.234 0-24-10.766-24-24s10.766-24 24-24 24 10.766 24 24-10.766 24-24 24zm0-40c-8.822 0-16 7.178-16 16s7.178 16 16 16 16-7.178 16-16-7.178-16-16-16z"
-                                    data-original="#000000"
-                                ></path>
-                            </svg>
-                        </div>
+                            />
+                        ) : (
+                            <Eye
+                                className="absolute right-2 top-2.5 cursor-pointer"
+                                onClick={() => setShowPassword(!showPassword)}
+                            />
+                        )}
                         <InputError message={errors.password} className="mt-2" />
                     </div>
-
-                    <div className="flex  items-center justify-between gap-4 mt-6">
+                    <div className="flex items-center justify-between gap-4 mt-6">
                         <label className="flex items-center">
                             <Checkbox
                                 name="remember"
                                 checked={data.remember}
-                                onChange={(e) =>
-                                    setData('remember', e.target.checked)
-                                }
+                                onChange={(e) => setData("remember", e.target.checked)}
                             />
-                            <span className="ms-2 text-sm text-gray-600">
-                                Remember me
-                            </span>
+                            <span className="ms-2 text-sm text-gray-600">{t("Remember_me")}</span>
                         </label>
-                        <div>
-                            {canResetPassword && (
-                                <Link
-                                    as="a"
-                                    href={route("password.request")}
-                                    className="text-sm text-blue-600 underline hover:text-blue-900 font-semibold"
-                                >
-
-                                    Forgot your password?
-                                </Link>
-                            )}
-                        </div>
+                        {canResetPassword && (
+                            <Link
+                                href={route("password.request")}
+                                className="text-sm text-blue-600 underline hover:text-blue-900 font-semibold"
+                            >
+                                {t("Forgot_your_password")}
+                            </Link>
+                        )}
                     </div>
-
                     <div className="mt-5 mx-auto">
                         <PrimaryButton
                             type="submit"
                             disabled={processing}
-                            className="w-full py-2.5 px-4  text-sm font-semibold tracking-wider rounded-full text-white
-                             bg-gray-800 hover:bg-[#222] flex items-center justify-center"
+                            className="w-full py-2.5 px-4 text-sm font-semibold tracking-wider rounded-full text-white bg-gray-800 hover:bg-[#222] flex items-center justify-center"
                         >
-                            {processing && (
-                                <Loader size={20} className="animate-spin mr-2"/>
-                            )}
-                            Sign in
+                            {processing && <Loader size={20} className="animate-spin mr-2" />}
+                            {t("Sign_in")}
                         </PrimaryButton>
                         <p className="text-gray-800 text-sm text-center mt-6">
-                            Don't have an account{" "}
+                            {t("Don't_have_an_account")}{" "}
                             <Link
-                                as="a"
                                 href={route("register")}
-                                className="text-sm text-blue-600 underline hover:text-blue-900 font-semibold whitespace-nowrap"
+                                className="text-sm text-blue-600 underline hover:text-blue-900 font-semibold"
                             >
-                                Register here
+                                {t("Register_here")}
                             </Link>
                         </p>
                     </div>
-
                     <hr className="my-6 border-gray-400" />
-
                     <div className="space-x-8 flex justify-center">
                         <button
                             type="button"

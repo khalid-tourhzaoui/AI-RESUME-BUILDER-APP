@@ -20,7 +20,12 @@
     "Creating_Blank_Resume...": "Creating Blank Resume...",
     "All_Trash": "All Trash",
     "Filter_by_document_title": "Filter by document title",
-    "No_documents_found": "No documents found"
-
-
-  }
+    "No_documents_found": "No documents found",
+    "Enter_your_email" : "Enter your email",
+    "Enter_your_password" : "Enter your password",
+    "Remember_me" : "Remember me",
+    "Forgot_your_password" : "Forgot your password ?",
+    "Don't_have_an_account" : "Don't have an account",
+    "Register_here" : "Register here",
+    "Sign_in" : "Sign in"
+}

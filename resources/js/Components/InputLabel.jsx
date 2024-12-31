@@ -1,3 +1,4 @@
+
 export default function InputLabel({
     value,
     className = '',
@@ -13,6 +14,7 @@ export default function InputLabel({
             }
         >
             {value ? value : children}
+
         </label>
     );
 }

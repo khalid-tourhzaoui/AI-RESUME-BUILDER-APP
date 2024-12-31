@@ -19,5 +19,12 @@
     "Creating_Blank_Resume...": "Création d'un CV vierge...",
     "All_Trash": "Toute la corbeille",
     "Filter_by_document_title": "Filtrer par titre du document",
-    "No_documents_found": "Aucun document trouvé"
+    "No_documents_found": "Aucun document trouvé",
+    "Enter_your_email" : "Entrez votre email",
+    "Enter_your_password" : "Entrez votre mot de passe",
+    "Remember_me" : "Souviens-toi de moi",
+    "Forgot_your_password" : "Mot de passe oublié ?",
+    "Don't_have_an_account" : "Vous n'avez pas de compte",
+    "Register_here" : "Inscrivez-vous ici",
+    "Sign_in" : "Se connecter"
   }
