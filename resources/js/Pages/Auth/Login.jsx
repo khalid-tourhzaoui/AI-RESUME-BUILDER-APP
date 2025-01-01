@@ -22,11 +22,7 @@ export default function Login({ status, canResetPassword }) {
 
     const submit = (e) => {
         e.preventDefault();
-
-        // If no errors, submit the form
-        if (Object.keys(errors).length === 0) {
-            post(route("login"), { onFinish: () => reset("password") });
-        }
+        post(route("login"), { onFinish: () => reset("password") });
     };
 
     const handleSocialLogin = (provider) => {

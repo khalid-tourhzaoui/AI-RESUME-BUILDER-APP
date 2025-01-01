@@ -1,3 +1,4 @@
+import ApplicationAiLogo from "@/Components/ApplicationAiLogo";
 import PrimaryButton from "@/Components/PrimaryButton";
 import GuestLayout from "@/Layouts/GuestLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
@@ -21,6 +22,11 @@ export default function VerifyEmail({ status }) {
                     onSubmit={submit}
                     className="bg-opacity-90 bg-white rounded-2xl p-6 shadow-[0_2px_16px_-3px_rgba(6,81,237,0.3)]"
                 >
+                    <div className="mb-5 text-center">
+                        <Link href="/">
+                            <ApplicationAiLogo className="h-20 w-40 fill-current text-gray-500 mx-auto" />
+                        </Link>
+                    </div>
                     <div className="mb-4 text-sm text-gray-600">
                         {t("verify-email-check-your-email")}
                     </div>
@@ -47,12 +53,6 @@ export default function VerifyEmail({ status }) {
                             as="button"
                             className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                         >
-                            {processing && (
-                                <Loader
-                                    size={20}
-                                    className="animate-spin mr-2"
-                                />
-                            )}
                             {t("Log_Out")}
                         </Link>
                     </div>

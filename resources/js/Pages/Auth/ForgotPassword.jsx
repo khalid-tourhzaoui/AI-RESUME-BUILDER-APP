@@ -51,7 +51,7 @@ export default function ForgotPassword({ status }) {
                             required
                             placeholder={t("Enter_your_email")}
                             value={data.email}
-                            className="mt-1 block w-full"
+                            className={`mt-1 block w-full ${errors.email ? 'border-red-500' : ''}`}
                             autoComplete="username"
                             isFocused={true}
                             onChange={(e) => {
