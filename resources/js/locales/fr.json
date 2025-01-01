@@ -60,5 +60,11 @@
     "Enter_Your_JobTitle": "Entrez votre poste",
     "Email": "Email",
     "Enter_Your_Email": "Entrez votre email",
-    "Save_Changes": "Enregistrer les modifications"
+    "Save_Changes": "Enregistrer les modifications",
+    "Summary": "Résumé",
+    "Add_summary_for_your_resume": "Ajoutez un résumé à votre CV",
+    "Generate_with_AI": "Générer avec l'IA",
+    "Add_Summary": "Ajouter un résumé",
+    "Suggestions": "Suggestions"
+
 }

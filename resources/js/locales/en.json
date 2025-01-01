@@ -60,6 +60,11 @@
     "Enter_Your_JobTitle":"Enter Your Job Title",
     "Email":"Email",
     "Enter_Your_Email":"Enter Your Email",
-    "Save_Changes":"Save Changes"
+    "Save_Changes":"Save Changes",
+    "Summary":"Summary",
+    "Add_summary_for_your_resume":"Add summary for your resume",
+    "Generate_with_AI":"Generate with AI",
+    "Add_Summary":"Add Summary",
+    "Suggestions":"Suggestions"
 
 }

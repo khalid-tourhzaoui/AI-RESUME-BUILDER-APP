@@ -5,8 +5,9 @@ import { TextGenerateEffect } from "@/Components/ui/text-generate-effect";
 import { Textarea } from "@/Components/ui/textarea";
 import { AIChatSession } from "@/lib/google-ai-model";
 import { useForm } from "@inertiajs/react";
-import { Book, FileText, Loader, Sparkles } from "lucide-react";
+import { Book, FileText, Loader, Sparkles, SparklesIcon } from "lucide-react";
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import Swal from "sweetalert2";
 
 const prompt = `Job Title: {jobTitle}. Based on the job title, please generate concise
@@ -23,6 +24,7 @@ function SummaryForm({ document, handleNext }) {
     const { data, setData, patch } = useForm({
         summary: document?.summary || "",
     });
+    const { t } = useTranslation();
 
     // AI Summary Generation
     const GenerateSummaryFromAI = async () => {
@@ -58,7 +60,7 @@ function SummaryForm({ document, handleNext }) {
     // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+        
         try {
             await patch(route("documents.UpdateSummary", document.document_id), {
                 data: { summary: data.summary },
@@ -72,14 +74,14 @@ function SummaryForm({ document, handleNext }) {
 
     return (
         <div>
-            <div className="w-full">
-                <h2 className="font-bold text-lg">Summary</h2>
-                <p className="text-sm">Add summary for your resume</p>
+            <div className="w-full text-white">
+                <h2 className="font-bold text-lg">{t("Summary")}</h2>
+                <p className="text-sm">{t("Add_summary_for_your_resume")}</p>
             </div>
             <div>
                 <form onSubmit={handleSubmit}>
-                    <div className="flex items-end justify-between">
-                        <Label>Add Summary ( <FileText   size={20} className="inline-flex"/> ) : </Label>
+                    <div className="flex items-center justify-between flex-wrap">
+                        <Label className="text-md font-semibold text-white">{t("Add_Summary")} ( <FileText  size={20} className="inline-flex"/> ) : </Label>
                         <Button
                             variant="outline"
                             type="button"
@@ -87,15 +89,16 @@ function SummaryForm({ document, handleNext }) {
                             disabled={loading}
                             onClick={GenerateSummaryFromAI}
                         >
-                            <Sparkles size="15px" className="text-purple-500" />
-                            Generate with AI
+                            <SparklesIcon size="30px" className="text-[#f68c09] mr-2" />
+                            {t("Generate_with_AI")}
+                            {loading && <Loader size="15px" className="animate-spin" />}
                         </Button>
                     </div>
 
                     <Textarea
-                        className="mt-5 min-h-36"
+                        className="mt-5 min-h-40"
                         required
-                        placeholder="Add summary for your resume"
+                        placeholder={t("Add_summary_for_your_resume")}
                         max={1000}
                         min={10}
                         value={data.summary}
@@ -103,22 +106,22 @@ function SummaryForm({ document, handleNext }) {
                     />
 
                     {data.summary.length > 0 && (
-                        <p className="text-sm text-right mt-4">
+                        <p className="text-sm text-right font-bold mt-4 text-[#f68c09]">
                             {data.summary.length} / 1000
                         </p>
                     )}
 
                     {aiGeneratedSummary && (
                         <div>
-                            <h5 className="font-semibold text-[15px] my-4">
-                                Suggestions
+                            <h5 className="font-semibold text-md text-white mt-2">
+                                {t("Suggestions")}
                             </h5>
                             <div className="grid grid-cols-1 gap-2">
                                 {aiGeneratedSummary?.summaries?.map(
                                     (suggestion, index) => (
                                         <Card
                                             key={index}
-                                            className="my-4 bg-primary/5 shadow-none border-primary/30 cursor-pointer"
+                                            className="my-4 bg-white shadow-none border-primary/30 cursor-pointer"
                                             onClick={() =>
                                                 handleSelect(suggestion.summary)
                                             }
@@ -132,8 +135,8 @@ function SummaryForm({ document, handleNext }) {
                                                 </CardTitle>
                                             </CardHeader>
                                             <CardContent className="text-sm cursor-pointer">
-                                                {/* <p>{suggestion.summary}</p> */}
-                                               <p><TextGenerateEffect words={suggestion.summary} /></p>
+                                                <p>{suggestion.summary}</p>
+                                               {/* <p><TextGenerateEffect words={suggestion?.summary} /></p> */}
                                             </CardContent>
                                         </Card>
                                     )
@@ -148,7 +151,7 @@ function SummaryForm({ document, handleNext }) {
                         disabled={loading || document?.status === "archived"}
                     >
                         {loading && <Loader size="15px" className="animate-spin" />}
-                        Save Changes
+                        {t("Save_Changes")}
                     </Button>
                 </form>
             </div>
