@@ -49,7 +49,7 @@ export default function Login({ status, canResetPassword }) {
                     )}
                     <div className="relative">
                         <InputLabel
-                            htmlFor="email"
+                            htmlhtmlFor="email"
                             value="Email-Address"
                             className="text-sm text-gray-800"
                         />
@@ -71,7 +71,7 @@ export default function Login({ status, canResetPassword }) {
                     </div>
                     <div className="relative mt-4">
                         <InputLabel
-                            htmlFor="password"
+                            htmlhtmlFor="password"
                             value="Password"
                             className="text-sm text-gray-800"
                         />
@@ -228,5 +228,6 @@ export default function Login({ status, canResetPassword }) {
                 </form>
             </div>
         </GuestLayout>
+
     );
 }

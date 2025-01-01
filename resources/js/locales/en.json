@@ -45,5 +45,21 @@
     "Profile":"Profile",
     "Resend_Verification_Email":"Resend Verification Email",
     "verification-link-sent":"A new verification link has been sent to the email address you provided during registration.",
-    "verify-email-check-your-email":"Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn't receive the email, we will gladly send you another."
+    "verify-email-check-your-email":"Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn't receive the email, we will gladly send you another.",
+    "Personal_Information":"Personal Information",
+    "Get_Started_with_the_personal_information":"Get Started with the personal information",
+    "First_Name":"First Name",
+    "Last_Name":"Last Name",
+    "Enter_Your_FirstName":"Enter Your First Name",
+    "Enter_Your_LastName":"Enter Your Last Name",
+    "Phone_Number":"Phone Number",
+    "Enter_Your_PhoneNumber":"Enter Your Phone Number",
+    "Address":"Address",
+    "Enter_Your_Address":"Enter Your Address",
+    "Job_Title":"Job Title",
+    "Enter_Your_JobTitle":"Enter Your Job Title",
+    "Email":"Email",
+    "Enter_Your_Email":"Enter Your Email",
+    "Save_Changes":"Save Changes"
+
 }

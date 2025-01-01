@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import * as Yup from "yup";
 import React, { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 function PersonalInfoForm({ handleNext, document }) {
     const [personalInfo, setPersonalInfo] = useState({
@@ -29,6 +30,7 @@ function PersonalInfoForm({ handleNext, document }) {
     });
     const [errors, setErrors] = useState({});
     const [isFormValid, setIsFormValid] = useState(false);
+    const { t } = useTranslation();
     const { put, post, data, setData } = useForm({
         title: document.title,
         status: document.status,
@@ -174,11 +176,11 @@ function PersonalInfoForm({ handleNext, document }) {
     }, [document]);
 
     return (
-        <div>
+        <div className="text-white">
             <div className="w-full">
-                <h2 className="font-bold text-lg">Personal Information</h2>
+                <h2 className="font-bold text-lg">{t("Personal_Information")}</h2>
                 <p className="text-sm">
-                    Get Started with the personal information
+                    {t("Get_Started_with_the_personal_information")}
                 </p>
             </div>
             <div>
@@ -189,29 +191,31 @@ function PersonalInfoForm({ handleNext, document }) {
                             {[
                                 {
                                     name: "first_name",
-                                    label: "First Name",
+                                    label: t("First_Name"),
                                     icon: (
                                         <UserCircle size={20} className="inline-flex" />
                                     ),
+                                    placeholder: t("Enter_Your_FirstName"),
                                 },
                                 {
                                     name: "last_name",
-                                    label: "Last Name",
+                                    label: t("Last_Name"),
                                     icon: (
-                                        <UserCircle size={20} className="inline-flex" />
+                                        <UserCircle size={20} className="inline-flex " />
                                     ),
+                                    placeholder: t("Enter_Your_LastName"),
                                 },
-                            ].map(({ name, label, icon }) => (
+                            ].map(({ name, label, icon,placeholder }) => (
                                 <div key={name} className="col-span-1">
-                                    <Label className="text-sm">
-                                        {label} ({icon}):
+                                    <Label className="text-md font-semibold">
+                                        {label} ({icon}) :
                                     </Label>
                                     <Input
                                         name={name}
                                         required
                                         className="mt-2 w-full"
                                         autoComplete="off"
-                                        placeholder={label}
+                                        placeholder={placeholder}
                                         value={personalInfo[name] || ""}
                                         onChange={handleChange}
                                     />
@@ -234,25 +238,27 @@ function PersonalInfoForm({ handleNext, document }) {
                             {[
                                 {
                                     name: "job_title",
-                                    label: "Job Title",
+                                    label: t("Job_Title"),
                                     icon: <Briefcase size={20} className="inline-flex" />,
+                                    placeholder: t("Enter_Your_JobTitle"),
                                 },
                                 {
                                     name: "address",
-                                    label: "Address",
+                                    label: t("Address"),
                                     icon: <LocateIcon size={20} className="inline-flex" />,
+                                    placeholder: t("Enter_Your_Address"),
                                 },
-                            ].map(({ name, label, icon }) => (
+                            ].map(({ name, label, icon ,placeholder}) => (
                                 <div key={name} className="col-span-1">
-                                    <Label className="text-sm">
-                                        {label} ({icon}):
+                                    <Label className="text-md font-semibold">
+                                        {label} ({icon}) :
                                     </Label>
                                     <Input
                                         name={name}
                                         required
                                         className="mt-2 w-full"
                                         autoComplete="off"
-                                        placeholder={label}
+                                        placeholder={placeholder}
                                         value={personalInfo[name] || ""}
                                         onChange={handleChange}
                                     />
@@ -275,25 +281,27 @@ function PersonalInfoForm({ handleNext, document }) {
                             {[
                                 {
                                     name: "phone",
-                                    label: "Phone Number",
+                                    label: t("Phone_Number"),
                                     icon: <PhoneIcon size={20} className="inline-flex" />,
+                                    placeholder: t("Enter_Your_PhoneNumber"),
                                 },
                                 {
                                     name: "email",
-                                    label: "Email",
+                                    label: t("Email"),
                                     icon: <Mail size={20} className="inline-flex" />,
+                                    placeholder: t("Enter_Your_Email"),
                                 },
-                            ].map(({ name, label, icon }) => (
+                            ].map(({ name, label, icon,placeholder }) => (
                                 <div key={name} className="col-span-1">
-                                    <Label className="text-sm">
-                                        {label} ({icon}):
+                                    <Label className="text-md font-semibold">
+                                        {label} ({icon}) :
                                     </Label>
                                     <Input
                                         name={name}
                                         required
                                         className="mt-2 w-full"
                                         autoComplete="off"
-                                        placeholder={label}
+                                        placeholder={placeholder}
                                         value={personalInfo[name] || ""}
                                         onChange={handleChange}
                                     />
@@ -337,11 +345,12 @@ function PersonalInfoForm({ handleNext, document }) {
                         <Button
                             type="submit"
                             disabled={!isFormValid || isSaving}
+                            className="w-full"
                         >
                             {isSaving ? (
                                 <Loader className="animate-spin" size={20} />
                             ) : (
-                                "Save Changes"
+                                t("Save_Changes")
                             )}
                         </Button>
                     </div>

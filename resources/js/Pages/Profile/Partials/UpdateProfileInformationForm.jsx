@@ -35,6 +35,7 @@ export default function UpdateProfileInformation({
                     Update your account's profile information and email address.
                 </p>
             </header>
+          
 
             <form onSubmit={submit} className="mt-6 space-y-6">
                 <div>
