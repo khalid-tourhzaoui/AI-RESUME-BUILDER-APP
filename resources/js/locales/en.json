@@ -65,6 +65,20 @@
     "Add_summary_for_your_resume":"Add summary for your resume",
     "Generate_with_AI":"Generate with AI",
     "Add_Summary":"Add Summary",
-    "Suggestions":"Suggestions"
+    "Suggestions":"Suggestions",
+    "Professional_Experience":"Professional Experience",
+    "Add_previous_job_experience":"Add previous job experience",
+    "Position_title":"Position title",
+    "Enter_your_position_title":"Enter your position title",
+    "Company_Name":"Company Name",
+    "Enter_company_name":"Enter company name",
+    "City":"City",
+    "Enter_city":"Enter city",
+    "Country":"Country",
+    "Enter_country":"Enter country",
+    "Start_Date":"Start Date",
+    "End_Date":"End Date",
+    "Add_More_Experience":"Add More Experience",
+    "Work_Summary":"Work Summary"
 
 }

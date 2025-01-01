@@ -19,6 +19,7 @@ import { Label } from "@/Components/ui/label";
 import { Button } from "@/Components/ui/button";
 import { AIChatSession } from "@/lib/google-ai-model";
 import Swal from "sweetalert2";
+import { useTranslation } from "react-i18next";
 
 
 const PROMPT = `Given the job title "{jobTitle}",
@@ -33,6 +34,7 @@ const RichTextEditor = (props) => {
     const { jobTitle, initialValue, onEditorChange } = props;
     const [loading, setLoading] = useState(false);
     const [value, setValue] = useState(initialValue || "");
+    const { t } = useTranslation();
     //---------------------------------------------------------------------------------
 
     const GenerateSummaryFromAI = async () => {
@@ -102,23 +104,26 @@ const RichTextEditor = (props) => {
     return (
         <div>
             <div className="flex items-center justify-between my-2">
-                <Label>Work Summary ( {<AlignLeft size={20} className="inline-flex" />} ) :</Label>
+                <Label className="text-md font-semibold text-white">
+                    {t("Work_Summary")}
+                    <span className="text-[#f68c09] mx-1">({<AlignLeft size={20} className="inline-flex" />})</span> :</Label>
                 <Button
                     variant="outline"
                     type="button"
-                    className="gap-1"
+                    className="gap-1 text-black"
                     disabled={loading}
                     onClick={() => GenerateSummaryFromAI()}>
                     <>
-                        <Sparkles size="15px" className="text-purple-500" />
-                        Generate with AI
+                        <Sparkles size={30} className="text-[#f68c09]" />
+                        {t("Generate_with_AI")}
                     </>
-                    {loading && <Loader size="13px" className="animate-spin" />}
+                    {loading && <Loader size={30} className="animate-spin mr-2" />}
                 </Button>
             </div>
 
             <EditorProvider>
                 <Editor
+                    className="bg-white text-black"
                     value={value}
                     containerProps={{
                         style: {

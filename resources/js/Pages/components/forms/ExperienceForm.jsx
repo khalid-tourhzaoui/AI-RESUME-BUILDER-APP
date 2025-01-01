@@ -7,6 +7,8 @@ import {
     Loader,
     MapPin,
     Plus,
+    PlusCircle,
+    PlusCircleIcon,
     X,
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
@@ -16,26 +18,58 @@ import { useForm } from "@inertiajs/react";
 import RichTextEditor from "../editor";
 import { generateThumbnail } from "@/lib/helper";
 import * as Yup from "yup";
-import { Button } from '@/Components/ui/button';
+import { Button } from "@/Components/ui/button";
+import { useTranslation } from "react-i18next";
 
 const initialState = {
-    id: undefined, docId: undefined, title: "", company_name: "", city: "", country: "", start_date: "", end_date: "", work_summary: "", currentlyWorking: false,
+    id: undefined,
+    docId: undefined,
+    title: "",
+    company_name: "",
+    city: "",
+    country: "",
+    start_date: "",
+    end_date: "",
+    work_summary: "",
+    thumbnail:"",
+    currentlyWorking: false,
 };
 
 function ExperienceForm({ handleNext, document }) {
-    const [experienceList, setExperienceList] = useState(() => document?.experience?.length ? document.experience : [initialState]);
+    const [experienceList, setExperienceList] = useState(() =>
+        document?.experience?.length ? document.experience : [initialState]
+    );
     const [errors, setErrors] = useState([]);
     const [isFormValid, setIsFormValid] = useState(false);
-    const { put, post, delete: destroy, data, setData } = useForm({ experience: experienceList });
+    const {
+        put,
+        post,
+        delete: destroy,
+        data,
+        setData,
+    } = useForm({ experience: experienceList });
     const [loading, setLoading] = useState(false);
+    const { t } = useTranslation();
 
     const experienceSchema = Yup.object().shape({
-        title: Yup.string().required("Position title is required").min(3, "Must be at least 3 characters"),
-        company_name: Yup.string().required("Company name is required").min(3, "Must be at least 3 characters"),
-        city: Yup.string().required("City is required").min(3, "Must be at least 3 characters"),
-        country: Yup.string().required("Country is required").min(3, "Must be at least 3 characters"),
-        start_date: Yup.date().required("Start date is required").typeError("Invalid start date"),
-        end_date: Yup.date().required("End date is required").min(Yup.ref("start_date"), "End date must be after start date"),
+        title: Yup.string()
+            .required("Position title is required")
+            .min(3, "Must be at least 3 characters"),
+        company_name: Yup.string()
+            .required("Company name is required")
+            .min(3, "Must be at least 3 characters"),
+        city: Yup.string()
+            .required("City is required")
+            .min(3, "Must be at least 3 characters"),
+        country: Yup.string()
+            .required("Country is required")
+            .min(3, "Must be at least 3 characters"),
+        start_date: Yup.date()
+            .required("Start date is required")
+            .typeError("Invalid start date"),
+        end_date: Yup.date()
+            .required("End date is required")
+            .min(Yup.ref("start_date"), "End date must be after start date"),
     });
 
     useEffect(() => {
@@ -43,7 +77,9 @@ function ExperienceForm({ handleNext, document }) {
             try {
                 const thumbnail = await generateThumbnail();
                 setData({ experience: experienceList, thumbnail });
-                await Promise.all(experienceList.map((exp) => experienceSchema.validate(exp)));
+                await Promise.all(
+                    experienceList.map((exp) => experienceSchema.validate(exp))
+                );
                 setIsFormValid(true);
             } catch (err) {
                 setIsFormValid(false);
@@ -63,18 +99,26 @@ function ExperienceForm({ handleNext, document }) {
         } catch (err) {
             setErrors((prev) => {
                 const newErrors = [...prev];
-                newErrors[index] = { ...(newErrors[index] || {}), [field]: err.message };
+                newErrors[index] = {
+                    ...(newErrors[index] || {}),
+                    [field]: err.message,
+                };
                 return newErrors;
             });
         }
     };
 
     const handleChange = (index, field, value) => {
-        setExperienceList((prev) => prev.map((item, i) => i === index ? { ...item, [field]: value } : item));
+        setExperienceList((prev) =>
+            prev.map((item, i) =>
+                i === index ? { ...item, [field]: value } : item
+            )
+        );
         validateField(index, field, value);
     };
 
-    const addNewExperience = () => setExperienceList((prev) => [...prev, { ...initialState }]);
+    const addNewExperience = () =>
+        setExperienceList((prev) => [...prev, { ...initialState }]);
     const removeExperience = (index, id) => {
         setExperienceList((prev) => prev.filter((_, i) => i !== index));
         if (id) removeEperienceBack(id);
@@ -82,7 +126,9 @@ function ExperienceForm({ handleNext, document }) {
 
     const removeEperienceBack = async (id) => {
         try {
-            await destroy(route("experience.delete", id), { data: { experience: [{ id }] } });
+            await destroy(route("experience.delete", id), {
+                data: { experience: [{ id }] },
+            });
         } catch (error) {
             console.error("Failed to delete experience", error);
         }
@@ -91,7 +137,10 @@ function ExperienceForm({ handleNext, document }) {
     const handleEditorChange = (value, name, index) => {
         setExperienceList((prevState) => {
             const newExperienceList = [...prevState];
-            newExperienceList[index] = { ...newExperienceList[index], [name]: value };
+            newExperienceList[index] = {
+                ...newExperienceList[index],
+                [name]: value,
+            };
             return newExperienceList;
         });
     };
@@ -99,12 +148,18 @@ function ExperienceForm({ handleNext, document }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const existingExperience = document.experience || [];
-        const toUpdate = [], toAdd = [], toDelete = [];
+        const toUpdate = [],
+            toAdd = [],
+            toDelete = [];
 
         experienceList.forEach((item) => {
-            const existingItem = existingExperience.find((exp) => exp.id === item.id);
+            const existingItem = existingExperience.find(
+                (exp) => exp.id === item.id
+            );
             if (existingItem) {
-                const hasChanged = Object.keys(item).some((key) => item[key] !== existingItem[key]);
+                const hasChanged = Object.keys(item).some(
+                    (key) => item[key] !== existingItem[key]
+                );
                 if (hasChanged) toUpdate.push(item);
             } else {
                 toAdd.push(item);
@@ -112,26 +167,42 @@ function ExperienceForm({ handleNext, document }) {
         });
 
         existingExperience.forEach((existingItem) => {
-            if (!experienceList.some((item) => item.id === existingItem.id)) toDelete.push(existingItem);
+            if (!experienceList.some((item) => item.id === existingItem.id))
+                toDelete.push(existingItem);
         });
 
         try {
-            if (toUpdate.length) await put(route("experience.update", document.id), { experience: toUpdate });
-            if (toAdd.length) await post(route("experience.store", document.id), { experience: toAdd });
+            if (toUpdate.length)
+                await put(route("experience.update", document.id), {
+                    experience: toUpdate,
+                });
+            if (toAdd.length)
+                await post(route("experience.store", document.id), {
+                    experience: toAdd,
+                });
             setLoading(true);
             if (handleNext) handleNext();
         } catch (error) {
             console.error("Failed to save experience details", error);
-            setErrors(error.inner.reduce((acc, curr) => { acc[curr.path] = curr.message; return acc; }, []));
+            setErrors(
+                error.inner.reduce((acc, curr) => {
+                    acc[curr.path] = curr.message;
+                    return acc;
+                }, [])
+            );
             setLoading(false);
         }
     };
 
     return (
-        <div>
+        <div className="text-white">
             <div className="w-full">
-                <h2 className="font-bold text-lg">Professional Experience</h2>
-                <p className="text-sm">Add previous job experience</p>
+                <h2 className="font-bold text-lg">
+                    {t("Professional_Experience")} :{" "}
+                </h2>
+                <p className="text-sm font-normal text-[#f68c09]">
+                    {t("Add_previous_job_experience")}
+                </p>
             </div>
             <form onSubmit={handleSubmit}>
                 <div className="border-2 w-full h-auto divide-y-[1px] rounded-md px-3 pb-4 my-5">
@@ -142,87 +213,198 @@ function ExperienceForm({ handleNext, document }) {
                                     <Button
                                         variant="secondary"
                                         type="button"
-                                        className="size-[20px] text-center rounded-full absolute -top-3 -right-5 !bg-black dark:!bg-gray-600 text-white"
+                                        className="size-[20px] text-center rounded-full absolute -top-3 -right-5 !bg-black text-white"
                                         size="icon"
-                                        onClick={() => removeExperience(index, item.id)}
+                                        onClick={() =>
+                                            removeExperience(index, item.id)
+                                        }
                                     >
                                         <X size="13px" />
                                     </Button>
                                 )}
                                 {/* Position Title and Company Name in the same row */}
                                 <div className="col-span-1 sm:col-span-1 md:col-span-1">
-                                    <Label className="text-sm">Position title ({<Briefcase size={20} className="inline-flex" />}) :</Label>
+                                    <Label className="text-md font-semibold">
+                                        {t("Position_title")}
+                                        <span className="text-[#f68c09] mx-1">
+                                            (
+                                            {
+                                                <Briefcase
+                                                    size={20}
+                                                    className="inline-flex"
+                                                />
+                                            }
+                                            )
+                                        </span>{" "}
+                                        :
+                                    </Label>
                                     <Input
                                         name="title"
-                                        placeholder="Enter"
+                                        placeholder={t(
+                                            "Enter_your_position_title"
+                                        )}
                                         required
                                         className="mt-2 w-full"
                                         value={item.title || ""}
-                                        onChange={(e) => handleChange(index, e.target.name, e.target.value)}
+                                        onChange={(e) =>
+                                            handleChange(
+                                                index,
+                                                e.target.name,
+                                                e.target.value
+                                            )
+                                        }
                                     />
                                     {errors[index]?.title && (
                                         <p className="text-red-500 text-sm mt-3">
-                                            (<AlertCircle size={20} className="inline-flex" />): {errors[index]?.title}
+                                            (
+                                            <AlertCircle
+                                                size={20}
+                                                className="inline-flex"
+                                            />
+                                            ): {errors[index]?.title}
                                         </p>
                                     )}
                                 </div>
 
                                 <div className="col-span-1 sm:col-span-1 md:col-span-1">
-                                    <Label className="text-sm">Company Name ({<Building size={20} className="inline-flex" />}) :</Label>
+                                    <Label className="text-md font-semibold">
+                                        {t("Company_Name")}
+                                        <span className="text-[#f68c09] mx-1">
+                                            (
+                                            {
+                                                <Building
+                                                    size={20}
+                                                    className="inline-flex"
+                                                />
+                                            }
+                                            )
+                                        </span>{" "}
+                                        :
+                                    </Label>
                                     <Input
                                         name="company_name"
-                                        placeholder="Enter"
+                                        placeholder={t("Enter_company_name")}
                                         required
                                         className="mt-2 w-full"
                                         value={item.company_name || ""}
-                                        onChange={(e) => handleChange(index, e.target.name, e.target.value)}
+                                        onChange={(e) =>
+                                            handleChange(
+                                                index,
+                                                e.target.name,
+                                                e.target.value
+                                            )
+                                        }
                                     />
                                     {errors[index]?.company_name && (
                                         <p className="text-red-500 text-sm mt-3">
-                                            (<AlertCircle size={20} className="inline-flex" />): {errors[index]?.company_name}
+                                            (
+                                            <AlertCircle
+                                                size={20}
+                                                className="inline-flex"
+                                            />
+                                            ): {errors[index]?.company_name}
                                         </p>
                                     )}
                                 </div>
 
                                 {/* City and Country in the same row */}
                                 <div className="col-span-1 sm:col-span-1 md:col-span-1">
-                                    <Label className="text-sm">City ({<MapPin size={20} className="inline-flex" />}) :</Label>
+                                    <Label className="text-md font-semibold">
+                                        {t("City")}
+                                        <span className="text-[#f68c09] mx-1">
+                                            (
+                                            {
+                                                <MapPin
+                                                    size={20}
+                                                    className="inline-flex"
+                                                />
+                                            }
+                                            )
+                                        </span>{" "}
+                                        :
+                                    </Label>
                                     <Input
                                         name="city"
-                                        placeholder="Enter"
+                                        placeholder={t("Enter_city")}
                                         required
                                         className="mt-2 w-full"
                                         value={item.city || ""}
-                                        onChange={(e) => handleChange(index, e.target.name, e.target.value)}
+                                        onChange={(e) =>
+                                            handleChange(
+                                                index,
+                                                e.target.name,
+                                                e.target.value
+                                            )
+                                        }
                                     />
                                     {errors[index]?.city && (
                                         <p className="text-red-500 text-sm mt-3">
-                                            (<AlertCircle size={20} className="inline-flex" />): {errors[index]?.city}
+                                            (
+                                            <AlertCircle
+                                                size={20}
+                                                className="inline-flex"
+                                            />
+                                            ): {errors[index]?.city}
                                         </p>
                                     )}
                                 </div>
 
                                 <div className="col-span-1 sm:col-span-1 md:col-span-1">
-                                    <Label className="text-sm">Country ({<Globe size={20} className="inline-flex" />}) :</Label>
+                                    <Label className="text-md font-semibold">
+                                        {t("Country")}
+                                        <span className="text-[#f68c09] mx-1">
+                                            (
+                                            {
+                                                <Globe
+                                                    size={20}
+                                                    className="inline-flex"
+                                                />
+                                            }
+                                            )
+                                        </span>{" "}
+                                        :
+                                    </Label>
                                     <Input
                                         name="country"
-                                        placeholder="Enter"
+                                        placeholder={t("Enter_country")}
                                         required
                                         className="mt-2 w-full"
                                         value={item.country || ""}
-                                        onChange={(e) => handleChange(index, e.target.name, e.target.value)}
+                                        onChange={(e) =>
+                                            handleChange(
+                                                index,
+                                                e.target.name,
+                                                e.target.value
+                                            )
+                                        }
                                     />
                                     {errors[index]?.country && (
                                         <p className="text-red-500 text-sm mt-3">
-                                            (<AlertCircle size={20} className="inline-flex" />): {errors[index]?.country}
+                                            (
+                                            <AlertCircle
+                                                size={20}
+                                                className="inline-flex"
+                                            />
+                                            ): {errors[index]?.country}
                                         </p>
                                     )}
                                 </div>
 
                                 {/* Start Date and End Date in the same row */}
                                 <div className="col-span-1 sm:col-span-1 md:col-span-1">
-                                    <Label className="text-sm">
-                                        Start Date ({<Calendar size={20} className="inline-flex" />}) :
+                                    <Label className="text-md font-semibold">
+                                        {t("Start_Date")}
+                                        <span className="text-[#f68c09] mx-1">
+                                            (
+                                            {
+                                                <Calendar
+                                                    size={20}
+                                                    className="inline-flex"
+                                                />
+                                            }
+                                            )
+                                        </span>{" "}
+                                        :
                                     </Label>
                                     <Input
                                         name="start_date"
@@ -230,18 +412,40 @@ function ExperienceForm({ handleNext, document }) {
                                         required
                                         className="mt-2 w-full"
                                         value={item.start_date || ""}
-                                        onChange={(e) => handleChange(index, e.target.name, e.target.value)}
+                                        onChange={(e) =>
+                                            handleChange(
+                                                index,
+                                                e.target.name,
+                                                e.target.value
+                                            )
+                                        }
                                     />
                                     {errors[index]?.start_date && (
                                         <p className="text-red-500 text-sm mt-3">
-                                            (<AlertCircle size={20} className="inline-flex" />): {errors[index]?.start_date}
+                                            (
+                                            <AlertCircle
+                                                size={20}
+                                                className="inline-flex"
+                                            />
+                                            ): {errors[index]?.start_date}
                                         </p>
                                     )}
                                 </div>
 
                                 <div className="col-span-1 sm:col-span-1 md:col-span-1">
-                                    <Label className="text-sm">
-                                        End Date ({<Calendar size={20} className="inline-flex" />}) :
+                                    <Label className="text-md font-semibold">
+                                        {t("End_Date")}
+                                        <span className="text-[#f68c09] mx-1">
+                                            (
+                                            {
+                                                <Calendar
+                                                    size={20}
+                                                    className="inline-flex"
+                                                />
+                                            }
+                                            )
+                                        </span>{" "}
+                                        :
                                     </Label>
                                     <Input
                                         name="end_date"
@@ -249,11 +453,22 @@ function ExperienceForm({ handleNext, document }) {
                                         required
                                         className="mt-2 w-full"
                                         value={item.end_date || ""}
-                                        onChange={(e) => handleChange(index, e.target.name, e.target.value)}
+                                        onChange={(e) =>
+                                            handleChange(
+                                                index,
+                                                e.target.name,
+                                                e.target.value
+                                            )
+                                        }
                                     />
                                     {errors[index]?.end_date && (
                                         <p className="text-red-500 text-sm mt-3">
-                                            (<AlertCircle size={20} className="inline-flex" />): {errors[index]?.end_date}
+                                            (
+                                            <AlertCircle
+                                                size={20}
+                                                className="inline-flex"
+                                            />
+                                            ): {errors[index]?.end_date}
                                         </p>
                                     )}
                                 </div>
@@ -263,20 +478,41 @@ function ExperienceForm({ handleNext, document }) {
                                     <RichTextEditor
                                         jobTitle={item.title || ""}
                                         initialValue={item?.work_summary || ""}
-                                        onEditorChange={(value) => handleEditorChange(value, "work_summary", index)}
+                                        onEditorChange={(value) =>
+                                            handleEditorChange(
+                                                value,
+                                                "work_summary",
+                                                index
+                                            )
+                                        }
                                     />
                                 </div>
                             </div>
-                            {index === experienceList.length - 1 && experienceList.length < 5 && (
-                                <Button className="gap-1 mt-1 text-primary border-primary/50" variant="outline" type="button" onClick={addNewExperience}>
-                                    <Plus size="15px" /> Add More Experience
-                                </Button>
-                            )}
+                            {index === experienceList.length - 1 &&
+                                experienceList.length < 5 && (
+                                    <Button
+                                        className="gap-1 mt-1 text-black border-primary/50"
+                                        variant="outline"
+                                        type="button"
+                                        onClick={addNewExperience}
+                                    >
+                                        <PlusCircleIcon
+                                            size={30}
+                                            className="text-[#f68c09]"
+                                        />{" "}
+                                        {t("Add_More_Experience")}
+                                    </Button>
+                                )}
                         </div>
                     ))}
                 </div>
-                <Button className="mt-4 w-full" type="submit" disabled={!isFormValid || loading}>
-                    {loading && <Loader size="15px" className="animate-spin" />} Save Changes
+                <Button
+                    className="mt-4 w-full"
+                    type="submit"
+                    disabled={!isFormValid || loading}
+                >
+                    {loading && <Loader size="15px" className="animate-spin" />}{" "}
+                    {t("Save_Changes")}
                 </Button>
             </form>
         </div>

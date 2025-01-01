@@ -65,6 +65,21 @@
     "Add_summary_for_your_resume": "Ajoutez un résumé à votre CV",
     "Generate_with_AI": "Générer avec l'IA",
     "Add_Summary": "Ajouter un résumé",
-    "Suggestions": "Suggestions"
+    "Suggestions": "Suggestions",
+    "Professional_Experience": "Expérience Professionnelle",
+    "Add_previous_job_experience": "Ajoutez une expérience professionnelle précédente",
+    "Position_title": "Intitulé du poste",
+    "Enter_your_position_title": "Saisissez l'intitulé de votre poste",
+    "Company_Name": "Nom de l'entreprise",
+    "Enter_company_name": "Saisissez le nom de l'entreprise",
+    "City": "Ville",
+    "Enter_city": "Saisissez la ville",
+    "Country": "Pays",
+    "Enter_country": "Saisissez le pays",
+    "Start_Date": "Date de début",
+    "End_Date": "Date de fin",
+    "Add_More_Experience": "Ajouter une autre expérience",
+    "Work_Summary": "Résumé du travail"
+
 
 }
