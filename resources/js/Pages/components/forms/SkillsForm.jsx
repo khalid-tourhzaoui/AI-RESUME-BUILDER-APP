@@ -301,7 +301,7 @@ const SkillsForm = ({ document, handleNext }) => {
                                 skillList.length < 15 && (
                                     <Button
                                         variant="outline"
-                                        className="gap-1 mt-1 text-primary border-primary/50"
+                                        className="gap-1 mt-1 text-[#f68c09] border-primary/50"
                                         type="button"
                                         disabled={processing}
                                         onClick={handleAdd}

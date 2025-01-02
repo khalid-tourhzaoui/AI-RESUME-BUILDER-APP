@@ -74,7 +74,7 @@ function SummaryForm({ document, handleNext }) {
 
     return (
         <div>
-            <div className="w-full text-white">
+            <div className="w-full text-black">
                 <h2 className="font-bold text-lg">
                     {t("Summary")} : <span className="text-lg text-[#f68c09]">{t("Add_summary_for_your_resume")}</span>
                 </h2>
@@ -82,7 +82,7 @@ function SummaryForm({ document, handleNext }) {
             <div>
                 <form onSubmit={handleSubmit}>
                     <div className="flex items-center justify-between flex-wrap mt-2">
-                        <Label className="text-md font-semibold text-white">
+                        <Label className="text-md font-semibold text-black">
                             {t("Add_Summary")}
                             ( <FileText  size={20} className="inline-flex"/> ) :
                         </Label>
@@ -93,14 +93,14 @@ function SummaryForm({ document, handleNext }) {
                             disabled={loading}
                             onClick={GenerateSummaryFromAI}
                         >
-                            <SparklesIcon size="30px" className="text-[#f68c09] mr-2" />
+                            <SparklesIcon size={30} className="text-white mr-2" />
                             {t("Generate_with_AI")}
                             {loading && <Loader size="15px" className="animate-spin" />}
                         </Button>
                     </div>
 
                     <Textarea
-                        className="mt-5 min-h-40"
+                        className="mt-5 min-h-40 border-black"
                         required
                         placeholder={t("Add_summary_for_your_resume")}
                         max={1000}
@@ -110,14 +110,14 @@ function SummaryForm({ document, handleNext }) {
                     />
 
                     {data.summary.length > 0 && (
-                        <p className="text-sm text-right font-bold mt-4 text-white">
+                        <p className="text-sm text-right font-bold mt-4 text-black">
                             {data.summary.length} / 1000
                         </p>
                     )}
 
                     {aiGeneratedSummary && (
                         <div>
-                            <h5 className="font-semibold text-md text-white mt-2">
+                            <h5 className="font-semibold text-md text-black mt-2">
                                 {t("Suggestions")}
                             </h5>
                             <div className="grid grid-cols-1 gap-2">

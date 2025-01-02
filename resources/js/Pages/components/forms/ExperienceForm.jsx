@@ -346,7 +346,7 @@ const ExperienceForm = ({ handleNext, document }) => {
     ), [handleChange, handleEditorChange, errors, t]);
 
     return (
-        <div className="text-white">
+        <div className="text-black">
             <div className="w-full">
                 <h2 className="font-bold text-lg">
                     {t("Professional_Experience")} :{" "}
@@ -356,14 +356,14 @@ const ExperienceForm = ({ handleNext, document }) => {
                 </h2>
             </div>
             <form onSubmit={handleSubmit}>
-                <div className="border-2 w-full h-auto divide-y-[1px] rounded-md px-3 pb-4 my-5">
+                <div className="border-2 w-full h-auto border-black divide-y-[1px] divide-black rounded-md px-3 pb-4 my-5">
                     {experienceList.map((item, index) => (
                         <div key={index} className="relative pt-4">
                             {experienceList.length > 1 && (
                                 <Button
                                     variant="secondary"
                                     type="button"
-                                    className="size-[20px] text-center rounded-full absolute -top-3 -right-5 !bg-black text-white"
+                                    className="size-[20px] text-center rounded-full absolute -top-3 -right-5 text-black"
                                     size="icon"
                                     onClick={() => removeExperience(index, item.id)}
                                 >
@@ -374,14 +374,14 @@ const ExperienceForm = ({ handleNext, document }) => {
                             {index === experienceList.length - 1 &&
                                 experienceList.length < 5 && (
                                     <Button
-                                        className="gap-1 mt-1 text-black border-primary/50"
+                                        className="gap-1 mt-1 border-primary/50"
                                         variant="outline"
                                         type="button"
                                         onClick={addNewExperience}
                                     >
                                         <PlusCircleIcon
                                             size={30}
-                                            className="text-[#f68c09]"
+                                            className="text-white"
                                         />
                                         {t("Add_More_Experience")}
                                     </Button>

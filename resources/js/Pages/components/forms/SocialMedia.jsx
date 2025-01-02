@@ -196,11 +196,13 @@ function SocialMedia({ document, handleNext }) {
     return (
         <div>
             <div className="w-full">
-                <h2 className="font-bold text-lg">Social Medias</h2>
-                <p className="text-sm">Add your social medias information</p>
+                <h2 className="font-bold text-lg">
+                    Social Medias : <span className="text-[#f68c09]">Add your social medias information</span>
+                </h2>
+
             </div>
             <form onSubmit={handleSubmit}>
-                <div className="border w-full h-auto divide-y-[1px] rounded-md px-3 pb-4 my-5">
+                <div className="border-2 w-full h-auto border-black divide-black divide-y-[2px] rounded-md px-3 pb-4 my-5">
                     {SocialMediaList.map((item, index) => (
                         <div key={index}>
                             <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-5 mb-5 pt-4 relative">
@@ -208,8 +210,7 @@ function SocialMedia({ document, handleNext }) {
                                     <Button
                                         variant="secondary"
                                         type="button"
-                                        className="size-[20px] text-center rounded-full absolute -top-3 -right-5 !bg-black
-                                         dark:!bg-gray-600 text-white"
+                                        className="size-[20px] text-center rounded-full absolute -top-3 -right-5 !bg-black text-white"
                                         size="icon"
                                         disabled={processing}
                                         onClick={() =>
@@ -221,7 +222,7 @@ function SocialMedia({ document, handleNext }) {
                                 )}
 
                                 <div className="col-span-1 sm:col-span-1 md:col-span-1">
-                                    <Label className="text-sm">Name ( <Network size="20px" className="inline-flex"/> ) :</Label>
+                                    <Label className="text-sm">Name <span className="text-[#f68c09]">(<Network size="20px" className="inline-flex"/>)</span> :</Label>
 
                                     <Select
                                         name={item.name || ""}
@@ -296,7 +297,7 @@ function SocialMedia({ document, handleNext }) {
 
                                 <div className="col-span-1 sm:col-span-1 md:col-span-1">
                                     <Label className="text-sm">
-                                        Link ( <Link size="20px" className="inline-flex"/> ) :
+                                        Link <span className="text-[#f68c09]">(<Link size="20px" className="inline-flex"/>)</span> :
                                     </Label>
                                     <Input
                                         name="link"
@@ -325,7 +326,7 @@ function SocialMedia({ document, handleNext }) {
                             {index === SocialMediaList.length - 1 &&
                                 SocialMediaList.length < 15 && (
                                     <Button
-                                        className="gap-1 mt-1 text-primary border-primary/50"
+                                        className="gap-1 mt-1 text-[#f68c09] border-primary/50"
                                         variant="outline"
                                         type="button"
                                         disabled={processing}

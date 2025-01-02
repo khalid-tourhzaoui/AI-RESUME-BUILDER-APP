@@ -152,21 +152,23 @@ function LanguageForm({ document, handleNext }) {
     );
 
     return (
-        <div>
+        <div >
             <div className="w-full">
-                <h2 className="font-bold text-lg">Languages</h2>
-                <p className="text-sm">Add your language information</p>
+                <h2 className="font-bold text-lg">
+                    Languages : <span className="text-[#f68c09]">Add your language information</span>
+                </h2>
+
             </div>
             <form onSubmit={handleSubmit}>
-                <div className="border w-full h-auto divide-y-[1px] rounded-md px-3 pb-4 my-5">
+                <div className="border w-full h-auto border-black divide-black divide-y-[2px] rounded-md px-3 pb-4 my-5">
                     {languageList.map((item, index) => (
                         <div key={index}>
-                            <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-5 mb-5 pt-4 relative">
+                            <div className="grid grid-cols-1 sm:grid-cols-1 border-black md:grid-cols-2 gap-5 mb-5 pt-4 relative">
                                 {languageList.length > 1 && (
                                     <Button
                                         variant="secondary"
                                         type="button"
-                                        className="size-[20px] text-center rounded-full absolute -top-3 -right-5 !bg-black dark:!bg-gray-600 text-white"
+                                        className="size-[20px] text-center rounded-full absolute -top-3 -right-5 !bg-black text-white"
                                         size="icon"
                                         disabled={processing}
                                         onClick={() =>
@@ -179,12 +181,12 @@ function LanguageForm({ document, handleNext }) {
 
                                 <div className="col-span-1 sm:col-span-1 md:col-span-1">
                                     <Label className="text-sm">
-                                        Name ({" "}
-                                        <Languages
+                                        Name
+                                            <span className="text-[#f68c09]"> ({" "}<Languages
                                             size="20px"
                                             className="inline-flex"
                                         />{" "}
-                                        ) :
+                                        )</span> :
                                     </Label>
                                     <Select
                                         value={item.name || ""}
@@ -261,12 +263,12 @@ function LanguageForm({ document, handleNext }) {
 
                                 <div className="col-span-1 sm:col-span-1 md:col-span-1">
                                     <Label className="text-sm">
-                                        Proficiency ({" "}
+                                        Proficiency <span className="text-[#f68c09]"> ({" "}
                                         <CheckCircle
                                             size="20px"
                                             className="inline-flex"
                                         />{" "}
-                                        ) :
+                                        ) </span>:
                                     </Label>
                                     <Select
                                         value={item.level || ""}
@@ -311,7 +313,7 @@ function LanguageForm({ document, handleNext }) {
                             {index === languageList.length - 1 &&
                                 languageList.length < 15 && (
                                     <Button
-                                        className="gap-1 mt-1 text-primary border-primary/50"
+                                        className="gap-1 mt-1 text-[#f68c09] border-primary/50"
                                         variant="outline"
                                         type="button"
                                         disabled={processing}
