@@ -36,7 +36,7 @@ const FormField = React.memo(({ label, icon, error, children }) => (
 
 function EducationForm({ handleNext, document }) {
     const { t } = useTranslation();
-    const initialState = {
+    const initialState = useMemo(()=>({
         id: undefined,
         docId: undefined,
         university_name: "",
@@ -45,7 +45,7 @@ function EducationForm({ handleNext, document }) {
         description: "",
         start_date: "",
         end_date: "",
-    };
+    }),[]);
 
     const [educationList, setEducationList] = useState(() =>
         document?.education?.length ? document.education : [initialState]

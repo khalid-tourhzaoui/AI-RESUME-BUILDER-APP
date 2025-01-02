@@ -33,7 +33,7 @@ const languageSchema = Yup.object().shape({
 
 function LanguageForm({ document, handleNext }) {
     const [languageList, setLanguageList] = useState(
-        () => document?.languages || [initialState]
+        document?.languages?.length ? document.languages : [initialState]
     );
     const [search, setSearch] = useState("");
     const {

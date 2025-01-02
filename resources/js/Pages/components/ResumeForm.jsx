@@ -19,10 +19,10 @@ function ResumeForm({document}) {
   };
     return (
         <div
-            className="flex-1 w-full lg:sticky lg:top-16">
-            <div className="shadow-md rounded-md bg-slate-500 !border-2 border-white
-            bg-[url('https://preline.co/assets/svg/examples/polygon-bg-element.svg')]">
-                <div className=" flex items-center gap-1 px-3 justify-end border-b py-[7px] min-h-10">
+            className="flex-1 w-full lg:sticky lg:top-16 ">
+            <div className="shadow-md rounded-md !border-2 border-[#f68c09]
+            bg-[url('https://c1.wallpaperflare.com/preview/811/606/534/marble-texture-white-pattern-thumbnail.jpg')]">
+                <div className=" flex items-center gap-1 px-3 justify-end border-b border-black  py-[7px] min-h-10">
                     {activeFormIndex > 1 && (
                         <Button
                             variant="outline"
