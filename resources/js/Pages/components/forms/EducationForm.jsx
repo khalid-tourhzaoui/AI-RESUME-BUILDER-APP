@@ -1,163 +1,353 @@
-import { generateThumbnail } from "@/lib/helper";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { useForm } from "@inertiajs/react";
-import {
-    AlertCircle,
-    AlignLeft,
-    Calendar,
-    FlaskConical,
-    GraduationCap,
-    Loader,
-    Medal,
-    Plus,
-    X,
-} from "lucide-react";
-import * as Yup from "yup";
-import React, { useEffect, useState } from "react";
+import {AlertCircle,Globe,Calendar,FlaskConical,GraduationCap,Loader,Medal,Plus,X, AlignLeft,} from "lucide-react";
+import { debounce } from "lodash";
 import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
 import { Textarea } from "@/Components/ui/textarea";
 import { useTranslation } from "react-i18next";
-
-const initialState = {
-    university_name: "",
-    degree: "",
-    major: "",
-    description: "",
-    start_date: "",
-    end_date: "",
-};
+import { generateThumbnail } from "@/lib/helper";
+import * as Yup from "yup";
+//---------------------------------------------------------------------------------------------------------
+const FormField = React.memo(({ label, icon, error, children }) => (
+    <div className="col-span-1">
+        <Label className="text-md font-semibold">
+            {label}
+            <span className="text-[#f68c09] mx-1">
+                (
+                {React.cloneElement(icon, {
+                    size: 20,
+                    className: "inline-flex",
+                })}
+                )
+            </span>{" "}
+            :
+        </Label>
+        {children}
+        {error && (
+            <p className="text-red-500 text-sm mt-3">
+                (<AlertCircle size={20} className="inline-flex" />
+                ): {error}
+            </p>
+        )}
+    </div>
+));
 
 function EducationForm({ handleNext, document }) {
+    const { t } = useTranslation();
+    const initialState = {
+        id: undefined,
+        docId: undefined,
+        university_name: "",
+        degree: "",
+        major: "",
+        description: "",
+        start_date: "",
+        end_date: "",
+    };
+
     const [educationList, setEducationList] = useState(() =>
         document?.education?.length ? document.education : [initialState]
     );
     const [errors, setErrors] = useState([]);
     const [isFormValid, setIsFormValid] = useState(true);
-    const { t } = useTranslation();
+    const [loading, setLoading] = useState(false);
+
     const {
         put,
         post,
         delete: destroy,
         data,
         setData,
-        processing,
     } = useForm({ education: educationList });
 
-    const educationSchema = Yup.object().shape({
-        university_name: Yup.string()
-            .required("University name is required")
-            .min(3),
-        degree: Yup.string().required("Degree is required").min(3),
-        major: Yup.string().required("Major is required"),
-        description: Yup.string().max(1000),
-        start_date: Yup.date().required("Start date is required"),
-        end_date: Yup.date()
-            .required("End date is required")
-    });
+    const educationSchema = useMemo(
+        () =>
+            Yup.object().shape({
+                university_name: Yup.string()
+                    .required("University name is required")
+                    .min(3),
+                degree: Yup.string().required("Degree is required").min(3),
+                major: Yup.string().required("Major is required"),
+                description: Yup.string().max(1000),
+                start_date: Yup.date().required("Start date is required"),
+                end_date: Yup.date().required("End date is required"),
+            }),
+        []
+    );
+    //---------------------------------------------------------------------------------------------------------
+    const debouncedValidation = useMemo(
+        () =>
+            debounce(async (list) => {
+                try {
+                    const thumbnail = await generateThumbnail();
+                    setData({ education: list, thumbnail });
+                    await Promise.all(
+                        list.map((exp) => educationSchema.validate(exp))
+                    );
+                    setIsFormValid(true);
+                } catch (err) {
+                    setIsFormValid(false);
+                }
+            }, 500),
+        [educationSchema, setData]
+    );
+    //---------------------------------------------------------------------------------------------------------
+    useEffect(() => {
+        debouncedValidation(educationList);
+        return () => debouncedValidation.cancel();
+    }, [educationList, debouncedValidation]);
+    //---------------------------------------------------------------------------------------------------------
+    const debouncedFieldValidation = useMemo(
+        () =>
+            debounce(async (index, field, value) => {
+                try {
+                    await educationSchema.validateAt(field, { [field]: value });
+                    setErrors((prev) => {
+                        const newErrors = [...prev];
+                        if (newErrors[index]) delete newErrors[index][field];
+                        return newErrors;
+                    });
+                } catch (err) {
+                    setErrors((prev) => {
+                        const newErrors = [...prev];
+                        newErrors[index] = {
+                            ...(newErrors[index] || {}),
+                            [field]: err.message,
+                        };
+                        return newErrors;
+                    });
+                }
+            }, 500),
+        [educationSchema]
+    );
+    //---------------------------------------------------------------------------------------------------------
+    const handleChange = useCallback(
+        (index, field, value) => {
+            setEducationList((prev) =>
+                prev.map((item, i) =>
+                    i === index ? { ...item, [field]: value } : item
+                )
+            );
+            debouncedFieldValidation(index, field, value);
+        },
+        [debouncedFieldValidation]
+    );
 
-    const validateField = async (index, field, value) => {
-        try {
-            await educationSchema.validateAt(field, { [field]: value });
-            setErrors((prev) => {
-                const newErrors = [...prev];
-                if (newErrors[index]) delete newErrors[index][field];
-                return newErrors;
-            });
-
-            checkFormValidity();
-        } catch (err) {
-            setErrors((prev) => {
-                const newErrors = [...prev];
-                if (!newErrors[index]) newErrors[index] = {};
-                newErrors[index][field] = err.message;
-                return newErrors;
-            });
-            setIsFormValid(false);
-        }
-    };
-
-    const handleBlur = (index, field, value) => {
-        validateField(index, field, value);
-    };
-
-    const handleChange = (index, field, value) => {
-        setEducationList((prev) =>
-            prev.map((item, i) =>
-                i === index ? { ...item, [field]: value } : item
-            )
-        );
-    };
-
-    const checkFormValidity = () => {
-        const isValid = educationList.every((item) => {
-            try {
-                educationSchema.validateSync(item, { abortEarly: false });
-                return true;
-            } catch (error) {
-                return false;
+    //---------------------------------------------------------------------------------------------------------
+    const addNewEducation = useCallback(
+        () => setEducationList((prev) => [...prev, { ...initialState }]),
+        [initialState]
+    );
+    //---------------------------------------------------------------------------------------------------------
+    const removeEducation = useCallback(
+        async (index, id) => {
+            setEducationList((prev) => prev.filter((_, i) => i !== index));
+            if (id) {
+                try {
+                    await destroy(route("education.delete", id), {
+                        data: { education: [{ id }] },
+                    });
+                } catch (error) {
+                    console.error("Failed to delete education", error);
+                }
             }
-        });
-        setIsFormValid(isValid);
-    };
-
-    const addNewEducation = () =>
-        setEducationList((prev) => [...prev, { ...initialState }]);
-
-    const removeEducation = (index, id) => {
-        setEducationList((prev) => prev.filter((_, i) => i !== index));
-        destroy(route("education.delete", id), {
-            data: { education: [{ id }] },
-        }).catch(console.error);
-    };
-
+        },
+        [destroy]
+    );
+    //---------------------------------------------------------------------------------------------------------
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        // Récupérer les educations existantes depuis le document
         const existingEducation = document.education || [];
-        const toUpdate = [],
-            toAdd = [],
-            toDelete = [];
 
+        // Initialiser les tableaux pour les educations à mettre à jour, ajouter ou supprimer
+        const toUpdate = [], toAdd = [], toDelete = [];
+
+        // Parcourir la liste des educations pour les comparer aux educations existantes
         educationList.forEach((item) => {
             const existingItem = existingEducation.find(
-                (edu) => edu.id === item.id
+                (exp) => exp.id === item.id
             );
-            existingItem
-                ? Object.keys(item).some(
-                      (key) => item[key] !== existingItem[key]
-                  ) && toUpdate.push(item)
-                : toAdd.push(item);
+
+            if (existingItem) {
+                // Si l'education existe et a des changements
+                const hasChanged = Object.keys(item).some(
+                    (key) => item[key] !== existingItem[key]
+                );
+                if (hasChanged) toUpdate.push(item); // Ajouter à la liste de mise à jour
+            } else {
+                // Si l'education n'existe pas encore, ajouter à la liste d'ajout
+                toAdd.push(item);
+            }
         });
 
+        // Trouver les educations existantes qui ne sont plus présentes dans la liste
         existingEducation.forEach((existingItem) => {
-            if (!educationList.some((item) => item.id === existingItem.id))
-                toDelete.push(existingItem);
+            if (!educationList.some((item) => item.id === existingItem.id)) {
+                toDelete.push(existingItem); // Ajouter à la liste de suppression
+            }
         });
 
+        // Traiter les ajouts, mises à jour et suppressions
         try {
-            if (toUpdate.length)
+            setLoading(true);
+
+            // Si des mises à jour sont nécessaires, appeler la méthode PUT
+            if (toUpdate.length) {
                 await put(route("education.update", document.id), {
                     education: toUpdate,
                 });
-            if (toAdd.length)
+            }
+
+            // Si de nouvelles educations doivent être ajoutées, appeler la méthode POST
+            if (toAdd.length) {
                 await post(route("education.store", document.id), {
                     education: toAdd,
                 });
-            await Promise.all(
-                educationList.map((item) => educationSchema.validate(item))
-            );
-            handleNext?.();
+            }
+
+            // Si des educations doivent être supprimées, appeler la méthode DELETE
+            if (toDelete.length) {
+                await Promise.all(
+                    toDelete.map(async (item) => {
+                        await destroy(route("education.delete", item.id), {
+                            data: { education: [item] },
+                        });
+                    })
+                );
+            }
+
+            // Appeler la fonction handleNext si tout s'est bien passé
+            if (handleNext) handleNext();
         } catch (error) {
-            console.error("Failed to save education details", error);
+            console.error("Failed to save eduaction details", error);
             setErrors(
-                error.inner.reduce(
-                    (acc, curr) => ({ ...acc, [curr.path]: curr.message }),
-                    []
-                )
+                error.inner.reduce((acc, curr) => {
+                    acc[curr.path] = curr.message;
+                    return acc;
+                }, [])
             );
+        } finally {
+            setLoading(false);
         }
     };
+    //---------------------------------------------------------------------------------------------------------
+    const renderFormFields = useCallback((item, index) => (
+        <>
+            <div className="col-span-2 sm:col-span-2 md:col-span-2">
+                <FormField
+                    label={t("University_Name")}
+                    icon={<GraduationCap />}
+                    error={errors[index]?.university_name}
+                >
+                    <Input
+                        name="university_name"
+                        placeholder={t("Enter_University_Name")}
+                        required
+                        className="mt-2 w-full"
+                        value={item.university_name || ""}
+                        onChange={(e) =>
+                            handleChange(index, e.target.name, e.target.value)
+                        }
+                    />
+                </FormField>
+            </div>
+            <div className="col-span-2 sm:col-span-2 md:col-span-1">
+                <FormField
+                    label={t("Degree")}
+                    icon={<Medal />}
+                    error={errors[index]?.degree}
+                >
+                    <Input
+                        name="degree"
+                        placeholder={t("Enter_the_Degree")}
+                        required
+                        className="mt-2 w-full"
+                        value={item.degree || ""}
+                        onChange={(e) =>
+                            handleChange(index, e.target.name, e.target.value)
+                        }
+                    />
+                </FormField>
+            </div>
+            <div className="col-span-2 sm:col-span-2 md:col-span-1">
+                <FormField
+                    label={t("Major")}
+                    icon={<FlaskConical />}
+                    error={errors[index]?.major}
+                >
+                    <Input
+                        name="major"
+                        placeholder={t("Enter_the_Major")}
+                        required
+                        className="mt-2 w-full"
+                        value={item.major || ""}
+                        onChange={(e) =>
+                            handleChange(index, e.target.name, e.target.value)
+                        }
+                    />
+                </FormField>
+            </div>
+            <div className="col-span-2 sm:col-span-2 md:col-span-1">
+                <FormField
+                    label={t("Start_Date")}
+                    icon={<Calendar />}
+                    error={errors[index]?.start_date}
+                >
+                    <Input
+                        name="start_date"
+                        type="date"
+                        required
+                        className="mt-2 w-full"
+                        value={item.start_date || ""}
+                        onChange={(e) =>
+                            handleChange(index, e.target.name, e.target.value)
+                        }
+                    />
+                </FormField>
+            </div>
+            <div className="col-span-2 sm:col-span-2 md:col-span-1">
+                <FormField
+                    label={t("End_Date")}
+                    icon={<Calendar />}
+                    error={errors[index]?.end_date}
+                >
+                    <Input
+                        name="end_date"
+                        type="date"
+                        required
+                        className="mt-2 w-full"
+                        value={item.end_date || ""}
+                        onChange={(e) =>
+                            handleChange(index, e.target.name, e.target.value)
+                        }
+                    />
+                </FormField>
+            </div>
+            <div className="col-span-2 sm:col-span-2 md:col-span-2">
+                <FormField
+                    label={t("Description")}
+                    icon={<AlignLeft />}
+                    error={errors[index]?.description}
+                >
+                    <Textarea
+                        name="description"
+                        className="w-full mt-2 text-black"
+                        placeholder={t("Enter_the_Description")}
+                        value={item.description || ""}
+                        onChange={(e) =>
+                            handleChange(index, e.target.name, e.target.value)
+                        }
+                    />
+                </FormField>
+            </div>
+
+        </>
+    ), [handleChange, errors, t]);
+
     return (
         <div className="text-white">
             <div className="w-full">
@@ -177,7 +367,7 @@ function EducationForm({ handleNext, document }) {
                                     <Button
                                         variant="secondary"
                                         type="button"
-                                        disabled={processing}
+                                        disabled={loading}
                                         className="size-[20px] text-center rounded-full absolute -top-3 -right-5 !bg-black text-white"
                                         size="icon"
                                         onClick={() =>
@@ -187,268 +377,9 @@ function EducationForm({ handleNext, document }) {
                                         <X size="13px" />
                                     </Button>
                                 )}
+                                {renderFormFields(item, index)}
                                 {/* University Name */}
-                                <div className="col-span-2 sm:col-span-2 md:col-span-2">
-                                    <Label className="text-md font-semibold">
-                                        {t("University_Name")}{" "}
-                                        <span className="text-[#f68c09] mx-1">
-                                            <GraduationCap
-                                                size={20}
-                                                className="inline-flex"
-                                            />
-                                        </span>
-                                        :
-                                    </Label>
-                                    <Input
-                                        name="university_name"
-                                        placeholder={t("Enter_University_Name")}
-                                        required
-                                        className="mt-2 w-full"
-                                        value={item.university_name || ""}
-                                        onChange={(e) =>
-                                            handleChange(
-                                                index,
-                                                e.target.name,
-                                                e.target.value
-                                            )
-                                        }
-                                        onBlur={(e) =>
-                                            handleBlur(
-                                                index,
-                                                e.target.name,
-                                                e.target.value
-                                            )
-                                        }
-                                    />
-                                    {errors[index]?.university_name && (
-                                        <p className="text-red-500 text-sm mt-3">
-                                            <AlertCircle
-                                                size={20}
-                                                className="inline-flex"
-                                            />
-                                            : {errors[index]?.university_name}
-                                        </p>
-                                    )}
-                                </div>
 
-                                {/* Degree and Major */}
-                                <div className="col-span-2 sm:col-span-2 md:col-span-1">
-                                    <Label className="text-md font-semibold">
-                                        {t("Degree")}{" "}
-                                        <span className="text-[#f68c09] mx-1">
-                                            <Medal
-                                                size={20}
-                                                className="inline-flex"
-                                            />
-                                        </span>
-                                        :
-                                    </Label>
-                                    <Input
-                                        name="degree"
-                                        placeholder={t("Enter_the_Degree")}
-                                        required
-                                        className="mt-2 w-full"
-                                        value={item.degree || ""}
-                                        onChange={(e) =>
-                                            handleChange(
-                                                index,
-                                                e.target.name,
-                                                e.target.value
-                                            )
-                                        }
-                                        onBlur={(e) =>
-                                            handleBlur(
-                                                index,
-                                                e.target.name,
-                                                e.target.value
-                                            )
-                                        }
-                                    />
-                                    {errors[index]?.degree && (
-                                        <p className="text-red-500 text-sm mt-3">
-                                            <AlertCircle
-                                                size={20}
-                                                className="inline-flex"
-                                            />
-                                            : {errors[index]?.degree}
-                                        </p>
-                                    )}
-                                </div>
-
-                                {/* Major */}
-                                <div className="col-span-2 sm:col-span-2 md:col-span-1">
-                                    <Label className="text-md font-semibold">
-                                        {t("Major")}{" "}
-                                        <span className="text-[#f68c09] mx-1">
-                                            <FlaskConical
-                                                size={20}
-                                                className="inline-flex"
-                                            />
-                                        </span>
-                                        :
-                                    </Label>
-                                    <Input
-                                        name="major"
-                                        placeholder={t("Enter_the_Major")}
-                                        required
-                                        className="mt-2 w-full"
-                                        value={item.major || ""}
-                                        onChange={(e) =>
-                                            handleChange(
-                                                index,
-                                                e.target.name,
-                                                e.target.value
-                                            )
-                                        }
-                                        onBlur={(e) =>
-                                            handleBlur(
-                                                index,
-                                                e.target.name,
-                                                e.target.value
-                                            )
-                                        }
-                                    />
-                                    {errors[index]?.major && (
-                                        <p className="text-red-500 text-sm mt-3">
-                                            <AlertCircle
-                                                size={20}
-                                                className="inline-flex"
-                                            />
-                                            : {errors[index]?.major}
-                                        </p>
-                                    )}
-                                </div>
-
-                                {/* Start Date */}
-                                <div className="col-span-2 sm:col-span-2 md:col-span-1">
-                                    <Label className="text-md font-semibold">
-                                        {t("Start_Date")}{" "}
-                                        <span className="text-[#f68c09] mx-1">
-                                            <Calendar
-                                                size={20}
-                                                className="inline-flex"
-                                            />
-                                        </span>
-                                        :
-                                    </Label>
-                                    <Input
-                                        name="start_date"
-                                        required
-                                        type="date"
-                                        className="mt-2 w-full"
-                                        value={item.start_date || ""}
-                                        onChange={(e) =>
-                                            handleChange(
-                                                index,
-                                                e.target.name,
-                                                e.target.value
-                                            )
-                                        }
-                                        onBlur={(e) =>
-                                            handleBlur(
-                                                index,
-                                                e.target.name,
-                                                e.target.value
-                                            )
-                                        }
-                                    />
-                                    {errors[index]?.start_date && (
-                                        <p className="text-red-500 text-sm mt-3">
-                                            <AlertCircle
-                                                size={20}
-                                                className="inline-flex"
-                                            />
-                                            : {errors[index]?.start_date}
-                                        </p>
-                                    )}
-                                </div>
-
-                                {/* End Date */}
-                                <div className="col-span-2 sm:col-span-2 md:col-span-1">
-                                    <Label className="text-md font-semibold">
-                                        {t("End_Date")}{" "}
-                                        <span className="text-[#f68c09] mx-1">
-                                            <Calendar
-                                                size={20}
-                                                className="inline-flex"
-                                            />
-                                        </span>
-                                        :
-                                    </Label>
-                                    <Input
-                                        name="end_date"
-                                        required
-                                        type="date"
-                                        className="mt-2 w-full"
-                                        value={item.end_date || ""}
-                                        onChange={(e) =>
-                                            handleChange(
-                                                index,
-                                                e.target.name,
-                                                e.target.value
-                                            )
-                                        }
-                                        onBlur={(e) =>
-                                            handleBlur(
-                                                index,
-                                                e.target.name,
-                                                e.target.value
-                                            )
-                                        }
-                                    />
-                                    {errors[index]?.end_date && (
-                                        <p className="text-red-500 text-sm mt-3">
-                                            <AlertCircle
-                                                size={20}
-                                                className="inline-flex"
-                                            />
-                                            : {errors[index]?.end_date}
-                                        </p>
-                                    )}
-                                </div>
-
-                                {/* Description */}
-                                <div className="col-span-2 sm:col-span-2 md:col-span-2">
-                                    <Label className="text-md font-semibold">
-                                        {t("Description")}{" "}
-                                        <span className="text-[#f68c09] mx-1">
-                                            <AlignLeft
-                                                size={20}
-                                                className="inline-flex"
-                                            />
-                                        </span>
-                                        :
-                                    </Label>
-                                    <Textarea
-                                        name="description"
-                                        className="w-full mt-2 text-black"
-                                        placeholder={t("Enter_the_Description")}
-                                        value={item.description || ""}
-                                        onChange={(e) =>
-                                            handleChange(
-                                                index,
-                                                e.target.name,
-                                                e.target.value
-                                            )
-                                        }
-                                        onBlur={(e) =>
-                                            handleBlur(
-                                                index,
-                                                e.target.name,
-                                                e.target.value
-                                            )
-                                        }
-                                    />
-                                    {errors[index]?.description && (
-                                        <p className="text-red-500 text-sm mt-3">
-                                            <AlertCircle
-                                                size={20}
-                                                className="inline-flex"
-                                            />
-                                            : {errors[index]?.description}
-                                        </p>
-                                    )}
-                                </div>
                             </div>
                             {index === educationList.length - 1 &&
                                 educationList.length < 5 && (
@@ -456,7 +387,6 @@ function EducationForm({ handleNext, document }) {
                                         className="gap-1 mt-1 text-[#f68c09] border-primary/50"
                                         variant="outline"
                                         type="button"
-                                        disabled={processing}
                                         onClick={addNewEducation}
                                     >
                                         <Plus size="15px" />{" "}
@@ -471,7 +401,7 @@ function EducationForm({ handleNext, document }) {
                     type="submit"
                     disabled={!isFormValid}
                 >
-                    {processing && (
+                    {loading && (
                         <Loader size="15px" className="animate-spin" />
                     )}{" "}
                     {t("Save_Changes")}

@@ -1,16 +1,6 @@
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { debounce } from "lodash";
-import {
-    AlertCircle,
-    Briefcase,
-    Building,
-    Calendar,
-    Globe,
-    Loader,
-    MapPin,
-    PlusCircleIcon,
-    X,
-} from "lucide-react";
+import {AlertCircle,Briefcase,Building,Calendar,Globe,Loader,MapPin,PlusCircleIcon,X} from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -68,27 +58,15 @@ const ExperienceForm = ({ handleNext, document }) => {
     } = useForm({ experience: experienceList });
 
     const experienceSchema = useMemo(() => Yup.object().shape({
-        title: Yup.string()
-            .required("Position title is required")
-            .min(3, "Must be at least 3 characters"),
-        company_name: Yup.string()
-            .required("Company name is required")
-            .min(3, "Must be at least 3 characters"),
-        city: Yup.string()
-            .required("City is required")
-            .min(3, "Must be at least 3 characters"),
-        country: Yup.string()
-            .required("Country is required")
-            .min(3, "Must be at least 3 characters"),
-        start_date: Yup.date()
-            .required("Start date is required")
-            .typeError("Invalid start date"),
-        end_date: Yup.date()
-            .required("End date is required")
-            .min(Yup.ref("start_date"), "End date must be after start date"),
+        title: Yup.string().required("Position title is required").min(3, "Must be at least 3 characters"),
+        company_name: Yup.string().required("Company name is required").min(3, "Must be at least 3 characters"),
+        city: Yup.string().required("City is required").min(3, "Must be at least 3 characters"),
+        country: Yup.string().required("Country is required").min(3, "Must be at least 3 characters"),
+        start_date: Yup.date().required("Start date is required").typeError("Invalid start date"),
+        end_date: Yup.date().required("End date is required"),
     }), []);
 
-    // Debounced validation
+    //---------------------------------------------------------------------------------------------------------
     const debouncedValidation = useMemo(
         () =>
             debounce(async (list) => {
@@ -105,13 +83,13 @@ const ExperienceForm = ({ handleNext, document }) => {
             }, 500),
         [experienceSchema, setData]
     );
-
+    //---------------------------------------------------------------------------------------------------------
     useEffect(() => {
         debouncedValidation(experienceList);
         return () => debouncedValidation.cancel();
     }, [experienceList, debouncedValidation]);
 
-    // Debounced field validation
+    //---------------------------------------------------------------------------------------------------------
     const debouncedFieldValidation = useMemo(
         () =>
             debounce(async (index, field, value) => {
@@ -135,7 +113,7 @@ const ExperienceForm = ({ handleNext, document }) => {
             }, 500),
         [experienceSchema]
     );
-
+    //---------------------------------------------------------------------------------------------------------
     const handleChange = useCallback((index, field, value) => {
         setExperienceList((prev) =>
             prev.map((item, i) =>
@@ -144,7 +122,7 @@ const ExperienceForm = ({ handleNext, document }) => {
         );
         debouncedFieldValidation(index, field, value);
     }, [debouncedFieldValidation]);
-
+    //---------------------------------------------------------------------------------------------------------
     const handleEditorChange = useCallback((value, name, index) => {
         setExperienceList((prev) => {
             const newList = [...prev];
@@ -152,12 +130,12 @@ const ExperienceForm = ({ handleNext, document }) => {
             return newList;
         });
     }, []);
-
+    //---------------------------------------------------------------------------------------------------------
     const addNewExperience = useCallback(() =>
         setExperienceList((prev) => [...prev, { ...initialState }]),
         [initialState]
     );
-
+    //---------------------------------------------------------------------------------------------------------
     const removeExperience = useCallback(async (index, id) => {
         setExperienceList((prev) => prev.filter((_, i) => i !== index));
         if (id) {
@@ -170,6 +148,7 @@ const ExperienceForm = ({ handleNext, document }) => {
             }
         }
     }, [destroy]);
+    //---------------------------------------------------------------------------------------------------------
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -207,7 +186,7 @@ const ExperienceForm = ({ handleNext, document }) => {
 
         // Traiter les ajouts, mises à jour et suppressions
         try {
-            setLoading(true); // Mettre l'état en "chargement"
+            setLoading(true);
 
             // Si des mises à jour sont nécessaires, appeler la méthode PUT
             if (toUpdate.length) {
@@ -238,7 +217,6 @@ const ExperienceForm = ({ handleNext, document }) => {
             if (handleNext) handleNext();
         } catch (error) {
             console.error("Failed to save experience details", error);
-            // Gestion des erreurs
             setErrors(
                 error.inner.reduce((acc, curr) => {
                     acc[curr.path] = curr.message;
@@ -246,11 +224,11 @@ const ExperienceForm = ({ handleNext, document }) => {
                 }, [])
             );
         } finally {
-            setLoading(false); // Terminer l'état de chargement
+            setLoading(false);
         }
     };
 
-    // Memoize form fields for better performance
+    //---------------------------------------------------------------------------------------------------------
     const renderFormFields = useCallback((item, index) => (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
             <FormField
@@ -414,7 +392,7 @@ const ExperienceForm = ({ handleNext, document }) => {
                 <Button
                     className="mt-4 w-full"
                     type="submit"
-
+                    disabled={!isFormValid}
                 >
                     {loading && <Loader size="15px" className="animate-spin" />}
                     {t("Save_Changes")}

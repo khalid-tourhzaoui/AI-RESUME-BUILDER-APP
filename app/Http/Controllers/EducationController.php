@@ -14,6 +14,7 @@ class EducationController extends Controller
             $request->validate([
                 'education.*.university_name' => 'required|string|max:50',
                 'education.*.degree' => 'required|string|max:50',
+                'education.*.description'=>'required|string|max:1000',
                 'education.*.start_date' => 'required|date',
                 'education.*.end_date' => 'required|date|after_or_equal:education.*.start_date',
             ]);
@@ -35,8 +36,9 @@ class EducationController extends Controller
             $EducationData=Education::where('document_id',$document_id)->first();
             $documentData = $EducationData->document;
             $documentData->thumbnail=$request->thumbnail;
+            $documentData->current_position=5;
             $documentData->save();
-            return $documentData;
+            // return $documentData;
             return redirect()->route('documents.edit', $documentData->document_id)
                 ->with('success','Education information updated successfully.');
         }catch (\Exception $e){
@@ -51,19 +53,26 @@ class EducationController extends Controller
             $request->validate([
                 'education.*.university_name' => 'required|string|max:50',
                 'education.*.degree' => 'required|string|max:50',
+                'education.*.description'=>'required|string|max:1000',
                 'education.*.start_date' => 'required|date',
                 'education.*.end_date' => 'required|date|after_or_equal:education.*.start_date',
             ]);
             $educationData = $request->education;
             foreach ($educationData as $education) {
                 $existingRecord = Education::where('document_id', $document_id)
-                    ->where('university_name', $education['university_name'])
-                    ->where('degree', $education['degree'])
-                    ->where('start_date', $education['start_date'])
-                    ->where('end_date', $education['end_date'])
+                    ->where('id', $education['id'] ?? null)
                     ->first();
 
-                if (!$existingRecord) {
+                if($existingRecord){
+                    $existingRecord->update([
+                        'university_name' => $education['university_name'],
+                        'degree' => $education['degree'],
+                        'major' => $education['major'],
+                        'description' => $education['description'],
+                        'start_date' => $education['start_date'],
+                        'end_date' => $education['end_date'],
+                    ]);
+                }else{
                     Education::create([
                         'document_id' => $document_id,
                         'university_name' => $education['university_name'],
@@ -79,6 +88,7 @@ class EducationController extends Controller
             $EducationData=Education::where('document_id',$document_id)->first();
             $documentData = $EducationData->document;
             $documentData->thumbnail=$request->thumbnail;
+            $documentData->current_position=5;
             $documentData->save();
             return redirect()->route('documents.edit', $documentData->document_id)
                 ->with('success','Education information addes successfully.');

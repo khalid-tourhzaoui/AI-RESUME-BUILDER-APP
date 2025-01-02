@@ -8,23 +8,10 @@ use App\Models\Document;
 use App\Http\Requests\ExperienceRequest;
 class ExperienceController extends Controller
 {
-    public function store(Request $request, $document_id)
+    public function store(ExperienceRequest $request, $document_id)
     {
         try {
-            // Validation des données de l'expérience
-            $request->validate([
-                'experience' => 'required|array|min:1',
-                'experience.*.title' => 'required|string|max:255',
-                'experience.*.company_name' => 'required|string|max:255',
-                'experience.*.city' => 'required|string|max:255',
-                'experience.*.country' => 'required|string|max:255',
-                'experience.*.work_summary' => 'required|string|max:1000',
-                'experience.*.start_date' => 'required|date',
-                'experience.*.end_date' => 'required|date|after_or_equal:experience.*.start_date',
-            ]);
-
-            $experienceData = $request->experience;
-
+            $experienceData = $request->validated()['experience'];
             foreach ($experienceData as $experience) {
                 // Vérification si une expérience existe déjà pour le document donné
                 $existingRecord = Experience::where('document_id', $document_id)
@@ -61,6 +48,7 @@ class ExperienceController extends Controller
             $ExperienceData = Experience::where('document_id', $document_id)->first();
             $documentData = $ExperienceData->document;
             $documentData->thumbnail = $request->thumbnail;
+            $documentData->current_position=4;
             $documentData->save();
 
             return redirect()->route('documents.edit', $documentData->document_id)
@@ -73,23 +61,9 @@ class ExperienceController extends Controller
     //--------------------------------------------------------------------------------------------
     public function update(ExperienceRequest $request, $document_id)
     {
-        // return response()->json([
-        //     "methode" => "update",
-        //     "request" =>$request->all()
-        // ]);
         try {
-            $request->validate([
-                'experience' => 'required|array|min:1',
-                'experience.*.id' => 'required|integer|exists:experiences,id',
-                'experience.*.title' => 'required|string|max:255',
-                'experience.*.company_name' => 'required|string|max:255',
-                'experience.*.city' => 'required|string|max:255',
-                'experience.*.country' => 'required|string|max:255',
-                'experience.*.work_summary' => 'required|string|max:1000',
-                'experience.*.start_date' => 'required|date',
-                'experience.*.end_date' => 'required|date|after_or_equal:experience.*.start_date',
-            ]);
-            $experienceData = $request->experience;
+            $experienceData = $request->validated()['experience'];
+
             foreach ($experienceData as $experience) {
                 if (isset($experience['id'])) {
                     // Mise à jour de l'expérience si l'ID existe
@@ -111,6 +85,7 @@ class ExperienceController extends Controller
             $ExperiencesData = Experience::where('document_id', $document_id)->first();
             $documentData = $ExperiencesData->document;
             $documentData->thumbnail = $request->thumbnail;
+            $documentData->current_position=4;
             $documentData->save();
 
             return redirect()->route('documents.edit', $documentData->document_id)
