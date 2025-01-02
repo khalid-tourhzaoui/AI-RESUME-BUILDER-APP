@@ -178,10 +178,9 @@ function PersonalInfoForm({ handleNext, document }) {
     return (
         <div className="text-white">
             <div className="w-full">
-                <h2 className="font-bold text-lg">{t("Personal_Information")}</h2>
-                <p className="text-sm">
-                    {t("Get_Started_with_the_personal_information")}
-                </p>
+                <h2 className="font-bold text-lg">
+                    {t("Personal_Information")} : <p className="text-sm text-[#f68c09]">{t("Get_Started_with_the_personal_information")}</p>
+                </h2>
             </div>
             <div>
                 <form onSubmit={handleSubmit}>
@@ -208,7 +207,7 @@ function PersonalInfoForm({ handleNext, document }) {
                             ].map(({ name, label, icon,placeholder }) => (
                                 <div key={name} className="col-span-1">
                                     <Label className="text-md font-semibold">
-                                        {label} ({icon}) :
+                                        {label} <span className="text-[#f68c09]">({icon})</span> :
                                     </Label>
                                     <Input
                                         name={name}
@@ -251,7 +250,7 @@ function PersonalInfoForm({ handleNext, document }) {
                             ].map(({ name, label, icon ,placeholder}) => (
                                 <div key={name} className="col-span-1">
                                     <Label className="text-md font-semibold">
-                                        {label} ({icon}) :
+                                        {label} <span className="text-[#f68c09]">({icon})</span> :
                                     </Label>
                                     <Input
                                         name={name}
@@ -294,7 +293,7 @@ function PersonalInfoForm({ handleNext, document }) {
                             ].map(({ name, label, icon,placeholder }) => (
                                 <div key={name} className="col-span-1">
                                     <Label className="text-md font-semibold">
-                                        {label} ({icon}) :
+                                        {label} <span className="text-[#f68c09]">({icon})</span> :
                                     </Label>
                                     <Input
                                         name={name}
@@ -318,28 +317,6 @@ function PersonalInfoForm({ handleNext, document }) {
                                 </div>
                             ))}
                         </div>
-
-                        {/* Image Input */}
-                        {/* <div className="mb-5 pt-4 relative">
-                            <Label className="text-sm">
-                                Image (
-                                <Image size={20} className="inline-flex" />):
-                            </Label>
-                            <Input
-                                name="img"
-                                type="file"
-                                onChange={handleFileChange}
-                                required
-                                className="mt-2 w-full"
-                            />
-                            {errors.img && (
-                                <p className="text-red-500 text-sm mt-3">
-                                    (
-                                    <AlertCircle size={20} className="inline-flex" />
-                                    ) : {errors.img}
-                                </p>
-                            )}
-                        </div> */}
                     </div>
                     <div className="w-full flex justify-between mt-5">
                         <Button

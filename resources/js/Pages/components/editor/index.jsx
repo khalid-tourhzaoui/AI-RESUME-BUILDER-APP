@@ -103,14 +103,14 @@ const RichTextEditor = (props) => {
     //---------------------------------------------------------------------------------
     return (
         <div>
-            <div className="flex items-center justify-between my-2">
+            <div className="flex items-center justify-between flex-wrap">
                 <Label className="text-md font-semibold text-white">
                     {t("Work_Summary")}
                     <span className="text-[#f68c09] mx-1">({<AlignLeft size={20} className="inline-flex" />})</span> :</Label>
                 <Button
                     variant="outline"
                     type="button"
-                    className="gap-1 text-black"
+                    className="gap-1 text-black my-2"
                     disabled={loading}
                     onClick={() => GenerateSummaryFromAI()}>
                     <>

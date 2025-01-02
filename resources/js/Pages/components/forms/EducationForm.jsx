@@ -6,6 +6,7 @@ import {
     Calendar,
     FlaskConical,
     GraduationCap,
+    Loader,
     Medal,
     Plus,
     X,
@@ -16,6 +17,7 @@ import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
 import { Textarea } from "@/Components/ui/textarea";
+import { useTranslation } from "react-i18next";
 
 const initialState = {
     university_name: "",
@@ -31,14 +33,15 @@ function EducationForm({ handleNext, document }) {
         document?.education?.length ? document.education : [initialState]
     );
     const [errors, setErrors] = useState([]);
-    const [isFormValid, setIsFormValid] = useState(false);
+    const [isFormValid, setIsFormValid] = useState(true);
+    const { t } = useTranslation();
     const {
         put,
         post,
         delete: destroy,
         data,
         setData,
-        isPending,
+        processing,
     } = useForm({ education: educationList });
 
     const educationSchema = Yup.object().shape({
@@ -49,24 +52,9 @@ function EducationForm({ handleNext, document }) {
         major: Yup.string().required("Major is required"),
         description: Yup.string().max(1000),
         start_date: Yup.date().required("Start date is required"),
-        end_date: Yup.date().required("End date is required"),
+        end_date: Yup.date()
+            .required("End date is required")
     });
-
-    useEffect(() => {
-        const processEducationList = async () => {
-            try {
-                const thumbnail = await generateThumbnail();
-                setData({ education: educationList, thumbnail });
-                await Promise.all(
-                    educationList.map((exp) => educationSchema.validate(exp))
-                );
-                setIsFormValid(true);
-            } catch (err) {
-                setIsFormValid(false);
-            }
-        };
-        processEducationList();
-    }, [educationList]);
 
     const validateField = async (index, field, value) => {
         try {
@@ -76,6 +64,8 @@ function EducationForm({ handleNext, document }) {
                 if (newErrors[index]) delete newErrors[index][field];
                 return newErrors;
             });
+
+            checkFormValidity();
         } catch (err) {
             setErrors((prev) => {
                 const newErrors = [...prev];
@@ -83,7 +73,12 @@ function EducationForm({ handleNext, document }) {
                 newErrors[index][field] = err.message;
                 return newErrors;
             });
+            setIsFormValid(false);
         }
+    };
+
+    const handleBlur = (index, field, value) => {
+        validateField(index, field, value);
     };
 
     const handleChange = (index, field, value) => {
@@ -92,7 +87,18 @@ function EducationForm({ handleNext, document }) {
                 i === index ? { ...item, [field]: value } : item
             )
         );
-        validateField(index, field, value);
+    };
+
+    const checkFormValidity = () => {
+        const isValid = educationList.every((item) => {
+            try {
+                educationSchema.validateSync(item, { abortEarly: false });
+                return true;
+            } catch (error) {
+                return false;
+            }
+        });
+        setIsFormValid(isValid);
     };
 
     const addNewEducation = () =>
@@ -152,12 +158,15 @@ function EducationForm({ handleNext, document }) {
             );
         }
     };
-
     return (
-        <div>
+        <div className="text-white">
             <div className="w-full">
-                <h2 className="font-bold text-lg">Education</h2>
-                <p className="text-sm">Add your education details</p>
+                <h2 className="font-bold text-lg">
+                    {t("Education")} :
+                    <span className="text-lg mx-1 text-[#f68c09]">
+                        {t("Add_your_education_details")}
+                    </span>
+                </h2>
             </div>
             <form onSubmit={handleSubmit}>
                 <div className="border-2 w-full h-auto divide-y-[1px] rounded-md px-3 pb-4 my-5">
@@ -168,8 +177,8 @@ function EducationForm({ handleNext, document }) {
                                     <Button
                                         variant="secondary"
                                         type="button"
-                                        disabled={isPending}
-                                        className="size-[20px] text-center rounded-full absolute -top-3 -right-5 !bg-black dark:!bg-gray-600 text-white"
+                                        disabled={processing}
+                                        className="size-[20px] text-center rounded-full absolute -top-3 -right-5 !bg-black text-white"
                                         size="icon"
                                         onClick={() =>
                                             removeEducation(index, item.id)
@@ -178,21 +187,21 @@ function EducationForm({ handleNext, document }) {
                                         <X size="13px" />
                                     </Button>
                                 )}
-                                {/* University Name in the one row */}
+                                {/* University Name */}
                                 <div className="col-span-2 sm:col-span-2 md:col-span-2">
-                                    <Label className="text-sm">
-                                        University Name ({" "}
-                                        {
+                                    <Label className="text-md font-semibold">
+                                        {t("University_Name")}{" "}
+                                        <span className="text-[#f68c09] mx-1">
                                             <GraduationCap
                                                 size={20}
                                                 className="inline-flex"
                                             />
-                                        }{" "}
-                                        ) :
+                                        </span>
+                                        :
                                     </Label>
                                     <Input
                                         name="university_name"
-                                        placeholder="Enter University Name"
+                                        placeholder={t("Enter_University_Name")}
                                         required
                                         className="mt-2 w-full"
                                         value={item.university_name || ""}
@@ -203,33 +212,40 @@ function EducationForm({ handleNext, document }) {
                                                 e.target.value
                                             )
                                         }
+                                        onBlur={(e) =>
+                                            handleBlur(
+                                                index,
+                                                e.target.name,
+                                                e.target.value
+                                            )
+                                        }
                                     />
                                     {errors[index]?.university_name && (
                                         <p className="text-red-500 text-sm mt-3">
-                                            (
                                             <AlertCircle
                                                 size={20}
                                                 className="inline-flex"
                                             />
-                                            ): {errors[index]?.university_name}
+                                            : {errors[index]?.university_name}
                                         </p>
                                     )}
                                 </div>
-                                {/* degree and major in the same row */}
+
+                                {/* Degree and Major */}
                                 <div className="col-span-2 sm:col-span-2 md:col-span-1">
-                                    <Label className="text-sm">
-                                        Degree ({" "}
-                                        {
+                                    <Label className="text-md font-semibold">
+                                        {t("Degree")}{" "}
+                                        <span className="text-[#f68c09] mx-1">
                                             <Medal
                                                 size={20}
                                                 className="inline-flex"
                                             />
-                                        }{" "}
-                                        ) :
+                                        </span>
+                                        :
                                     </Label>
                                     <Input
                                         name="degree"
-                                        placeholder="Enter the Degree"
+                                        placeholder={t("Enter_the_Degree")}
                                         required
                                         className="mt-2 w-full"
                                         value={item.degree || ""}
@@ -240,32 +256,40 @@ function EducationForm({ handleNext, document }) {
                                                 e.target.value
                                             )
                                         }
+                                        onBlur={(e) =>
+                                            handleBlur(
+                                                index,
+                                                e.target.name,
+                                                e.target.value
+                                            )
+                                        }
                                     />
                                     {errors[index]?.degree && (
                                         <p className="text-red-500 text-sm mt-3">
-                                            (
                                             <AlertCircle
                                                 size={20}
                                                 className="inline-flex"
                                             />
-                                            ): {errors[index]?.degree}
+                                            : {errors[index]?.degree}
                                         </p>
                                     )}
                                 </div>
+
+                                {/* Major */}
                                 <div className="col-span-2 sm:col-span-2 md:col-span-1">
-                                    <Label className="text-sm">
-                                        Major ({" "}
-                                        {
+                                    <Label className="text-md font-semibold">
+                                        {t("Major")}{" "}
+                                        <span className="text-[#f68c09] mx-1">
                                             <FlaskConical
                                                 size={20}
                                                 className="inline-flex"
                                             />
-                                        }{" "}
-                                        ) :
+                                        </span>
+                                        :
                                     </Label>
                                     <Input
                                         name="major"
-                                        placeholder="Enter the Major"
+                                        placeholder={t("Enter_the_Major")}
                                         required
                                         className="mt-2 w-full"
                                         value={item.major || ""}
@@ -276,29 +300,36 @@ function EducationForm({ handleNext, document }) {
                                                 e.target.value
                                             )
                                         }
+                                        onBlur={(e) =>
+                                            handleBlur(
+                                                index,
+                                                e.target.name,
+                                                e.target.value
+                                            )
+                                        }
                                     />
                                     {errors[index]?.major && (
                                         <p className="text-red-500 text-sm mt-3">
-                                            (
                                             <AlertCircle
                                                 size={20}
                                                 className="inline-flex"
                                             />
-                                            ): {errors[index]?.major}
+                                            : {errors[index]?.major}
                                         </p>
                                     )}
                                 </div>
-                                {/* degree and major in the same row */}
+
+                                {/* Start Date */}
                                 <div className="col-span-2 sm:col-span-2 md:col-span-1">
-                                    <Label className="text-sm">
-                                        Start Date ({" "}
-                                        {
+                                    <Label className="text-md font-semibold">
+                                        {t("Start_Date")}{" "}
+                                        <span className="text-[#f68c09] mx-1">
                                             <Calendar
                                                 size={20}
                                                 className="inline-flex"
                                             />
-                                        }{" "}
-                                        ) :
+                                        </span>
+                                        :
                                     </Label>
                                     <Input
                                         name="start_date"
@@ -313,28 +344,36 @@ function EducationForm({ handleNext, document }) {
                                                 e.target.value
                                             )
                                         }
+                                        onBlur={(e) =>
+                                            handleBlur(
+                                                index,
+                                                e.target.name,
+                                                e.target.value
+                                            )
+                                        }
                                     />
                                     {errors[index]?.start_date && (
                                         <p className="text-red-500 text-sm mt-3">
-                                            (
                                             <AlertCircle
                                                 size={20}
                                                 className="inline-flex"
                                             />
-                                            ): {errors[index]?.start_date}
+                                            : {errors[index]?.start_date}
                                         </p>
                                     )}
                                 </div>
+
+                                {/* End Date */}
                                 <div className="col-span-2 sm:col-span-2 md:col-span-1">
-                                    <Label className="text-sm">
-                                        End Date ({" "}
-                                        {
+                                    <Label className="text-md font-semibold">
+                                        {t("End_Date")}{" "}
+                                        <span className="text-[#f68c09] mx-1">
                                             <Calendar
                                                 size={20}
                                                 className="inline-flex"
                                             />
-                                        }{" "}
-                                        ) :
+                                        </span>
+                                        :
                                     </Label>
                                     <Input
                                         name="end_date"
@@ -349,34 +388,41 @@ function EducationForm({ handleNext, document }) {
                                                 e.target.value
                                             )
                                         }
+                                        onBlur={(e) =>
+                                            handleBlur(
+                                                index,
+                                                e.target.name,
+                                                e.target.value
+                                            )
+                                        }
                                     />
                                     {errors[index]?.end_date && (
                                         <p className="text-red-500 text-sm mt-3">
-                                            (
                                             <AlertCircle
                                                 size={20}
                                                 className="inline-flex"
                                             />
-                                            ): {errors[index]?.end_date}
+                                            : {errors[index]?.end_date}
                                         </p>
                                     )}
                                 </div>
-                                {/* description in the one row */}
+
+                                {/* Description */}
                                 <div className="col-span-2 sm:col-span-2 md:col-span-2">
-                                    <Label className="text-sm">
-                                        Description ({" "}
-                                        {
+                                    <Label className="text-md font-semibold">
+                                        {t("Description")}{" "}
+                                        <span className="text-[#f68c09] mx-1">
                                             <AlignLeft
                                                 size={20}
                                                 className="inline-flex"
                                             />
-                                        }{" "}
-                                        ) :
+                                        </span>
+                                        :
                                     </Label>
                                     <Textarea
                                         name="description"
-                                        className="w-full mt-2"
-                                        placeholder="Enter the Description"
+                                        className="w-full mt-2 text-black"
+                                        placeholder={t("Enter_the_Description")}
                                         value={item.description || ""}
                                         onChange={(e) =>
                                             handleChange(
@@ -385,15 +431,21 @@ function EducationForm({ handleNext, document }) {
                                                 e.target.value
                                             )
                                         }
+                                        onBlur={(e) =>
+                                            handleBlur(
+                                                index,
+                                                e.target.name,
+                                                e.target.value
+                                            )
+                                        }
                                     />
                                     {errors[index]?.description && (
                                         <p className="text-red-500 text-sm mt-3">
-                                            (
                                             <AlertCircle
                                                 size={20}
                                                 className="inline-flex"
                                             />
-                                            ): {errors[index]?.description}
+                                            : {errors[index]?.description}
                                         </p>
                                     )}
                                 </div>
@@ -401,13 +453,14 @@ function EducationForm({ handleNext, document }) {
                             {index === educationList.length - 1 &&
                                 educationList.length < 5 && (
                                     <Button
-                                        className="gap-1 mt-1 text-primary border-primary/50"
+                                        className="gap-1 mt-1 text-[#f68c09] border-primary/50"
                                         variant="outline"
                                         type="button"
-                                        disabled={isPending}
+                                        disabled={processing}
                                         onClick={addNewEducation}
                                     >
-                                        <Plus size="15px" /> Add More Education
+                                        <Plus size="15px" />{" "}
+                                        {t("Add_More_Education")}
                                     </Button>
                                 )}
                         </div>
@@ -416,12 +469,12 @@ function EducationForm({ handleNext, document }) {
                 <Button
                     className="mt-4 w-full"
                     type="submit"
-                    disabled={!isFormValid || isPending}
+                    disabled={!isFormValid}
                 >
-                    {isPending && (
+                    {processing && (
                         <Loader size="15px" className="animate-spin" />
                     )}{" "}
-                    Save Changes
+                    {t("Save_Changes")}
                 </Button>
             </form>
         </div>

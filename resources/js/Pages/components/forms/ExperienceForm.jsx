@@ -1,3 +1,5 @@
+import React, { useEffect, useState, useCallback, useMemo } from "react";
+import { debounce } from "lodash";
 import {
     AlertCircle,
     Briefcase,
@@ -6,52 +8,66 @@ import {
     Globe,
     Loader,
     MapPin,
-    Plus,
-    PlusCircle,
     PlusCircleIcon,
     X,
 } from "lucide-react";
-import React, { useEffect, useState } from "react";
-import { Label } from "@/Components/ui/label";
-import { Input } from "@/Components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { useForm } from "@inertiajs/react";
 import RichTextEditor from "../editor";
 import { generateThumbnail } from "@/lib/helper";
 import * as Yup from "yup";
-import { Button } from "@/Components/ui/button";
 import { useTranslation } from "react-i18next";
 
-const initialState = {
-    id: undefined,
-    docId: undefined,
-    title: "",
-    company_name: "",
-    city: "",
-    country: "",
-    start_date: "",
-    end_date: "",
-    work_summary: "",
-    thumbnail:"",
-    currentlyWorking: false,
-};
+const FormField = React.memo(({ label, icon, error, children }) => (
+    <div className="col-span-1">
+        <Label className="text-md font-semibold">
+            {label}
+            <span className="text-[#f68c09] mx-1">
+                ({React.cloneElement(icon, { size: 20, className: "inline-flex" })})
+            </span> :
+        </Label>
+        {children}
+        {error && (
+            <p className="text-red-500 text-sm mt-3">
+                (<AlertCircle size={20} className="inline-flex" />): {error}
+            </p>
+        )}
+    </div>
+));
 
-function ExperienceForm({ handleNext, document }) {
+const ExperienceForm = ({ handleNext, document }) => {
+    const { t } = useTranslation();
+    const initialState = useMemo(() => ({
+        id: undefined,
+        docId: undefined,
+        title: "",
+        company_name: "",
+        city: "",
+        country: "",
+        start_date: "",
+        end_date: "",
+        work_summary: "",
+        thumbnail: "",
+        currentlyWorking: false,
+    }), []);
+
     const [experienceList, setExperienceList] = useState(() =>
         document?.experience?.length ? document.experience : [initialState]
     );
     const [errors, setErrors] = useState([]);
     const [isFormValid, setIsFormValid] = useState(false);
+    const [loading, setLoading] = useState(false);
+
     const {
         put,
         post,
         delete: destroy,
-        data,
         setData,
     } = useForm({ experience: experienceList });
-    const [loading, setLoading] = useState(false);
-    const { t } = useTranslation();
 
-    const experienceSchema = Yup.object().shape({
+    const experienceSchema = useMemo(() => Yup.object().shape({
         title: Yup.string()
             .required("Position title is required")
             .min(3, "Must be at least 3 characters"),
@@ -70,424 +86,313 @@ function ExperienceForm({ handleNext, document }) {
         end_date: Yup.date()
             .required("End date is required")
             .min(Yup.ref("start_date"), "End date must be after start date"),
-    });
+    }), []);
+
+    // Debounced validation
+    const debouncedValidation = useMemo(
+        () =>
+            debounce(async (list) => {
+                try {
+                    const thumbnail = await generateThumbnail();
+                    setData({ experience: list, thumbnail });
+                    await Promise.all(
+                        list.map((exp) => experienceSchema.validate(exp))
+                    );
+                    setIsFormValid(true);
+                } catch (err) {
+                    setIsFormValid(false);
+                }
+            }, 500),
+        [experienceSchema, setData]
+    );
 
     useEffect(() => {
-        const processExperienceList = async () => {
-            try {
-                const thumbnail = await generateThumbnail();
-                setData({ experience: experienceList, thumbnail });
-                await Promise.all(
-                    experienceList.map((exp) => experienceSchema.validate(exp))
-                );
-                setIsFormValid(true);
-            } catch (err) {
-                setIsFormValid(false);
-            }
-        };
-        processExperienceList();
-    }, [experienceList]);
+        debouncedValidation(experienceList);
+        return () => debouncedValidation.cancel();
+    }, [experienceList, debouncedValidation]);
 
-    const validateField = async (index, field, value) => {
-        try {
-            await experienceSchema.validateAt(field, { [field]: value });
-            setErrors((prev) => {
-                const newErrors = [...prev];
-                if (newErrors[index]) delete newErrors[index][field];
-                return newErrors;
-            });
-        } catch (err) {
-            setErrors((prev) => {
-                const newErrors = [...prev];
-                newErrors[index] = {
-                    ...(newErrors[index] || {}),
-                    [field]: err.message,
-                };
-                return newErrors;
-            });
-        }
-    };
+    // Debounced field validation
+    const debouncedFieldValidation = useMemo(
+        () =>
+            debounce(async (index, field, value) => {
+                try {
+                    await experienceSchema.validateAt(field, { [field]: value });
+                    setErrors((prev) => {
+                        const newErrors = [...prev];
+                        if (newErrors[index]) delete newErrors[index][field];
+                        return newErrors;
+                    });
+                } catch (err) {
+                    setErrors((prev) => {
+                        const newErrors = [...prev];
+                        newErrors[index] = {
+                            ...(newErrors[index] || {}),
+                            [field]: err.message,
+                        };
+                        return newErrors;
+                    });
+                }
+            }, 500),
+        [experienceSchema]
+    );
 
-    const handleChange = (index, field, value) => {
+    const handleChange = useCallback((index, field, value) => {
         setExperienceList((prev) =>
             prev.map((item, i) =>
                 i === index ? { ...item, [field]: value } : item
             )
         );
-        validateField(index, field, value);
-    };
+        debouncedFieldValidation(index, field, value);
+    }, [debouncedFieldValidation]);
 
-    const addNewExperience = () =>
-        setExperienceList((prev) => [...prev, { ...initialState }]);
-    const removeExperience = (index, id) => {
-        setExperienceList((prev) => prev.filter((_, i) => i !== index));
-        if (id) removeEperienceBack(id);
-    };
-
-    const removeEperienceBack = async (id) => {
-        try {
-            await destroy(route("experience.delete", id), {
-                data: { experience: [{ id }] },
-            });
-        } catch (error) {
-            console.error("Failed to delete experience", error);
-        }
-    };
-
-    const handleEditorChange = (value, name, index) => {
-        setExperienceList((prevState) => {
-            const newExperienceList = [...prevState];
-            newExperienceList[index] = {
-                ...newExperienceList[index],
-                [name]: value,
-            };
-            return newExperienceList;
+    const handleEditorChange = useCallback((value, name, index) => {
+        setExperienceList((prev) => {
+            const newList = [...prev];
+            newList[index] = { ...newList[index], [name]: value };
+            return newList;
         });
-    };
+    }, []);
+
+    const addNewExperience = useCallback(() =>
+        setExperienceList((prev) => [...prev, { ...initialState }]),
+        [initialState]
+    );
+
+    const removeExperience = useCallback(async (index, id) => {
+        setExperienceList((prev) => prev.filter((_, i) => i !== index));
+        if (id) {
+            try {
+                await destroy(route("experience.delete", id), {
+                    data: { experience: [{ id }] },
+                });
+            } catch (error) {
+                console.error("Failed to delete experience", error);
+            }
+        }
+    }, [destroy]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const existingExperience = document.experience || [];
-        const toUpdate = [],
-            toAdd = [],
-            toDelete = [];
 
+        // Récupérer les expériences existantes depuis le document
+        const existingExperience = document.experience || [];
+
+        // Initialiser les tableaux pour les expériences à mettre à jour, ajouter ou supprimer
+        const toUpdate = [], toAdd = [], toDelete = [];
+
+        // Parcourir la liste des expériences pour les comparer aux expériences existantes
         experienceList.forEach((item) => {
             const existingItem = existingExperience.find(
                 (exp) => exp.id === item.id
             );
+
             if (existingItem) {
+                // Si l'expérience existe et a des changements
                 const hasChanged = Object.keys(item).some(
                     (key) => item[key] !== existingItem[key]
                 );
-                if (hasChanged) toUpdate.push(item);
+                if (hasChanged) toUpdate.push(item); // Ajouter à la liste de mise à jour
             } else {
+                // Si l'expérience n'existe pas encore, ajouter à la liste d'ajout
                 toAdd.push(item);
             }
         });
 
+        // Trouver les expériences existantes qui ne sont plus présentes dans la liste
         existingExperience.forEach((existingItem) => {
-            if (!experienceList.some((item) => item.id === existingItem.id))
-                toDelete.push(existingItem);
+            if (!experienceList.some((item) => item.id === existingItem.id)) {
+                toDelete.push(existingItem); // Ajouter à la liste de suppression
+            }
         });
 
+        // Traiter les ajouts, mises à jour et suppressions
         try {
-            if (toUpdate.length)
+            setLoading(true); // Mettre l'état en "chargement"
+
+            // Si des mises à jour sont nécessaires, appeler la méthode PUT
+            if (toUpdate.length) {
                 await put(route("experience.update", document.id), {
                     experience: toUpdate,
                 });
-            if (toAdd.length)
+            }
+
+            // Si de nouvelles expériences doivent être ajoutées, appeler la méthode POST
+            if (toAdd.length) {
                 await post(route("experience.store", document.id), {
                     experience: toAdd,
                 });
-            setLoading(true);
+            }
+
+            // Si des expériences doivent être supprimées, appeler la méthode DELETE
+            if (toDelete.length) {
+                await Promise.all(
+                    toDelete.map(async (item) => {
+                        await destroy(route("experience.delete", item.id), {
+                            data: { experience: [item] },
+                        });
+                    })
+                );
+            }
+
+            // Appeler la fonction handleNext si tout s'est bien passé
             if (handleNext) handleNext();
         } catch (error) {
             console.error("Failed to save experience details", error);
+            // Gestion des erreurs
             setErrors(
                 error.inner.reduce((acc, curr) => {
                     acc[curr.path] = curr.message;
                     return acc;
                 }, [])
             );
-            setLoading(false);
+        } finally {
+            setLoading(false); // Terminer l'état de chargement
         }
     };
+
+    // Memoize form fields for better performance
+    const renderFormFields = useCallback((item, index) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+            <FormField
+                label={t("Position_title")}
+                icon={<Briefcase />}
+                error={errors[index]?.title}
+            >
+                <Input
+                    name="title"
+                    placeholder={t("Enter_your_position_title")}
+                    required
+                    className="mt-2 w-full"
+                    value={item.title || ""}
+                    onChange={(e) =>
+                        handleChange(index, e.target.name, e.target.value)
+                    }
+                />
+            </FormField>
+
+            <FormField
+                label={t("Company_Name")}
+                icon={<Building />}
+                error={errors[index]?.company_name}
+            >
+                <Input
+                    name="company_name"
+                    placeholder={t("Enter_company_name")}
+                    required
+                    className="mt-2 w-full"
+                    value={item.company_name || ""}
+                    onChange={(e) =>
+                        handleChange(index, e.target.name, e.target.value)
+                    }
+                />
+            </FormField>
+
+            <FormField
+                label={t("City")}
+                icon={<MapPin />}
+                error={errors[index]?.city}
+            >
+                <Input
+                    name="city"
+                    placeholder={t("Enter_city")}
+                    required
+                    className="mt-2 w-full"
+                    value={item.city || ""}
+                    onChange={(e) =>
+                        handleChange(index, e.target.name, e.target.value)
+                    }
+                />
+            </FormField>
+
+            <FormField
+                label={t("Country")}
+                icon={<Globe />}
+                error={errors[index]?.country}
+            >
+                <Input
+                    name="country"
+                    placeholder={t("Enter_country")}
+                    required
+                    className="mt-2 w-full"
+                    value={item.country || ""}
+                    onChange={(e) =>
+                        handleChange(index, e.target.name, e.target.value)
+                    }
+                />
+            </FormField>
+
+            <FormField
+                label={t("Start_Date")}
+                icon={<Calendar />}
+                error={errors[index]?.start_date}
+            >
+                <Input
+                    name="start_date"
+                    type="date"
+                    required
+                    className="mt-2 w-full"
+                    value={item.start_date || ""}
+                    onChange={(e) =>
+                        handleChange(index, e.target.name, e.target.value)
+                    }
+                />
+            </FormField>
+
+            <FormField
+                label={t("End_Date")}
+                icon={<Calendar />}
+                error={errors[index]?.end_date}
+            >
+                <Input
+                    name="end_date"
+                    type="date"
+                    required
+                    className="mt-2 w-full"
+                    value={item.end_date || ""}
+                    onChange={(e) =>
+                        handleChange(index, e.target.name, e.target.value)
+                    }
+                />
+            </FormField>
+
+            <div className="col-span-1 md:col-span-2 mt-1">
+                <RichTextEditor
+                    jobTitle={item.title || ""}
+                    initialValue={item?.work_summary || ""}
+                    onEditorChange={(value) =>
+                        handleEditorChange(value, "work_summary", index)
+                    }
+                />
+            </div>
+        </div>
+    ), [handleChange, handleEditorChange, errors, t]);
 
     return (
         <div className="text-white">
             <div className="w-full">
                 <h2 className="font-bold text-lg">
                     {t("Professional_Experience")} :{" "}
+                    <span className="text-lg font-bold text-[#f68c09]">
+                        {t("Add_previous_job_experience")}
+                    </span>
                 </h2>
-                <p className="text-sm font-normal text-[#f68c09]">
-                    {t("Add_previous_job_experience")}
-                </p>
             </div>
             <form onSubmit={handleSubmit}>
                 <div className="border-2 w-full h-auto divide-y-[1px] rounded-md px-3 pb-4 my-5">
                     {experienceList.map((item, index) => (
-                        <div key={index}>
-                            <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-5 mb-5 pt-4 relative">
-                                {experienceList.length > 1 && (
-                                    <Button
-                                        variant="secondary"
-                                        type="button"
-                                        className="size-[20px] text-center rounded-full absolute -top-3 -right-5 !bg-black text-white"
-                                        size="icon"
-                                        onClick={() =>
-                                            removeExperience(index, item.id)
-                                        }
-                                    >
-                                        <X size="13px" />
-                                    </Button>
-                                )}
-                                {/* Position Title and Company Name in the same row */}
-                                <div className="col-span-1 sm:col-span-1 md:col-span-1">
-                                    <Label className="text-md font-semibold">
-                                        {t("Position_title")}
-                                        <span className="text-[#f68c09] mx-1">
-                                            (
-                                            {
-                                                <Briefcase
-                                                    size={20}
-                                                    className="inline-flex"
-                                                />
-                                            }
-                                            )
-                                        </span>{" "}
-                                        :
-                                    </Label>
-                                    <Input
-                                        name="title"
-                                        placeholder={t(
-                                            "Enter_your_position_title"
-                                        )}
-                                        required
-                                        className="mt-2 w-full"
-                                        value={item.title || ""}
-                                        onChange={(e) =>
-                                            handleChange(
-                                                index,
-                                                e.target.name,
-                                                e.target.value
-                                            )
-                                        }
-                                    />
-                                    {errors[index]?.title && (
-                                        <p className="text-red-500 text-sm mt-3">
-                                            (
-                                            <AlertCircle
-                                                size={20}
-                                                className="inline-flex"
-                                            />
-                                            ): {errors[index]?.title}
-                                        </p>
-                                    )}
-                                </div>
-
-                                <div className="col-span-1 sm:col-span-1 md:col-span-1">
-                                    <Label className="text-md font-semibold">
-                                        {t("Company_Name")}
-                                        <span className="text-[#f68c09] mx-1">
-                                            (
-                                            {
-                                                <Building
-                                                    size={20}
-                                                    className="inline-flex"
-                                                />
-                                            }
-                                            )
-                                        </span>{" "}
-                                        :
-                                    </Label>
-                                    <Input
-                                        name="company_name"
-                                        placeholder={t("Enter_company_name")}
-                                        required
-                                        className="mt-2 w-full"
-                                        value={item.company_name || ""}
-                                        onChange={(e) =>
-                                            handleChange(
-                                                index,
-                                                e.target.name,
-                                                e.target.value
-                                            )
-                                        }
-                                    />
-                                    {errors[index]?.company_name && (
-                                        <p className="text-red-500 text-sm mt-3">
-                                            (
-                                            <AlertCircle
-                                                size={20}
-                                                className="inline-flex"
-                                            />
-                                            ): {errors[index]?.company_name}
-                                        </p>
-                                    )}
-                                </div>
-
-                                {/* City and Country in the same row */}
-                                <div className="col-span-1 sm:col-span-1 md:col-span-1">
-                                    <Label className="text-md font-semibold">
-                                        {t("City")}
-                                        <span className="text-[#f68c09] mx-1">
-                                            (
-                                            {
-                                                <MapPin
-                                                    size={20}
-                                                    className="inline-flex"
-                                                />
-                                            }
-                                            )
-                                        </span>{" "}
-                                        :
-                                    </Label>
-                                    <Input
-                                        name="city"
-                                        placeholder={t("Enter_city")}
-                                        required
-                                        className="mt-2 w-full"
-                                        value={item.city || ""}
-                                        onChange={(e) =>
-                                            handleChange(
-                                                index,
-                                                e.target.name,
-                                                e.target.value
-                                            )
-                                        }
-                                    />
-                                    {errors[index]?.city && (
-                                        <p className="text-red-500 text-sm mt-3">
-                                            (
-                                            <AlertCircle
-                                                size={20}
-                                                className="inline-flex"
-                                            />
-                                            ): {errors[index]?.city}
-                                        </p>
-                                    )}
-                                </div>
-
-                                <div className="col-span-1 sm:col-span-1 md:col-span-1">
-                                    <Label className="text-md font-semibold">
-                                        {t("Country")}
-                                        <span className="text-[#f68c09] mx-1">
-                                            (
-                                            {
-                                                <Globe
-                                                    size={20}
-                                                    className="inline-flex"
-                                                />
-                                            }
-                                            )
-                                        </span>{" "}
-                                        :
-                                    </Label>
-                                    <Input
-                                        name="country"
-                                        placeholder={t("Enter_country")}
-                                        required
-                                        className="mt-2 w-full"
-                                        value={item.country || ""}
-                                        onChange={(e) =>
-                                            handleChange(
-                                                index,
-                                                e.target.name,
-                                                e.target.value
-                                            )
-                                        }
-                                    />
-                                    {errors[index]?.country && (
-                                        <p className="text-red-500 text-sm mt-3">
-                                            (
-                                            <AlertCircle
-                                                size={20}
-                                                className="inline-flex"
-                                            />
-                                            ): {errors[index]?.country}
-                                        </p>
-                                    )}
-                                </div>
-
-                                {/* Start Date and End Date in the same row */}
-                                <div className="col-span-1 sm:col-span-1 md:col-span-1">
-                                    <Label className="text-md font-semibold">
-                                        {t("Start_Date")}
-                                        <span className="text-[#f68c09] mx-1">
-                                            (
-                                            {
-                                                <Calendar
-                                                    size={20}
-                                                    className="inline-flex"
-                                                />
-                                            }
-                                            )
-                                        </span>{" "}
-                                        :
-                                    </Label>
-                                    <Input
-                                        name="start_date"
-                                        type="date"
-                                        required
-                                        className="mt-2 w-full"
-                                        value={item.start_date || ""}
-                                        onChange={(e) =>
-                                            handleChange(
-                                                index,
-                                                e.target.name,
-                                                e.target.value
-                                            )
-                                        }
-                                    />
-                                    {errors[index]?.start_date && (
-                                        <p className="text-red-500 text-sm mt-3">
-                                            (
-                                            <AlertCircle
-                                                size={20}
-                                                className="inline-flex"
-                                            />
-                                            ): {errors[index]?.start_date}
-                                        </p>
-                                    )}
-                                </div>
-
-                                <div className="col-span-1 sm:col-span-1 md:col-span-1">
-                                    <Label className="text-md font-semibold">
-                                        {t("End_Date")}
-                                        <span className="text-[#f68c09] mx-1">
-                                            (
-                                            {
-                                                <Calendar
-                                                    size={20}
-                                                    className="inline-flex"
-                                                />
-                                            }
-                                            )
-                                        </span>{" "}
-                                        :
-                                    </Label>
-                                    <Input
-                                        name="end_date"
-                                        type="date"
-                                        required
-                                        className="mt-2 w-full"
-                                        value={item.end_date || ""}
-                                        onChange={(e) =>
-                                            handleChange(
-                                                index,
-                                                e.target.name,
-                                                e.target.value
-                                            )
-                                        }
-                                    />
-                                    {errors[index]?.end_date && (
-                                        <p className="text-red-500 text-sm mt-3">
-                                            (
-                                            <AlertCircle
-                                                size={20}
-                                                className="inline-flex"
-                                            />
-                                            ): {errors[index]?.end_date}
-                                        </p>
-                                    )}
-                                </div>
-
-                                {/* Work Summary */}
-                                <div className="col-span-1 sm:col-span-2 mt-1">
-                                    <RichTextEditor
-                                        jobTitle={item.title || ""}
-                                        initialValue={item?.work_summary || ""}
-                                        onEditorChange={(value) =>
-                                            handleEditorChange(
-                                                value,
-                                                "work_summary",
-                                                index
-                                            )
-                                        }
-                                    />
-                                </div>
-                            </div>
+                        <div key={index} className="relative pt-4">
+                            {experienceList.length > 1 && (
+                                <Button
+                                    variant="secondary"
+                                    type="button"
+                                    className="size-[20px] text-center rounded-full absolute -top-3 -right-5 !bg-black text-white"
+                                    size="icon"
+                                    onClick={() => removeExperience(index, item.id)}
+                                >
+                                    <X size="13px" />
+                                </Button>
+                            )}
+                            {renderFormFields(item, index)}
                             {index === experienceList.length - 1 &&
                                 experienceList.length < 5 && (
                                     <Button
@@ -499,7 +404,7 @@ function ExperienceForm({ handleNext, document }) {
                                         <PlusCircleIcon
                                             size={30}
                                             className="text-[#f68c09]"
-                                        />{" "}
+                                        />
                                         {t("Add_More_Experience")}
                                     </Button>
                                 )}
@@ -509,14 +414,14 @@ function ExperienceForm({ handleNext, document }) {
                 <Button
                     className="mt-4 w-full"
                     type="submit"
-                    disabled={!isFormValid || loading}
+
                 >
-                    {loading && <Loader size="15px" className="animate-spin" />}{" "}
+                    {loading && <Loader size="15px" className="animate-spin" />}
                     {t("Save_Changes")}
                 </Button>
             </form>
         </div>
     );
-}
+};
 
 export default ExperienceForm;

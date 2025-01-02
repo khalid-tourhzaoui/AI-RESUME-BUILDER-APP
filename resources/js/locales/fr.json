@@ -79,7 +79,18 @@
     "Start_Date": "Date de début",
     "End_Date": "Date de fin",
     "Add_More_Experience": "Ajouter une autre expérience",
-    "Work_Summary": "Résumé du travail"
+    "Work_Summary": "Résumé du travail",
+    "Education": "Éducation",
+    "Add_your_education_details": "Ajoutez vos détails éducatifs",
+    "University_Name": "Nom de l'université",
+    "Enter_University_Name": "Saisissez le nom de l'université",
+    "Degree": "Diplôme",
+    "Enter_the_Degree": "Saisissez le diplôme",
+    "Major": "Spécialisation",
+    "Enter_the_Description": "Saisissez la description",
+    "Add_More_Education": "Ajouter une autre formation",
+    "Enter_the_Major": "Saisissez la spécialisation"
+
 
 
 }

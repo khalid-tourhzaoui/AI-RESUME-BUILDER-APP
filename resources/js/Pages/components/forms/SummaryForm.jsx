@@ -60,7 +60,7 @@ function SummaryForm({ document, handleNext }) {
     // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         try {
             await patch(route("documents.UpdateSummary", document.document_id), {
                 data: { summary: data.summary },
@@ -75,13 +75,17 @@ function SummaryForm({ document, handleNext }) {
     return (
         <div>
             <div className="w-full text-white">
-                <h2 className="font-bold text-lg">{t("Summary")}</h2>
-                <p className="text-sm">{t("Add_summary_for_your_resume")}</p>
+                <h2 className="font-bold text-lg">
+                    {t("Summary")} : <span className="text-lg text-[#f68c09]">{t("Add_summary_for_your_resume")}</span>
+                </h2>
             </div>
             <div>
                 <form onSubmit={handleSubmit}>
-                    <div className="flex items-center justify-between flex-wrap">
-                        <Label className="text-md font-semibold text-white">{t("Add_Summary")} ( <FileText  size={20} className="inline-flex"/> ) : </Label>
+                    <div className="flex items-center justify-between flex-wrap mt-2">
+                        <Label className="text-md font-semibold text-white">
+                            {t("Add_Summary")}
+                            ( <FileText  size={20} className="inline-flex"/> ) :
+                        </Label>
                         <Button
                             variant="outline"
                             type="button"
@@ -106,7 +110,7 @@ function SummaryForm({ document, handleNext }) {
                     />
 
                     {data.summary.length > 0 && (
-                        <p className="text-sm text-right font-bold mt-4 text-[#f68c09]">
+                        <p className="text-sm text-right font-bold mt-4 text-white">
                             {data.summary.length} / 1000
                         </p>
                     )}

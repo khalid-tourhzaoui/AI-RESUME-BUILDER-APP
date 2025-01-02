@@ -101,7 +101,7 @@ class DocumentController extends Controller
     public function edit(string $document_id)
     {
         try{
-            $document = Document::where('document_id', $document_id)->firstOrFail();
+            $document = Document::where('document_id', $document_id)->where("user_id",auth()->user()->id)->firstOrFail();
 
             return Inertia::render('components/EditResume', [
                 'document' => $document,
@@ -153,6 +153,7 @@ class DocumentController extends Controller
 
             $document->update([
                 'summary' => $request->input('summary'),
+                'current_position'=>3
             ]);
             return redirect()->route('documents.edit', $document->document_id)
                 ->with(['success'=>'Document summary updated successfully']);

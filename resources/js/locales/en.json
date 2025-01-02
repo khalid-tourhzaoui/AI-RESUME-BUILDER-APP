@@ -79,6 +79,17 @@
     "Start_Date":"Start Date",
     "End_Date":"End Date",
     "Add_More_Experience":"Add More Experience",
-    "Work_Summary":"Work Summary"
+    "Work_Summary":"Work Summary",
+    "Education": "Education",
+    "Add_your_education_details": "Add your education details",
+    "University_Name": "University Name",
+    "Enter_University_Name": "Enter University Name",
+    "Degree": "Degree",
+    "Enter_the_Degree": "Enter the Degree",
+    "Major": "Major",
+    "Enter_the_Description": "Enter the Description",
+    "Add_More_Education": "Add More Education",
+    "Enter_the_Major": "Enter the Major"
+
 
 }

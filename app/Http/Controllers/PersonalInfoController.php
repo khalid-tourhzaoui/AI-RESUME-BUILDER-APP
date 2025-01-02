@@ -33,6 +33,7 @@ class PersonalInfoController extends Controller
             // Mettre à jour la miniature si elle est fournie
             if ($request->filled('thumbnail')) {
                 $document->thumbnail = $request->thumbnail;
+                $document->current_position=2;
                 $document->save();
             }
 
@@ -60,6 +61,7 @@ class PersonalInfoController extends Controller
             // Mettre à jour la miniature si elle est fournie
             if ($request->filled('thumbnail')) {
                 $document->thumbnail = $request->thumbnail;
+                $document->current_position=2;
                 $document->save();
             }
 
