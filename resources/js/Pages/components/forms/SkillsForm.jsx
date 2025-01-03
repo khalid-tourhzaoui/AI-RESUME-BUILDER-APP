@@ -13,7 +13,7 @@ import { debounce } from "lodash";
 
 const FormField = React.memo(({ label, icon, error, children }) => (
     <div className="col-span-1">
-        <Label className="text-md font-semibold">
+        <Label className="text-md font-semibold text-white">
             {label}
             <span className="text-[#f68c09] mx-1">
                 (
@@ -270,22 +270,22 @@ const SkillsForm = ({ document, handleNext }) => {
 
     return (
         <div>
-            <h2 className="font-bold text-lg">
+            <h2 className="font-bold text-lg text-white">
                 {t("Skills")} :{" "}
                 <span className="text-[#f68c09]">
                     {t("Add_your_skills_information")}
                 </span>
             </h2>
             <form onSubmit={handleSubmit}>
-                <div className="border-2 border-black w-full h-auto divide-y-[3px]  rounded-md px-3 pb-4 my-5">
+                <div className="border-2 border-white w-full h-auto divide-y-[3px]  rounded-md px-3 pb-4 my-5">
                     {skillList.map((item, index) => (
-                        <div key={index} className="border-black">
+                        <div key={index} className="border-white">
                             <div className="relative flex items-center justify-between mb-5 pt-4 gap-3">
                                 {skillList.length > 1 && (
                                     <Button
                                         variant="secondary"
                                         type="button"
-                                        className="size-[20px] text-center rounded-full absolute -top-3 -right-5 !bg-black text-white"
+                                        className="size-[20px] text-center rounded-full absolute -top-3 -right-5 !bg-white text-black"
                                         size="icon"
                                         disabled={processing}
                                         onClick={() =>

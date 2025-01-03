@@ -349,7 +349,7 @@ function EducationForm({ handleNext, document }) {
     ), [handleChange, errors, t]);
 
     return (
-        <div className="text-black">
+        <div className="text-white">
             <div className="w-full">
                 <h2 className="font-bold text-lg">
                     {t("Education")} :
@@ -359,7 +359,7 @@ function EducationForm({ handleNext, document }) {
                 </h2>
             </div>
             <form onSubmit={handleSubmit}>
-                <div className="border-2 w-full h-auto border-black divide-y-[2px] rounded-md px-3 pb-4 my-5">
+                <div className="border-2 w-full h-auto border-white divide-y-[2px] rounded-md px-3 pb-4 my-5">
                     {educationList.map((item, index) => (
                         <div key={index}>
                             <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-5 mb-5 pt-4 relative">
@@ -368,7 +368,7 @@ function EducationForm({ handleNext, document }) {
                                         variant="secondary"
                                         type="button"
                                         disabled={loading}
-                                        className="size-[20px] text-center rounded-full absolute -top-3 -right-5 text-black"
+                                        className="size-[20px] text-center rounded-full absolute -top-3 -right-5 text-white"
                                         size="icon"
                                         onClick={() =>
                                             removeEducation(index, item.id)

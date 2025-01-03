@@ -89,8 +89,17 @@
     "Major": "Spécialisation",
     "Enter_the_Description": "Saisissez la description",
     "Add_More_Education": "Ajouter une autre formation",
-    "Enter_the_Major": "Saisissez la spécialisation"
-
-
-
+    "Enter_the_Major": "Saisissez la spécialisation",
+    "Skills": "Compétences",
+    "Add_your_skills_information": "Ajoutez vos informations de compétences",
+    "Name": "Nom",
+    "Add_More_Skills": "Ajouter d'autres compétences",
+    "Languages": "Langues",
+    "Add_your_language_information": "Ajoutez vos informations linguistiques",
+    "Proficiency": "Maîtrise",
+    "Add_More_Languages": "Ajouter d'autres langues",
+    "Social_Medias": "Réseaux sociaux",
+    "Add_your_social_medias_information": "Ajoutez vos informations sur les réseaux sociaux",
+    "Link": "Lien",
+    "Add_More_Social_Media": "Ajouter un autre réseau social"
 }

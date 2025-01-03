@@ -14,6 +14,7 @@ import {
     SelectValue,
 } from "@/Components/ui/select";
 import { languages } from "@/constant/languages";
+import { useTranslation } from "react-i18next";
 
 const initialState = { name: "", level: "", thumbnail: "" };
 const LanguageLevel = {
@@ -35,6 +36,7 @@ function LanguageForm({ document, handleNext }) {
     const [languageList, setLanguageList] = useState(
         document?.languages?.length ? document.languages : [initialState]
     );
+    const { t } =useTranslation();
     const [search, setSearch] = useState("");
     const {
         put,
@@ -154,21 +156,21 @@ function LanguageForm({ document, handleNext }) {
     return (
         <div >
             <div className="w-full">
-                <h2 className="font-bold text-lg">
-                    Languages : <span className="text-[#f68c09]">Add your language information</span>
+                <h2 className="font-bold text-lg text-white">
+                    {t("Languages ")}: <span className="text-[#f68c09]">{t("Add_your_language_information")}</span>
                 </h2>
 
             </div>
             <form onSubmit={handleSubmit}>
-                <div className="border w-full h-auto border-black divide-black divide-y-[2px] rounded-md px-3 pb-4 my-5">
+                <div className="border w-full h-auto border-white divide-white divide-y-[2px] rounded-md px-3 pb-4 my-5">
                     {languageList.map((item, index) => (
                         <div key={index}>
-                            <div className="grid grid-cols-1 sm:grid-cols-1 border-black md:grid-cols-2 gap-5 mb-5 pt-4 relative">
+                            <div className="grid grid-cols-1 sm:grid-cols-1 border-white md:grid-cols-2 gap-5 mb-5 pt-4 relative">
                                 {languageList.length > 1 && (
                                     <Button
                                         variant="secondary"
                                         type="button"
-                                        className="size-[20px] text-center rounded-full absolute -top-3 -right-5 !bg-black text-white"
+                                        className="size-[20px] text-center rounded-full absolute -top-3 -right-5 !bg-white text-black"
                                         size="icon"
                                         disabled={processing}
                                         onClick={() =>
@@ -180,13 +182,12 @@ function LanguageForm({ document, handleNext }) {
                                 )}
 
                                 <div className="col-span-1 sm:col-span-1 md:col-span-1">
-                                    <Label className="text-sm">
-                                        Name
-                                            <span className="text-[#f68c09]"> ({" "}<Languages
+                                    <Label className="text-lg text-white">
+                                        {t("Name")}
+                                            <span className="text-[#f68c09]"> (<Languages
                                             size="20px"
                                             className="inline-flex"
-                                        />{" "}
-                                        )</span> :
+                                        />)</span> :
                                     </Label>
                                     <Select
                                         value={item.name || ""}
@@ -262,13 +263,12 @@ function LanguageForm({ document, handleNext }) {
                                 </div>
 
                                 <div className="col-span-1 sm:col-span-1 md:col-span-1">
-                                    <Label className="text-sm">
-                                        Proficiency <span className="text-[#f68c09]"> ({" "}
+                                    <Label className="text-lg text-white">
+                                        {t("Proficiency")} <span className="text-[#f68c09]">(
                                         <CheckCircle
                                             size="20px"
                                             className="inline-flex"
-                                        />{" "}
-                                        ) </span>:
+                                        />)</span> :
                                     </Label>
                                     <Select
                                         value={item.level || ""}
@@ -320,7 +320,7 @@ function LanguageForm({ document, handleNext }) {
                                         onClick={addNewLanguage}
                                     >
                                         <Plus size="15px" />
-                                        Add More Languages
+                                        {t("Add_More_Languages")}
                                     </Button>
                                 )}
                         </div>
@@ -334,7 +334,7 @@ function LanguageForm({ document, handleNext }) {
                     {processing && (
                         <Loader size="15px" className="animate-spin" />
                     )}
-                    Save Changes
+                    {t("Save_Changes")}
                 </Button>
             </form>
         </div>

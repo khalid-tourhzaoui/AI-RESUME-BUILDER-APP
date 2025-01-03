@@ -15,6 +15,7 @@ import {
 } from "@/Components/ui/select";
 import { socialMediaListData } from "@/constant/socialMedia";
 import { SocialIcon } from "react-social-icons";
+import { useTranslation } from "react-i18next";
 
 const initialState = {
     name: "",
@@ -29,7 +30,7 @@ function SocialMedia({ document, handleNext }) {
             : [initialState]
     );
     const [search, setSearch] = useState("");
-
+    const { t } =useTranslation();
     // Filter the languages based on the search query
     const filteredSocialMedias = socialMediaListData.filter((item) =>
         item.name.toLowerCase().includes(search.toLowerCase())
@@ -196,13 +197,13 @@ function SocialMedia({ document, handleNext }) {
     return (
         <div>
             <div className="w-full">
-                <h2 className="font-bold text-lg">
-                    Social Medias : <span className="text-[#f68c09]">Add your social medias information</span>
+                <h2 className="font-bold text-lg text-white">
+                    {t("Social_Medias")} : <span className="text-[#f68c09]">{t("Add_your_social_medias_information")}</span>
                 </h2>
 
             </div>
             <form onSubmit={handleSubmit}>
-                <div className="border-2 w-full h-auto border-black divide-black divide-y-[2px] rounded-md px-3 pb-4 my-5">
+                <div className="border-2 w-full h-auto border-white divide-white divide-y-[2px] rounded-md px-3 pb-4 my-5">
                     {SocialMediaList.map((item, index) => (
                         <div key={index}>
                             <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-5 mb-5 pt-4 relative">
@@ -210,7 +211,7 @@ function SocialMedia({ document, handleNext }) {
                                     <Button
                                         variant="secondary"
                                         type="button"
-                                        className="size-[20px] text-center rounded-full absolute -top-3 -right-5 !bg-black text-white"
+                                        className="size-[20px] text-center rounded-full absolute -top-3 -right-5 !bg-white text-black"
                                         size="icon"
                                         disabled={processing}
                                         onClick={() =>
@@ -222,7 +223,7 @@ function SocialMedia({ document, handleNext }) {
                                 )}
 
                                 <div className="col-span-1 sm:col-span-1 md:col-span-1">
-                                    <Label className="text-sm">Name <span className="text-[#f68c09]">(<Network size="20px" className="inline-flex"/>)</span> :</Label>
+                                    <Label className="text-md font-semibold text-white">{t("Name")} <span className="text-[#f68c09]">(<Network size="20px" className="inline-flex"/>)</span> :</Label>
 
                                     <Select
                                         name={item.name || ""}
@@ -296,8 +297,8 @@ function SocialMedia({ document, handleNext }) {
                                 </div>
 
                                 <div className="col-span-1 sm:col-span-1 md:col-span-1">
-                                    <Label className="text-sm">
-                                        Link <span className="text-[#f68c09]">(<Link size="20px" className="inline-flex"/>)</span> :
+                                    <Label className="text-md font-semibold text-white">
+                                        {t("Link")} <span className="text-[#f68c09]">(<Link size="20px" className="inline-flex"/>)</span> :
                                     </Label>
                                     <Input
                                         name="link"
@@ -333,7 +334,7 @@ function SocialMedia({ document, handleNext }) {
                                         onClick={addNewLanguage}
                                     >
                                         <Plus size="15px" />
-                                        Add More Social Media
+                                        {t("Add_More_Social_Media")}
                                     </Button>
                                 )}
                         </div>
@@ -347,7 +348,7 @@ function SocialMedia({ document, handleNext }) {
                     {processing && (
                         <Loader size="15px" className="animate-spin" />
                     )}
-                    Save Changes
+                    {t("Save_Changes")}
                 </Button>
             </form>
         </div>
