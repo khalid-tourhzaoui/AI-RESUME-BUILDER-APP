@@ -14,7 +14,7 @@ export default function ResumeList({document}) {
                 <div
                     className="flex items-center mx-5">
                     <Loader
-                        className="animate-spin text-black dark:text-white size-10"
+                        className="animate-spin text-black size-10"
                     />
                 </div>
             ) : error ? (

@@ -7,11 +7,10 @@ import ResumePreview from "./ResumePreview";
 import Swal from "sweetalert2";
 import { InfiniteMovingCards } from "@/Components/ui/infinite-moving-cards";
 import { colors } from "@/constant/colors";
-import { Vortex } from "@/Components/ui/vortex"; // Importer le composant Vortex
 
 function EditResume() {
-    const { document, success, error,locale,translations} = usePage().props;
-    console.log(locale,translations)
+    const { document, success, error, locale, translations } = usePage().props;
+    console.log(locale, translations);
 
     useEffect(() => {
         if (success) {
@@ -57,23 +56,26 @@ function EditResume() {
 
             <div className="py-2">
                 <div className="mx-auto max-w-12xl sm:px-6 lg:px-8">
-                    <div className="overflow-hidden bg-[url('https://c4.wallpaperflare.com/wallpaper/332/110/571/polygon-material-design-abstract-3d-wallpaper-preview.jpg')]
-                    shadow-sm sm:rounded-lg p-5">
-                            <div className="relative z-10 w-full">
-                                <div className="w-full mx-auto max-w-12xl py-4 px-5">
-                                    <TopSection document={document} locale={locale} translations={translations} />
-                                    <div className="w-full mt-1">
-                                        <div className="flex flex-col lg:flex-row items-start w-full py-3 gap-10">
-                                            {/* {Form Section} */}
-                                            <ResumeForm document={document} />
-                                            {/* {Preview Section} */}
-                                            <ResumePreview
-                                                document={document}
-                                            />
-                                        </div>
+                    <div className="overflow-hidden shadow-sm sm:rounded-lg p-5 border-black border-2
+                        bg-[url('https://c1.wallpaperflare.com/preview/896/809/244/paper-texture-winter-color.jpg')]"
+                    >
+                        <div className="relative z-10 w-full">
+                            <div className="w-full mx-auto max-w-12xl py-4 px-5">
+                                <TopSection
+                                    document={document}
+                                    locale={locale}
+                                    translations={translations}
+                                />
+                                <div className="w-full mt-1">
+                                    <div className="flex flex-col lg:flex-row items-start w-full py-3 gap-10">
+                                        {/* {Form Section} */}
+                                        <ResumeForm document={document} />
+                                        {/* {Preview Section} */}
+                                        <ResumePreview document={document} />
                                     </div>
                                 </div>
                             </div>
+                        </div>
                     </div>
                 </div>
             </div>

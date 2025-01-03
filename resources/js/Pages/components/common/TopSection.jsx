@@ -8,7 +8,6 @@ import Share from "./Share";
 import MoreOption from "./MoreOption";
 
 const TopSection = ({ document }) => {
-
     const { data, setData, put, processing } = useForm({
         title: document.title,
         status: document.status,
@@ -30,12 +29,13 @@ const TopSection = ({ document }) => {
     return (
         <>
             {isArchived && (
-                <div className="absolute z-[9] inset-0 h-6 top-0 bg-rose-500 text-center text-base p-2 text-white flex items-center gap-x-2 justify-center font-medium">
+                <div className="absolute z-[9] inset-0 h-6 top-0 text-center text-base p-2 flex items-center gap-x-2
+                    justify-center font-medium">
                     <AlertCircle size="16px" />
                     This resume is in the trash bin
                 </div>
             )}
-            <div className="w-full flex items-center justify-between border-b pb-3">
+            <div className="w-full flex items-center justify-between border-b-2 border-black pb-3">
                 <div className="flex items-center gap-2">
                     <ResumeTitle
                         isLoading={processing}
