@@ -104,17 +104,17 @@ const RichTextEditor = (props) => {
     return (
         <div>
             <div className="flex items-center justify-between flex-wrap">
-                <Label className="text-md font-semibold text-black">
+                <Label className="text-md font-semibold text-white">
                     {t("Work_Summary")}
                     <span className="text-[#f68c09] mx-1">({<AlignLeft size={20} className="inline-flex" />})</span> :</Label>
                 <Button
-                    variant="outline"
+                    variant="generate"
                     type="button"
-                    className="gap-1 text-white my-2"
+                    className="gap-1 my-2"
                     disabled={loading}
                     onClick={() => GenerateSummaryFromAI()}>
                     <>
-                        <Sparkles size={30} className="text-white" />
+                        <Sparkles size={30} className="hover:text-[#f68c09] mr-2" />
                         {t("Generate_with_AI")}
                     </>
                     {loading && <Loader size={30} className="animate-spin mr-2" />}

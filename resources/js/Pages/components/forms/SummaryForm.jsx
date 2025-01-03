@@ -116,7 +116,7 @@ function SummaryForm({ document, handleNext }) {
 
                     {aiGeneratedSummary && (
                         <div>
-                            <h5 className="font-semibold text-md text-white mt-2">
+                            <h5 className="font-semibold text-md text-white mt-1">
                                 {t("Suggestions")}
                             </h5>
                             <div className="grid grid-cols-1 gap-2">
@@ -124,7 +124,7 @@ function SummaryForm({ document, handleNext }) {
                                     (suggestion, index) => (
                                         <Card
                                             key={index}
-                                            className="my-4 bg-white shadow-none border-primary/30 cursor-pointer"
+                                            className="my-4 bg-white shadow-none border-2 border-[#f68c09] cursor-pointer"
                                             onClick={() =>
                                                 handleSelect(suggestion.summary)
                                             }
@@ -138,8 +138,8 @@ function SummaryForm({ document, handleNext }) {
                                                 </CardTitle>
                                             </CardHeader>
                                             <CardContent className="text-sm cursor-pointer">
-                                                <p>{suggestion.summary}</p>
-                                               {/* <p><TextGenerateEffect words={suggestion?.summary} /></p> */}
+                                                {/* <p>{suggestion.summary}</p> */}
+                                               <p><TextGenerateEffect words={suggestion?.summary} /></p>
                                             </CardContent>
                                         </Card>
                                     )

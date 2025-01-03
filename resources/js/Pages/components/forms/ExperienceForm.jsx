@@ -346,7 +346,7 @@ const ExperienceForm = ({ handleNext, document }) => {
     ), [handleChange, handleEditorChange, errors, t]);
 
     return (
-        <div className="text-black">
+        <div className="text-white">
             <div className="w-full">
                 <h2 className="font-bold text-lg">
                     {t("Professional_Experience")} :{" "}
@@ -356,14 +356,14 @@ const ExperienceForm = ({ handleNext, document }) => {
                 </h2>
             </div>
             <form onSubmit={handleSubmit}>
-                <div className="border-2 w-full h-auto border-black divide-y-[1px] divide-black rounded-md px-3 pb-4 my-5">
+                <div className="border-2 w-full h-auto border-white divide-y-[1px] divide-white rounded-md px-3 pb-4 my-5">
                     {experienceList.map((item, index) => (
                         <div key={index} className="relative pt-4">
                             {experienceList.length > 1 && (
                                 <Button
                                     variant="secondary"
                                     type="button"
-                                    className="size-[20px] text-center rounded-full absolute -top-3 -right-5 text-black"
+                                    className="size-[20px] text-center rounded-full absolute -top-3 -right-5 text-white"
                                     size="icon"
                                     onClick={() => removeExperience(index, item.id)}
                                 >
@@ -375,13 +375,13 @@ const ExperienceForm = ({ handleNext, document }) => {
                                 experienceList.length < 5 && (
                                     <Button
                                         className="gap-1 mt-1 border-primary/50"
-                                        variant="outline"
+                                        variant="generate"
                                         type="button"
                                         onClick={addNewExperience}
                                     >
                                         <PlusCircleIcon
                                             size={30}
-                                            className="text-white"
+                                            className="hover:text-[#f68c09] mr-2"
                                         />
                                         {t("Add_More_Experience")}
                                     </Button>
