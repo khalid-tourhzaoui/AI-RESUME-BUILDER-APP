@@ -35,8 +35,8 @@ const TopSection = ({ document }) => {
                     This resume is in the trash bin
                 </div>
             )}
-            <div className="w-full flex items-center justify-between border-b-2 border-black pb-3">
-                <div className="flex items-center gap-2">
+            <div className="w-full flex items-center justify-between flex-wrap border-b-2 border-black ">
+                <div className="flex items-center">
                     <ResumeTitle
                         isLoading={processing}
                         initialTitle={data.title}
@@ -45,7 +45,7 @@ const TopSection = ({ document }) => {
                         handleSave={handleSave}
                     />
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center sm:mx-auto md:mx-0 gap-2">
                     <PreviewModal document={document} isLoading={processing} />
                     <Download
                         title={data.title}

@@ -79,7 +79,7 @@ const SkillsForm = ({ document, handleNext }) => {
             debounce(async (list) => {
                 try {
                     const thumbnail = await generateThumbnail();
-                    setData({ skills: list, thumbnail });
+                    setData({...prev, skills: list, thumbnail });
                     await Promise.all(
                         list.map((exp) => skillSchema.validate(exp))
                     );
@@ -88,13 +88,13 @@ const SkillsForm = ({ document, handleNext }) => {
                     setIsFormValid(false);
                 }
             }, 500),
-        [skillSchema, setData]
+        [skillSchema]
     );
     //---------------------------------------------------------------------------------------------------------
     useEffect(() => {
         debouncedValidation(skillList);
         return () => debouncedValidation.cancel();
-    }, [skillList, debouncedValidation]);
+    }, [skillList]);
     //---------------------------------------------------------------------------------------------------------
     const debouncedFieldValidation = useMemo(
         () =>

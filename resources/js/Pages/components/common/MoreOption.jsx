@@ -31,54 +31,56 @@ function MoreOption({ document, isLoading }) {
     };
 
     return (
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button
-                    variant="secondary"
-                    size="icon"
-                    className="bg-white hover:bg-[#f68c09] hover:text-white"
-                >
-                    <MoreHorizontal />
-                </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-                <DropdownMenuItem asChild>
-                    {document.status === "archived" ? (
-                        <Button
-                            variant="ghost"
-                            className="gap-1 !py-2 !cursor-pointer"
-                            disabled={isLoading || processing}
-                            onClick={() => handleClick("private")}
-                        >
-                            <Redo size="15px" />
-                            Restore Document
-                            {processing && (
-                                <Loader
-                                    size="15px"
-                                    className="animate-spin"
-                                />
-                            )}
-                        </Button>
-                    ) : (
-                        <Button
-                            variant="ghost"
-                            className="gap-1 !py-2 !cursor-pointer"
-                            disabled={isLoading || processing}
-                            onClick={() => handleClick("archived")}
-                        >
-                            <Trash2 size="15px" />
-                            Move to Trash
-                            {processing && (
-                                <Loader
-                                    size="15px"
-                                    className="animate-spin"
-                                />
-                            )}
-                        </Button>
-                    )}
-                </DropdownMenuItem>
-            </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="pb-3">
+            <DropdownMenu >
+                <DropdownMenuTrigger asChild>
+                    <Button
+                        variant="generate"
+                        size="icon"
+                        className="!p-2 lg:w-auto lg:p-4"
+                    >
+                        <MoreHorizontal />
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                    <DropdownMenuItem asChild>
+                        {document.status === "archived" ? (
+                            <Button
+                                variant="ghost"
+                                className="gap-1 !py-2 !cursor-pointer"
+                                disabled={isLoading || processing}
+                                onClick={() => handleClick("private")}
+                            >
+                                <Redo size="15px" />
+                                Restore Document
+                                {processing && (
+                                    <Loader
+                                        size="15px"
+                                        className="animate-spin"
+                                    />
+                                )}
+                            </Button>
+                        ) : (
+                            <Button
+                                variant="ghost"
+                                className="gap-1 !py-2 !cursor-pointer"
+                                disabled={isLoading || processing}
+                                onClick={() => handleClick("archived")}
+                            >
+                                <Trash2 size="15px" />
+                                Move to Trash
+                                {processing && (
+                                    <Loader
+                                        size="15px"
+                                        className="animate-spin"
+                                    />
+                                )}
+                            </Button>
+                        )}
+                    </DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
+        </div>
     );
 }
 

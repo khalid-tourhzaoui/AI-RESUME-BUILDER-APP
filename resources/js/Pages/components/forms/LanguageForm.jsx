@@ -3,7 +3,7 @@ import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
 import { useForm } from "@inertiajs/react";
 import { CheckCircle, Languages, Loader, Plus, X } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { generateThumbnail } from "@/lib/helper";
 import * as Yup from "yup";
 import {
@@ -15,6 +15,7 @@ import {
 } from "@/Components/ui/select";
 import { languages } from "@/constant/languages";
 import { useTranslation } from "react-i18next";
+import { debounce } from "lodash";
 
 const initialState = { name: "", level: "", thumbnail: "" };
 const LanguageLevel = {
@@ -48,93 +49,143 @@ function LanguageForm({ document, handleNext }) {
     const [errors, setErrors] = useState([]);
     const [isFormValid, setIsFormValid] = useState(false);
 
+    //---------------------------------------------------------------------------------------------------------
+    const debouncedValidation = useMemo(
+        () =>
+            debounce(async (list) => {
+                try {
+                    const thumbnail = await generateThumbnail();
+                    setData({ languages: list, thumbnail });
+                    await Promise.all(
+                        list.map((lang) => languageSchema.validate(lang))
+                    );
+                    setIsFormValid(true);
+                } catch (err) {
+                    setIsFormValid(false);
+                }
+            }, 500),
+        []
+    );
+    //---------------------------------------------------------------------------------------------------------
     useEffect(() => {
-        const processLanguages = async () => {
-            try {
-                const thumbnail = await generateThumbnail();
-                setData({ languages: languageList, thumbnail: thumbnail });
-                await Promise.all(
-                    languageList.map((lang) => languageSchema.validate(lang))
-                );
-                setIsFormValid(true);
-            } catch (err) {
-                setIsFormValid(false);
-            }
-        };
-        processLanguages();
+        debouncedValidation(languageList);
+        return () => debouncedValidation.cancel();
     }, [languageList]);
 
-    const handleChange = async (index, field, value) => {
-        const updatedList = [...languageList];
-        updatedList[index] = { ...updatedList[index], [field]: value };
-        setLanguageList(updatedList);
-        try {
-            await languageSchema.validateAt(field, { [field]: value });
-            setErrors(
-                errors.filter(
-                    (error) => !(error.index === index && error.field === field)
+    //---------------------------------------------------------------------------------------------------------
+    const debouncedFieldValidation = useMemo(
+        () =>
+            debounce(async (index, field, value) => {
+                try {
+                    await languageSchema.validateAt(field, {
+                        [field]: value,
+                    });
+                    setErrors((prev) => {
+                        const newErrors = [...prev];
+                        if (newErrors[index]) delete newErrors[index][field];
+                        return newErrors;
+                    });
+                } catch (err) {
+                    setErrors((prev) => {
+                        const newErrors = [...prev];
+                        newErrors[index] = {
+                            ...(newErrors[index] || {}),
+                            [field]: err.message,
+                        };
+                        return newErrors;
+                    });
+                }
+            }, 500),
+        []
+    );
+    //---------------------------------------------------------------------------------------------------------
+    const handleChange = useCallback(
+        (index, field, value) => {
+            setLanguageList((prev) =>
+                prev.map((item, i) =>
+                    i === index ? { ...item, [field]: value } : item
                 )
             );
-            setIsFormValid(true);
-        } catch (err) {
-            setErrors([...errors, { index, field, message: err.message }]);
-            setIsFormValid(false);
-        }
-    };
-
-    const addNewLanguage = () =>
-        setLanguageList([...languageList, initialState]);
-
-    const removeLanguage = async (index, id) => {
-        setLanguageList(languageList.filter((_, i) => i !== index));
-        try {
-            await destroy(route("profile-details.delete", id), {
-                data: { language: [{ id }] },
-            });
-        } catch (error) {
-            console.error("Failed to delete language", error);
-        }
-    };
-
+            debouncedFieldValidation(index, field, value);
+        },
+        [debouncedFieldValidation]
+    );
+    //---------------------------------------------------------------------------------------------------------
+    const addNewLanguage = useCallback(
+        () => setLanguageList((prev) => [...prev, { ...initialState }]),
+        []
+    );
+    //---------------------------------------------------------------------------------------------------------
+    const removeLanguage = useCallback(
+        async (index, id) => {
+            setLanguageList((prev) => prev.filter((_, i) => i !== index));
+            if (id) {
+                try {
+                    await destroy(route("profile-details.delete", id), {
+                        data: { language: [{ id }] },
+                    });
+                } catch (error) {
+                    console.error("Failed to delete language", error);
+                }
+            }
+        },
+        [destroy]
+    );
+    //---------------------------------------------------------------------------------------------------------
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try {
-            const existingLanguages = document.languages || [];
-            const toUpdate = [],
-                toAdd = [],
-                toDelete = [];
 
-            languageList.forEach((item) => {
-                const existingItem = existingLanguages.find(
-                    (lang) => lang.id === item.id
+        const existingLanguages = document.languages || [];
+        const toUpdate = [],
+            toAdd = [],
+            toDelete = [];
+
+        languageList.forEach((item) => {
+            const existingItem = existingLanguages.find(
+                (lang) => lang.id === item.id
+            );
+
+            if (existingItem) {
+                const hasChanged = Object.keys(item).some(
+                    (key) => item[key] !== existingItem[key]
                 );
-                if (existingItem) {
-                    if (
-                        Object.keys(item).some(
-                            (key) => item[key] !== existingItem[key]
-                        )
-                    ) {
-                        toUpdate.push(item);
-                    }
-                } else {
-                    toAdd.push(item);
-                }
-            });
+                if (hasChanged) toUpdate.push(item);
+            } else {
+                toAdd.push(item);
+            }
+        });
 
-            existingLanguages.forEach((existingItem) => {
-                if (!languageList.some((item) => item.id === existingItem.id)) {
-                    toDelete.push(existingItem);
-                }
-            });
+        existingLanguages.forEach((existingItem) => {
+            if (!languageList.some((item) => item.id === existingItem.id)) {
+                toDelete.push(existingItem);
+            }
+        });
 
-            if (toUpdate.length > 0)
+        try {
+            if (toUpdate.length) {
                 await put(route("profile-details.update", document.id), {
                     languages: toUpdate,
                 });
-            if (toAdd.length > 0)
+            }
+
+            if (toAdd.length) {
                 await post(route("profile-details.store", document.id), {
                     languages: toAdd,
                 });
+            }
+
+            if (toDelete.length) {
+                await Promise.all(
+                    toDelete.map(async (item) => {
+                        await destroy(
+                            route("profile-details.delete", item.id),
+                            {
+                                data: { languages: [item] },
+                            }
+                        );
+                    })
+                );
+            }
             if (handleNext) handleNext();
         } catch (error) {
             console.error("Failed to save language details", error);
@@ -146,7 +197,6 @@ function LanguageForm({ document, handleNext }) {
             );
         }
     };
-
     const filteredLanguages = languages.filter(
         (language) =>
             language.name.toLowerCase().includes(search.toLowerCase()) ||

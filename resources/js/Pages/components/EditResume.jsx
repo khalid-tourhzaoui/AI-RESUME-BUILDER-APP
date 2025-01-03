@@ -60,7 +60,7 @@ function EditResume() {
                         bg-[url('https://c1.wallpaperflare.com/preview/896/809/244/paper-texture-winter-color.jpg')]"
                     >
                         <div className="relative z-10 w-full">
-                            <div className="w-full mx-auto max-w-12xl py-4 px-5">
+                            <div className="w-full mx-auto max-w-12xl">
                                 <TopSection
                                     document={document}
                                     locale={locale}

@@ -56,21 +56,23 @@ function Download(props) {
 
 
     return (
-        <Button
-            disabled={
-                isLoading || loading || status === "archived" ? true : false
-            }
-            variant="secondary"
-            className="bg-white hover:bg-[#f68c09] hover:text-white gap-1 !p-2 min-w-9 lg:min-w-auto lg:p-4"
-            onClick={handleDownload}
-        >
-            <div className="flex items-center gap-1">
-                <DownloadCloud size="17px" />
-                <span className="hidden lg:flex">
-                    {loading ? "Generating PDF" : "Download Resume"}
-                </span>
-            </div>
-        </Button>
+        <div className="pb-3">
+            <Button
+                disabled={
+                    isLoading || loading || status === "archived" ? true : false
+                }
+                variant="generate"
+                className="gap-1 !p-2 min-w-9 lg:min-w-auto lg:p-4"
+                onClick={handleDownload}
+            >
+                <div className="flex items-center gap-1">
+                    <DownloadCloud size="17px" />
+                    <span className="hidden lg:flex">
+                        {loading ? "Generating PDF" : "Download Resume"}
+                    </span>
+                </div>
+            </Button>
+        </div>
     );
 }
 

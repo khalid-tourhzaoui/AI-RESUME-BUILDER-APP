@@ -93,7 +93,7 @@ function PersonalInfoForm({ handleNext, document }) {
     useEffect(() => {
         debouncedValidation();
         return () => debouncedValidation.cancel();
-    }, [personalInfo, debouncedValidation]);
+    }, [personalInfo, debouncedValidation]); // Effect triggered only by `personalInfo` changes
 
     const handleChange = useCallback((e) => {
         const { name, value } = e.target;

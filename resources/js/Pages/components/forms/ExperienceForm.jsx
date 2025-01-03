@@ -67,12 +67,14 @@ const ExperienceForm = ({ handleNext, document }) => {
     }), []);
 
     //---------------------------------------------------------------------------------------------------------
+   
+    // );
     const debouncedValidation = useMemo(
         () =>
             debounce(async (list) => {
                 try {
                     const thumbnail = await generateThumbnail();
-                    setData({ experience: list, thumbnail });
+                    setData((prev) => ({ ...prev, experience: list, thumbnail }));
                     await Promise.all(
                         list.map((exp) => experienceSchema.validate(exp))
                     );
@@ -81,15 +83,43 @@ const ExperienceForm = ({ handleNext, document }) => {
                     setIsFormValid(false);
                 }
             }, 500),
-        [experienceSchema, setData]
+        [experienceSchema] // Évitez de dépendre de setData
     );
+
     //---------------------------------------------------------------------------------------------------------
+    // useEffect(() => {
+    //     debouncedValidation(experienceList);
+    //     return () => debouncedValidation.cancel();
+    // }, [experienceList, debouncedValidation]);
     useEffect(() => {
         debouncedValidation(experienceList);
         return () => debouncedValidation.cancel();
-    }, [experienceList, debouncedValidation]);
+    }, [experienceList]);
 
     //---------------------------------------------------------------------------------------------------------
+    // const debouncedFieldValidation = useMemo(
+    //     () =>
+    //         debounce(async (index, field, value) => {
+    //             try {
+    //                 await experienceSchema.validateAt(field, { [field]: value });
+    //                 setErrors((prev) => {
+    //                     const newErrors = [...prev];
+    //                     if (newErrors[index]) delete newErrors[index][field];
+    //                     return newErrors;
+    //                 });
+    //             } catch (err) {
+    //                 setErrors((prev) => {
+    //                     const newErrors = [...prev];
+    //                     newErrors[index] = {
+    //                         ...(newErrors[index] || {}),
+    //                         [field]: err.message,
+    //                     };
+    //                     return newErrors;
+    //                 });
+    //             }
+    //         }, 500),
+    //     [experienceSchema]
+    // );
     const debouncedFieldValidation = useMemo(
         () =>
             debounce(async (index, field, value) => {
@@ -113,6 +143,7 @@ const ExperienceForm = ({ handleNext, document }) => {
             }, 500),
         [experienceSchema]
     );
+
     //---------------------------------------------------------------------------------------------------------
     const handleChange = useCallback((index, field, value) => {
         setExperienceList((prev) =>

@@ -82,7 +82,7 @@ function EducationForm({ handleNext, document }) {
             debounce(async (list) => {
                 try {
                     const thumbnail = await generateThumbnail();
-                    setData({ education: list, thumbnail });
+                    setData({...prev, education: list, thumbnail });
                     await Promise.all(
                         list.map((exp) => educationSchema.validate(exp))
                     );
@@ -91,13 +91,13 @@ function EducationForm({ handleNext, document }) {
                     setIsFormValid(false);
                 }
             }, 500),
-        [educationSchema, setData]
+        [educationSchema]
     );
     //---------------------------------------------------------------------------------------------------------
     useEffect(() => {
         debouncedValidation(educationList);
         return () => debouncedValidation.cancel();
-    }, [educationList, debouncedValidation]);
+    }, [educationList]);
     //---------------------------------------------------------------------------------------------------------
     const debouncedFieldValidation = useMemo(
         () =>

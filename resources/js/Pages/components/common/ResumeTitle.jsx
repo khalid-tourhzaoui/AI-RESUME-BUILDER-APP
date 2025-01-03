@@ -24,9 +24,9 @@ function ResumeTitle({ initialTitle, status, isLoading, onSave, handleSave }) {
     };
 
     return (
-        <div className="flex items-center gap-1 pr-4">
+        <div className="flex items-center gap-1 pb-3">
             <h5
-                className="text-xl px-1 text-black font-semibold opacity-100 !pointer-events-none"
+                className="text-lg px-4 text-black border-2 border-black font-semibold opacity-100 !pointer-events-none"
                 contentEditable={
                     isLoading || status === "archived" ? false : true
                 }
