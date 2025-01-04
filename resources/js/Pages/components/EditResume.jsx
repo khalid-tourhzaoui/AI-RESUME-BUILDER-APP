@@ -39,7 +39,7 @@ function EditResume() {
     return (
         <AuthenticatedLayout
             header={
-                <div className="flex flex-col lg:flex-row items-center justify-between gap-4 ">
+                <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
                     {/* Composant InfiniteMovingCards */}
                     <div className="w-full">
                         <InfiniteMovingCards
@@ -56,7 +56,8 @@ function EditResume() {
 
             <div className="py-2">
                 <div className="mx-auto max-w-12xl sm:px-6 lg:px-8">
-                    <div className="overflow-hidden shadow-sm sm:rounded-lg p-5 border-black border-4
+                    <div
+                        className="overflow-hidden shadow-sm sm:rounded-lg p-5 border-black border-4
                         bg-[url('https://c4.wallpaperflare.com/wallpaper/332/110/571/polygon-material-design-abstract-3d-wallpaper-preview.jpg')]"
                     >
                         <div className="relative z-10 w-full">

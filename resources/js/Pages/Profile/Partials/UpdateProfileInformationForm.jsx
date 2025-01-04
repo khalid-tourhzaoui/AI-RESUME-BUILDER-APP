@@ -39,7 +39,7 @@ export default function UpdateProfileInformation({
             </header>
 
 
-            <form onSubmit={submit} className="mt-6 space-y-6">
+            <form onSubmit={submit} className="mt-3 space-y-6">
 
                 <div>
                     <InputLabel htmlFor="name" value="Name" className='!text-md text-white' />
@@ -109,7 +109,7 @@ export default function UpdateProfileInformation({
                 </Transition>
 
                 <div className="flex items-center gap-4">
-                    <Button variant="generate" className="w-full" disabled={processing}>{t("Save_Changes")}</Button>
+                    <Button className="w-full" disabled={processing}>{t("Save_Changes")}</Button>
                 </div>
 
             </form>

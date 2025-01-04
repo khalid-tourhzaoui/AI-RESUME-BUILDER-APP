@@ -7,28 +7,33 @@ import PersonalInfoPreview from "./Preview/PersonalInfoPreview";
 import { cn } from './../../lib/utils';
 
 function ResumePreview({document,isLoading}) {
-    
+
     return (
-        <div id="resume-preview-id" className={cn(` shadow-lg bg-white w-full flex-[1.02] h-full p-10 !font-open-sansdark:border
-             dark:bg-card dark:border-b-gray-800  dark:border-x-gray-800`)}
+        <div id="resume-preview-id" className={cn(
+            ` shadow-lg w-full flex-[1.02] h-full !font-open-sansdark:border max-w-6xl mx-auto p-8 bg-white min-h-screen flex gap-8`)}
             style={{
                 borderTop: `13px solid ${document?.theme_color}`,
             }}
         >
-            {/* {Personnal Info} */}
+            {/* Colonne de gauche */}
+            <div className="w-1/3 space-y-4">
+                {/* {Personnal Info} */}
+                <PersonalInfoPreview isLoading={isLoading} document={document} />
+            </div>
+            {/* {Personnal Info}
             <PersonalInfoPreview isLoading={isLoading} document={document} />
 
             {/* {Summary} */}
-            <SummaryPreview isLoading={isLoading} document={document} />
+            {/* <SummaryPreview isLoading={isLoading} document={document} /> */}
 
             {/* {Professional Exp} */}
-            <ExperiencePreview isLoading={isLoading} document={document} />
+            {/* <ExperiencePreview isLoading={isLoading} document={document} /> */}
 
             {/* {Educational Info} */}
-            <EducationPreview isLoading={isLoading} document={document} />
+            {/* <EducationPreview isLoading={isLoading} document={document} /> */}
 
             {/* {Skills} */}
-            <SkillPreview isLoading={isLoading} document={document} />
+            {/* <SkillPreview isLoading={isLoading} document={document} /> */}
         </div>
     );
 }

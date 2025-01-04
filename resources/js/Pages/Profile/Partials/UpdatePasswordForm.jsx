@@ -58,9 +58,9 @@ export default function UpdatePasswordForm({ className = '' }) {
                 </p>
             </header>
 
-            <form onSubmit={updatePassword} className="space-y-6">
-                <div className='flex justify-between flex-wrap gap-4'>
-                    <div>
+            <form onSubmit={updatePassword} className="mt-2 space-y-4">
+                <div className='grid grid-cols-1 sm:grid-cols-2 gap-2'>
+                    <div className='col-span-1'>
                         <InputLabel
                             htmlFor="current_password"
                             value="Current Password"
@@ -86,7 +86,7 @@ export default function UpdatePasswordForm({ className = '' }) {
                         />
                     </div>
 
-                    <div>
+                    <div className='col-span-1'>
                         <InputLabel htmlFor="password" value="New Password" className='!text-md text-white' />
 
                         <TextInput
@@ -141,7 +141,7 @@ export default function UpdatePasswordForm({ className = '' }) {
                     </Transition>
 
                 <div className="flex items-center gap-4">
-                    <Button variant="generate" disabled={processing} className='w-full'>{t("Save_Changes")}</Button>
+                    <Button eedisabled={processing} className='w-full'>{t("Save_Changes")}</Button>
                 </div>
             </form>
         </section>
