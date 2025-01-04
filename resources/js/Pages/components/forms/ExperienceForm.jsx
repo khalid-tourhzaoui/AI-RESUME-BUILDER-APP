@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { debounce } from "lodash";
-import {AlertCircle,Briefcase,Building,Calendar,Globe,Loader,MapPin,PlusCircleIcon,X} from "lucide-react";
+import {AlertCircle,Briefcase,Building,Calendar,Globe,Loader,MapPin,PlusCircleIcon,Send,X} from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -55,6 +55,7 @@ const ExperienceForm = ({ handleNext, document }) => {
         post,
         delete: destroy,
         setData,
+        processing
     } = useForm({ experience: experienceList });
 
     const experienceSchema = useMemo(() => Yup.object().shape({
@@ -67,7 +68,7 @@ const ExperienceForm = ({ handleNext, document }) => {
     }), []);
 
     //---------------------------------------------------------------------------------------------------------
-   
+
     // );
     const debouncedValidation = useMemo(
         () =>
@@ -83,43 +84,18 @@ const ExperienceForm = ({ handleNext, document }) => {
                     setIsFormValid(false);
                 }
             }, 500),
-        [experienceSchema] // Évitez de dépendre de setData
+        [experienceSchema]
     );
 
     //---------------------------------------------------------------------------------------------------------
-    // useEffect(() => {
-    //     debouncedValidation(experienceList);
-    //     return () => debouncedValidation.cancel();
-    // }, [experienceList, debouncedValidation]);
+
     useEffect(() => {
         debouncedValidation(experienceList);
         return () => debouncedValidation.cancel();
     }, [experienceList]);
 
     //---------------------------------------------------------------------------------------------------------
-    // const debouncedFieldValidation = useMemo(
-    //     () =>
-    //         debounce(async (index, field, value) => {
-    //             try {
-    //                 await experienceSchema.validateAt(field, { [field]: value });
-    //                 setErrors((prev) => {
-    //                     const newErrors = [...prev];
-    //                     if (newErrors[index]) delete newErrors[index][field];
-    //                     return newErrors;
-    //                 });
-    //             } catch (err) {
-    //                 setErrors((prev) => {
-    //                     const newErrors = [...prev];
-    //                     newErrors[index] = {
-    //                         ...(newErrors[index] || {}),
-    //                         [field]: err.message,
-    //                     };
-    //                     return newErrors;
-    //                 });
-    //             }
-    //         }, 500),
-    //     [experienceSchema]
-    // );
+
     const debouncedFieldValidation = useMemo(
         () =>
             debounce(async (index, field, value) => {
@@ -183,57 +159,44 @@ const ExperienceForm = ({ handleNext, document }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        // Récupérer les expériences existantes depuis le document
         const existingExperience = document.experience || [];
 
-        // Initialiser les tableaux pour les expériences à mettre à jour, ajouter ou supprimer
         const toUpdate = [], toAdd = [], toDelete = [];
 
-        // Parcourir la liste des expériences pour les comparer aux expériences existantes
         experienceList.forEach((item) => {
             const existingItem = existingExperience.find(
                 (exp) => exp.id === item.id
             );
 
             if (existingItem) {
-                // Si l'expérience existe et a des changements
                 const hasChanged = Object.keys(item).some(
                     (key) => item[key] !== existingItem[key]
                 );
-                if (hasChanged) toUpdate.push(item); // Ajouter à la liste de mise à jour
+                if (hasChanged) toUpdate.push(item);
             } else {
-                // Si l'expérience n'existe pas encore, ajouter à la liste d'ajout
                 toAdd.push(item);
             }
         });
 
-        // Trouver les expériences existantes qui ne sont plus présentes dans la liste
         existingExperience.forEach((existingItem) => {
             if (!experienceList.some((item) => item.id === existingItem.id)) {
-                toDelete.push(existingItem); // Ajouter à la liste de suppression
+                toDelete.push(existingItem);
             }
         });
 
-        // Traiter les ajouts, mises à jour et suppressions
         try {
             setLoading(true);
-
-            // Si des mises à jour sont nécessaires, appeler la méthode PUT
             if (toUpdate.length) {
                 await put(route("experience.update", document.id), {
                     experience: toUpdate,
                 });
             }
 
-            // Si de nouvelles expériences doivent être ajoutées, appeler la méthode POST
             if (toAdd.length) {
                 await post(route("experience.store", document.id), {
                     experience: toAdd,
                 });
             }
-
-            // Si des expériences doivent être supprimées, appeler la méthode DELETE
             if (toDelete.length) {
                 await Promise.all(
                     toDelete.map(async (item) => {
@@ -244,7 +207,6 @@ const ExperienceForm = ({ handleNext, document }) => {
                 );
             }
 
-            // Appeler la fonction handleNext si tout s'est bien passé
             if (handleNext) handleNext();
         } catch (error) {
             console.error("Failed to save experience details", error);
@@ -421,12 +383,12 @@ const ExperienceForm = ({ handleNext, document }) => {
                     ))}
                 </div>
                 <Button
-                    className="mt-4 w-full"
+                    className="mt-4"
                     type="submit"
                     disabled={!isFormValid}
                 >
                     {loading && <Loader size="15px" className="animate-spin" />}
-                    {t("Save_Changes")}
+                    <><Send/> {t("Save_Changes")}</>
                 </Button>
             </form>
         </div>

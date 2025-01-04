@@ -1,6 +1,6 @@
 import { Button } from "@/Components/ui/button";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import React, { act, useState } from "react";
+import React, { useState } from "react";
 import PersonalInfoForm from "./forms/PersonalInfoForm";
 import SummaryForm from "./forms/SummaryForm";
 import ExperienceForm from "./forms/ExperienceForm";
@@ -21,7 +21,7 @@ function ResumeForm({document}) {
         <div
             className="flex-1 w-full lg:sticky lg:top-16 ">
             <div className="shadow-md rounded-md !border-2 border-[#f68c09]
-             bg-[url('https://c4.wallpaperflare.com/wallpaper/332/110/571/polygon-material-design-abstract-3d-wallpaper-preview.jpg')]">
+             bg-[url('https://readymadeui.com/background-image.webp')]">
                 <div className=" flex items-center gap-1 px-3 justify-end border-b border-white  py-[7px] min-h-10">
                     {activeFormIndex > 1 && (
                         <Button

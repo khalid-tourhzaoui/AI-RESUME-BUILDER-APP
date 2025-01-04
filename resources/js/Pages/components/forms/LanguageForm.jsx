@@ -2,7 +2,7 @@ import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
 import { useForm } from "@inertiajs/react";
-import { CheckCircle, Languages, Loader, Plus, X } from "lucide-react";
+import { CheckCircle, Languages, Loader, Plus, Send, X } from "lucide-react";
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { generateThumbnail } from "@/lib/helper";
 import * as Yup from "yup";
@@ -377,14 +377,14 @@ function LanguageForm({ document, handleNext }) {
                     ))}
                 </div>
                 <Button
-                    className="mt-4 w-full"
+                    className="mt-2"
                     type="submit"
                     disabled={!isFormValid || processing}
                 >
                     {processing && (
                         <Loader size="15px" className="animate-spin" />
                     )}
-                    {t("Save_Changes")}
+                    <><Send/> {t("Save_Changes")}</>
                 </Button>
             </form>
         </div>

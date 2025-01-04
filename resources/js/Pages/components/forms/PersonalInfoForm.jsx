@@ -8,6 +8,7 @@ import {
     LocateIcon,
     Mail,
     PhoneIcon,
+    Send,
     UserCircle,
 } from "lucide-react";
 import { useForm } from "@inertiajs/react";
@@ -27,7 +28,6 @@ function PersonalInfoForm({ handleNext, document }) {
         thumbnail: "",
     });
     const [errors, setErrors] = useState({});
-    const [isFormValid, setIsFormValid] = useState(false);
     const { t } = useTranslation();
     const { put, post, data, setData, processing } = useForm({
         title: document.title,
@@ -70,15 +70,12 @@ function PersonalInfoForm({ handleNext, document }) {
             debounce(async () => {
                 if (Object.values(personalInfo).every((value) => value === "")) {
                     setErrors({});
-                    setIsFormValid(false);
                     return;
                 }
                 try {
                     await personalInfoSchema.validate(personalInfo, { abortEarly: false });
                     setErrors({});
-                    setIsFormValid(true);
                 } catch (err) {
-                    setIsFormValid(false);
                     setErrors(
                         err.inner.reduce((acc, curr) => {
                             acc[curr.path] = curr.message;
@@ -93,7 +90,7 @@ function PersonalInfoForm({ handleNext, document }) {
     useEffect(() => {
         debouncedValidation();
         return () => debouncedValidation.cancel();
-    }, [personalInfo, debouncedValidation]); // Effect triggered only by `personalInfo` changes
+    }, [personalInfo, debouncedValidation]);
 
     const handleChange = useCallback((e) => {
         const { name, value } = e.target;
@@ -231,13 +228,11 @@ function PersonalInfoForm({ handleNext, document }) {
                 <Button
                     variant="default"
                     type="submit"
-                    disabled={!isFormValid || processing}
-                    className="w-full"
                 >
                     {processing ? (
                         <Loader className="animate-spin" size={20} />
                     ) : (
-                        t("Save_Changes")
+                        <><Send/> {t("Save_Changes")}</>
                     )}
                 </Button>
             </form>

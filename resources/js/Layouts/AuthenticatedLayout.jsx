@@ -85,20 +85,20 @@ export default function AuthenticatedLayout({ header, children }) {
                                     </Dropdown.Trigger>
 
                                     <Dropdown.Content>
-                                        <Dropdown.Link
+                                        <Dropdown.Button
                                             onClick={() => handleLanguageChange('en')}
                                             as="button"
                                         >
                                             <span className="fi fi-us"></span>
                                             <span className="m-5">{t('english')}</span>
-                                        </Dropdown.Link>
-                                        <Dropdown.Link
+                                        </Dropdown.Button>
+                                        <Dropdown.Button
                                             onClick={() => handleLanguageChange('fr')}
                                             as="button"
                                         >
                                             <span className="fi fi-fr"></span>
                                             <span className="m-5">{t('frensh')}</span>
-                                        </Dropdown.Link>
+                                        </Dropdown.Button>
                                     </Dropdown.Content>
                                 </Dropdown>
                             </div>

@@ -9,12 +9,13 @@ class EducationController extends Controller
 {
     public function update(Request $request, $document_id)
     {
-        // return $request->thumbnail;
+        // return $request->all();
         try{
             $request->validate([
+                'education' => 'required|array|min:1',
                 'education.*.university_name' => 'required|string|max:50',
                 'education.*.degree' => 'required|string|max:50',
-                'education.*.description'=>'required|string|max:1000',
+                'education.*.description'=>'nullable|string|max:1000',
                 'education.*.start_date' => 'required|date',
                 'education.*.end_date' => 'required|date|after_or_equal:education.*.start_date',
             ]);
@@ -51,9 +52,10 @@ class EducationController extends Controller
     {
         try{
             $request->validate([
+                'education' => 'required|array|min:1',
                 'education.*.university_name' => 'required|string|max:50',
                 'education.*.degree' => 'required|string|max:50',
-                'education.*.description'=>'required|string|max:1000',
+                'education.*.description'=>'nullable|string|max:1000',
                 'education.*.start_date' => 'required|date',
                 'education.*.end_date' => 'required|date|after_or_equal:education.*.start_date',
             ]);

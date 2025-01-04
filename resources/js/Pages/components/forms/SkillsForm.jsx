@@ -4,7 +4,7 @@ import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
 import { useForm } from "@inertiajs/react";
 import { Rating } from "@smastrom/react-rating";
-import { Cpu, Loader, Plus, X } from "lucide-react";
+import { AlertCircle, Cpu, Loader, Plus, Send, X } from "lucide-react";
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { generateThumbnail } from "@/lib/helper";
 import * as Yup from "yup";
@@ -52,6 +52,7 @@ const SkillsForm = ({ document, handleNext }) => {
     );
     const [errors, setErrors] = useState([]);
     const [isFormValid, setIsFormValid] = useState(false);
+
     const {
         put,
         post,
@@ -73,16 +74,14 @@ const SkillsForm = ({ document, handleNext }) => {
             }),
         []
     );
-    //---------------------------------------------------------------------------------------------------------
+
     const debouncedValidation = useMemo(
         () =>
             debounce(async (list) => {
                 try {
                     const thumbnail = await generateThumbnail();
-                    setData({...prev, skills: list, thumbnail });
-                    await Promise.all(
-                        list.map((exp) => skillSchema.validate(exp))
-                    );
+                    setData({ skills: list, thumbnail });
+                    await Promise.all(list.map((exp) => skillSchema.validate(exp)));
                     setIsFormValid(true);
                 } catch (err) {
                     setIsFormValid(false);
@@ -90,12 +89,12 @@ const SkillsForm = ({ document, handleNext }) => {
             }, 500),
         [skillSchema]
     );
-    //---------------------------------------------------------------------------------------------------------
+
     useEffect(() => {
         debouncedValidation(skillList);
         return () => debouncedValidation.cancel();
     }, [skillList]);
-    //---------------------------------------------------------------------------------------------------------
+
     const debouncedFieldValidation = useMemo(
         () =>
             debounce(async (index, field, value) => {
@@ -121,7 +120,7 @@ const SkillsForm = ({ document, handleNext }) => {
             }, 500),
         [skillSchema]
     );
-    //---------------------------------------------------------------------------------------------------------
+
     const handleChange = useCallback(
         (index, field, value) => {
             setSkillList((prev) =>
@@ -130,16 +129,16 @@ const SkillsForm = ({ document, handleNext }) => {
                 )
             );
             debouncedFieldValidation(index, field, value);
+            debouncedValidation(skillList); // Recheck overall form validity
         },
-        [debouncedFieldValidation]
+        [debouncedFieldValidation, debouncedValidation, skillList]
     );
 
-    //---------------------------------------------------------------------------------------------------------
     const handleAdd = useCallback(
         () => setSkillList((prev) => [...prev, { ...initialState }]),
         [initialState]
     );
-    //---------------------------------------------------------------------------------------------------------
+
     const handleRemove = useCallback(
         async (index, id) => {
             setSkillList((prev) => prev.filter((_, i) => i !== index));
@@ -155,10 +154,14 @@ const SkillsForm = ({ document, handleNext }) => {
         },
         [destroy]
     );
-    //---------------------------------------------------------------------------------------------------------
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!isFormValid) {
+            console.log("Form is not valid!");
+            return;
+        }
 
         const existingSkills = document.skills || [];
         const toUpdate = [],
@@ -211,6 +214,7 @@ const SkillsForm = ({ document, handleNext }) => {
                     })
                 );
             }
+
             if (handleNext) handleNext();
         } catch (error) {
             console.error("Failed to save skill details", error);
@@ -222,7 +226,7 @@ const SkillsForm = ({ document, handleNext }) => {
             );
         }
     };
-    //---------------------------------------------------------------------------------------------------------
+
     const renderFormFields = useCallback(
         (item, index) => (
             <>
@@ -277,7 +281,7 @@ const SkillsForm = ({ document, handleNext }) => {
                 </span>
             </h2>
             <form onSubmit={handleSubmit}>
-                <div className="border-2 border-white w-full h-auto divide-y-[3px]  rounded-md px-3 pb-4 my-5">
+                <div className="border-2 border-white w-full h-auto divide-y-[3px] rounded-md px-3 pb-4 my-5">
                     {skillList.map((item, index) => (
                         <div key={index} className="border-white">
                             <div className="relative flex items-center justify-between mb-5 pt-4 gap-3">
@@ -309,19 +313,20 @@ const SkillsForm = ({ document, handleNext }) => {
                                         <Plus size="15px" />{" "}
                                         {t("Add_More_Skills")}
                                     </Button>
+                                    
                                 )}
                         </div>
                     ))}
                 </div>
                 <Button
-                    className="w-full"
+                    className="mt-2"
                     type="submit"
                     disabled={!isFormValid || processing}
                 >
                     {processing && (
                         <Loader size="15px" className="animate-spin" />
                     )}
-                    {t("Save_Changes")}
+                    <><Send/> {t("Save_Changes")}</>
                 </Button>
             </form>
         </div>

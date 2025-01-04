@@ -35,7 +35,7 @@ const TopSection = ({ document }) => {
                     This resume is in the trash bin
                 </div>
             )}
-            <div className="w-full flex items-center justify-between flex-wrap border-b-2 border-black ">
+            <div className="w-full flex items-center justify-between flex-wrap border-b-2 border-white ">
                 <div className="flex items-center">
                     <ResumeTitle
                         isLoading={processing}

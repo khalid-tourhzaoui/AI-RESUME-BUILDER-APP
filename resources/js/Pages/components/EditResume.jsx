@@ -56,8 +56,8 @@ function EditResume() {
 
             <div className="py-2">
                 <div className="mx-auto max-w-12xl sm:px-6 lg:px-8">
-                    <div className="overflow-hidden shadow-sm sm:rounded-lg p-5 border-black border-2
-                        bg-[url('https://readymadeui.com/background-image.webp')]"
+                    <div className="overflow-hidden shadow-sm sm:rounded-lg p-5 border-black border-4
+                        bg-[url('https://c4.wallpaperflare.com/wallpaper/332/110/571/polygon-material-design-abstract-3d-wallpaper-preview.jpg')]"
                     >
                         <div className="relative z-10 w-full">
                             <div className="w-full mx-auto max-w-12xl">

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { useForm } from "@inertiajs/react";
-import {AlertCircle,Globe,Calendar,FlaskConical,GraduationCap,Loader,Medal,Plus,X, AlignLeft,} from "lucide-react";
+import { AlertCircle, Calendar, FlaskConical, GraduationCap, Loader, Medal, Plus, X, AlignLeft, Send } from "lucide-react";
 import { debounce } from "lodash";
 import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
@@ -9,34 +9,36 @@ import { Textarea } from "@/Components/ui/textarea";
 import { useTranslation } from "react-i18next";
 import { generateThumbnail } from "@/lib/helper";
 import * as Yup from "yup";
+
 //---------------------------------------------------------------------------------------------------------
-const FormField = React.memo(({ label, icon, error, children }) => (
+
+const FormField = React.memo(({ label, icon, error, children, required }) => (
     <div className="col-span-1">
         <Label className="text-md font-semibold">
             {label}
-            <span className="text-[#f68c09] mx-1">
-                (
-                {React.cloneElement(icon, {
-                    size: 20,
-                    className: "inline-flex",
-                })}
-                )
-            </span>{" "}
+            {required && <span className="text-red-500 ml-1">*</span>}
+            {icon && (
+                <span className="text-[#f68c09] mx-1">
+                    ({React.cloneElement(icon, { size: 20, className: "inline-flex" })})
+                </span>
+            )}
             :
         </Label>
         {children}
         {error && (
             <p className="text-red-500 text-sm mt-3">
-                (<AlertCircle size={20} className="inline-flex" />
-                ): {error}
+                (<AlertCircle size={20} className="inline-flex" />): {error}
             </p>
         )}
     </div>
 ));
 
+//---------------------------------------------------------------------------------------------------------
+
 function EducationForm({ handleNext, document }) {
     const { t } = useTranslation();
-    const initialState = useMemo(()=>({
+
+    const initialState = useMemo(() => ({
         id: undefined,
         docId: undefined,
         university_name: "",
@@ -45,22 +47,16 @@ function EducationForm({ handleNext, document }) {
         description: "",
         start_date: "",
         end_date: "",
-    }),[]);
+    }), []);
 
     const [educationList, setEducationList] = useState(() =>
         document?.education?.length ? document.education : [initialState]
     );
     const [errors, setErrors] = useState([]);
-    const [isFormValid, setIsFormValid] = useState(true);
+    const [isFormValid, setIsFormValid] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const {
-        put,
-        post,
-        delete: destroy,
-        data,
-        setData,
-    } = useForm({ education: educationList });
+    const { put, post, delete: destroy, data, setData } = useForm({ education: educationList });
 
     const educationSchema = useMemo(
         () =>
@@ -76,13 +72,13 @@ function EducationForm({ handleNext, document }) {
             }),
         []
     );
-    //---------------------------------------------------------------------------------------------------------
+
     const debouncedValidation = useMemo(
         () =>
             debounce(async (list) => {
                 try {
                     const thumbnail = await generateThumbnail();
-                    setData({...prev, education: list, thumbnail });
+                    setData((prev) => ({ ...prev, education: list, thumbnail }));
                     await Promise.all(
                         list.map((exp) => educationSchema.validate(exp))
                     );
@@ -93,12 +89,12 @@ function EducationForm({ handleNext, document }) {
             }, 500),
         [educationSchema]
     );
-    //---------------------------------------------------------------------------------------------------------
+
     useEffect(() => {
         debouncedValidation(educationList);
         return () => debouncedValidation.cancel();
     }, [educationList]);
-    //---------------------------------------------------------------------------------------------------------
+
     const debouncedFieldValidation = useMemo(
         () =>
             debounce(async (index, field, value) => {
@@ -122,7 +118,7 @@ function EducationForm({ handleNext, document }) {
             }, 500),
         [educationSchema]
     );
-    //---------------------------------------------------------------------------------------------------------
+
     const handleChange = useCallback(
         (index, field, value) => {
             setEducationList((prev) =>
@@ -135,12 +131,11 @@ function EducationForm({ handleNext, document }) {
         [debouncedFieldValidation]
     );
 
-    //---------------------------------------------------------------------------------------------------------
     const addNewEducation = useCallback(
         () => setEducationList((prev) => [...prev, { ...initialState }]),
         [initialState]
     );
-    //---------------------------------------------------------------------------------------------------------
+
     const removeEducation = useCallback(
         async (index, id) => {
             setEducationList((prev) => prev.filter((_, i) => i !== index));
@@ -156,60 +151,48 @@ function EducationForm({ handleNext, document }) {
         },
         [destroy]
     );
-    //---------------------------------------------------------------------------------------------------------
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Récupérer les educations existantes depuis le document
         const existingEducation = document.education || [];
-
-        // Initialiser les tableaux pour les educations à mettre à jour, ajouter ou supprimer
         const toUpdate = [], toAdd = [], toDelete = [];
 
-        // Parcourir la liste des educations pour les comparer aux educations existantes
         educationList.forEach((item) => {
             const existingItem = existingEducation.find(
                 (exp) => exp.id === item.id
             );
 
             if (existingItem) {
-                // Si l'education existe et a des changements
                 const hasChanged = Object.keys(item).some(
                     (key) => item[key] !== existingItem[key]
                 );
-                if (hasChanged) toUpdate.push(item); // Ajouter à la liste de mise à jour
+                if (hasChanged) toUpdate.push(item);
             } else {
-                // Si l'education n'existe pas encore, ajouter à la liste d'ajout
                 toAdd.push(item);
             }
         });
 
-        // Trouver les educations existantes qui ne sont plus présentes dans la liste
         existingEducation.forEach((existingItem) => {
             if (!educationList.some((item) => item.id === existingItem.id)) {
-                toDelete.push(existingItem); // Ajouter à la liste de suppression
+                toDelete.push(existingItem);
             }
         });
 
-        // Traiter les ajouts, mises à jour et suppressions
         try {
             setLoading(true);
-
-            // Si des mises à jour sont nécessaires, appeler la méthode PUT
             if (toUpdate.length) {
                 await put(route("education.update", document.id), {
                     education: toUpdate,
                 });
             }
 
-            // Si de nouvelles educations doivent être ajoutées, appeler la méthode POST
             if (toAdd.length) {
                 await post(route("education.store", document.id), {
                     education: toAdd,
                 });
             }
 
-            // Si des educations doivent être supprimées, appeler la méthode DELETE
             if (toDelete.length) {
                 await Promise.all(
                     toDelete.map(async (item) => {
@@ -220,10 +203,9 @@ function EducationForm({ handleNext, document }) {
                 );
             }
 
-            // Appeler la fonction handleNext si tout s'est bien passé
             if (handleNext) handleNext();
         } catch (error) {
-            console.error("Failed to save eduaction details", error);
+            console.error("Failed to save education details", error);
             setErrors(
                 error.inner.reduce((acc, curr) => {
                     acc[curr.path] = curr.message;
@@ -397,14 +379,13 @@ function EducationForm({ handleNext, document }) {
                     ))}
                 </div>
                 <Button
-                    className="mt-4 w-full"
+                    className="mt-4"
                     type="submit"
-                    disabled={!isFormValid}
                 >
                     {loading && (
                         <Loader size="15px" className="animate-spin" />
                     )}{" "}
-                    {t("Save_Changes")}
+                    <><Send/> {t("Save_Changes")}</>
                 </Button>
             </form>
         </div>

@@ -26,7 +26,7 @@ function ResumeTitle({ initialTitle, status, isLoading, onSave, handleSave }) {
     return (
         <div className="flex items-center gap-1 pb-3">
             <h5
-                className="text-lg px-4 text-black border-2 border-black font-semibold opacity-100 !pointer-events-none"
+                className="text-lg p-1 text-black bg-white rounded-md font-semibold opacity-100 !pointer-events-none"
                 contentEditable={
                     isLoading || status === "archived" ? false : true
                 }
@@ -37,19 +37,19 @@ function ResumeTitle({ initialTitle, status, isLoading, onSave, handleSave }) {
             >
                 {title}
             </h5>
-            <span className={status === "archived" ? "text-red-500" : ""}>
+            <span className={`bg-white p-1 rounded-md ${status === 'archived' ? 'text-red-500' : ''}`}>
                 {status === "private" ? (
-                    <Lock size="20px" className="stroke-black" />
+                    <Lock size="25px" className="stroke-black" />
                 ) : status === "public" ? (
-                    <Globe size="20px" className="stroke-black" />
+                    <Globe size="25px" className="stroke-black" />
                 ) : status === "archived" ? (
-                    <Trash2 size="20px" className="stroke-black" />
+                    <Trash2 size="25px" className="stroke-black" />
                 ) : null}
             </span>
             <Save
-                className="stroke-black cursor-pointer"
+                className="stroke-black cursor-pointer p-1 bg-white rounded-md"
                 onClick={() => handleSave()}
-                size="20px"
+                size="32px"
             />
         </div>
     );

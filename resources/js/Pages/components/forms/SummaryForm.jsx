@@ -5,7 +5,7 @@ import { TextGenerateEffect } from "@/Components/ui/text-generate-effect";
 import { Textarea } from "@/Components/ui/textarea";
 import { AIChatSession } from "@/lib/google-ai-model";
 import { useForm } from "@inertiajs/react";
-import { Book, FileText, Loader, Sparkles, SparklesIcon } from "lucide-react";
+import { Book, FileText, Loader, Send, Sparkles, SparklesIcon } from "lucide-react";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import Swal from "sweetalert2";
@@ -149,12 +149,12 @@ function SummaryForm({ document, handleNext }) {
                     )}
 
                     <Button
-                        className="mt-4 w-full"
+                        className="mt-4"
                         type="submit"
                         disabled={loading || document?.status === "archived"}
                     >
                         {loading && <Loader size="15px" className="animate-spin" />}
-                        {t("Save_Changes")}
+                        <><Send/> {t("Save_Changes")}</>
                     </Button>
                 </form>
             </div>
