@@ -20,6 +20,11 @@ function ResumePreview({document,isLoading}) {
                 {/* {Personnal Info} */}
                 <PersonalInfoPreview isLoading={isLoading} document={document} />
             </div>
+            {/* Colonne de droite */}
+            <div className="w-2/3 space-y-8">
+                <ExperiencePreview isLoading={isLoading} document={document} />
+                <EducationPreview isLoading={isLoading} document={document} />
+            </div>
             {/* {Personnal Info}
             <PersonalInfoPreview isLoading={isLoading} document={document} />
 

@@ -47,7 +47,7 @@ function PersonalInfoPreview({ document, isLoading }) {
                     />
                 </div>
                 <div>
-                    <h1 className="text-xl font-bold text-gray-800 text-center">
+                    <h1 className="text-md font-bold text-gray-800">
                         {document?.personal_info?.first_name+" "+document?.personal_info?.last_name || "John Doe"}
                     </h1>
                     <h2 className="text-lg" style={{color: themeColor}}>
@@ -64,6 +64,9 @@ function PersonalInfoPreview({ document, isLoading }) {
                         <Mail className="w-5 h-5" /> <span>{document?.personal_info?.email || "john.doe@gmail.com"}</span>
                     </div>
                     <div className="flex items-center gap-3 text-gray-600">
+                        <Globe className="w-5 h-5" /> <span>{document?.personal_info?.email || "john.doe@gmail.com"}</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-gray-600">
                         <Phone className="w-5 h-5" /> <span>{document?.personal_info?.phone || "(+212) 766-56-24-12"}</span>
                     </div>
                     <div className="flex items-center gap-3 text-gray-600">
@@ -71,7 +74,34 @@ function PersonalInfoPreview({ document, isLoading }) {
                     </div>
                 </div>
             </div>
-            <hr className="border-[1.5px] my-2"style={{borderColor: themeColor,}}/>
+            <hr className="border-[1.5px] my-2"style={{borderColor: themeColor}}/>
+            {/* Socials */}
+            <div>
+                <h3 className="font-semibold text-gray-800 mb-4">Social</h3>
+                <div className="space-y-3">
+                {
+                    document?.social_medias?.map((item, index) => {
+                        // const flagClass = `fi fi-${item.code}`;
+                        const flagClass = `fi fi-fr`;
+                        return (
+                        <div className="flex items-center gap-1" key={index}>
+                            <div>
+                                {/* <span className={`w-full h-full ${flagClass} object-cover`}></span> */}
+                                <SocialIcon className="mr-2" url={item.link} style={{height: 30,width: 30,}}/>
+                            </div>
+                            <div>
+                                <div className="text-gray-800">{item.name}</div>
+                                <a href={item.link} target="_blank" className="text-sm text-gray-500">
+                                    {document?.personal_info?.first_name}'s {item.name}
+                                </a>
+                            </div>
+                        </div>
+                        );
+                    })
+                }
+                </div>
+            </div>
+            <hr className="border-[1.5px] my-2"style={{borderColor: themeColor}}/>
             {/* Langues */}
             <div>
                 <h3 className="font-semibold text-gray-800 mb-4">Languages</h3>
@@ -82,27 +112,17 @@ function PersonalInfoPreview({ document, isLoading }) {
                         const flagClass = `fi fi-fr`;
                         return (
                         <div className="flex items-center gap-3" key={index}>
-                            <div className="w-10 h-10 rounded-full overflow-hidden">
-                            <div className={`w-full h-full ${flagClass} object-cover`} />
+                            <div>
+                                <span className={`${flagClass} object-cover`}></span>
                             </div>
                             <div>
-                            <div className="text-gray-800">{item.name}</div>
-                            <div className="text-sm text-gray-500">{item.level}</div>
+                                <div className="text-gray-800">{item.name}</div>
+                                <div className="text-sm text-gray-500">{item.level}</div>
                             </div>
                         </div>
                         );
                     })
                 }
-
-                    {/* <div className="flex items-center gap-3">
-                        <div className="w-6 h-6 rounded-full overflow-hidden">
-                            <div className="w-full h-full bg-blue-500" />
-                        </div>
-                        <div>
-                            <div className="text-gray-800">Greek</div>
-                            <div className="text-sm text-gray-500">Native</div>
-                        </div>
-                    </div> */}
                 </div>
             </div>
         </>
