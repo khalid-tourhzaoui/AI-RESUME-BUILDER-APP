@@ -8,7 +8,7 @@ function ResumePreview({ document, isLoading }) {
         <div
             id="resume-preview-id"
             className={cn(
-                ` shadow-lg !font-open-sansdark:border w-full  flex-[1.02] h-full !font-open-sansdark:border flex gap-8 max-w-4xl mx-auto p-4 sm:p-8 bg-white min-h-screen`
+                ` shadow-lg !font-open-sansdark:border w-full flex-[1.02] h-full !font-open-sansdark:border flex gap-8 max-w-5xl mx-auto p-4 sm:p-8 bg-white min-h-screen`
             )}
             style={{ borderTop: `13px solid ${document?.theme_color}` }}
         >

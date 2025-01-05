@@ -37,6 +37,7 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::post('/profile-details/{document_id}/', [ProfilDetailsController::class, 'store'])->name('profile-details.store');
     Route::put('/profile-details/{document_id}/', [ProfilDetailsController::class, 'update'])->name('profile-details.update');
     Route::delete('/profile-details/{document_id}/', [ProfilDetailsController::class, 'destroy'])->name('profile-details.delete');
+    Route::patch('/profile-image/{document_id}/', [ProfilDetailsController::class, 'upload'])->name('profile-details.upload');
     // ----------------------------------------------------------------------------------------------------------------------
     Route::post('/personals/{document_id}', [PersonalInfoController::class, 'store'])->name('personals.store');
     Route::put('/personals/{document_id}', [PersonalInfoController::class, 'update'])->name('personals.update');

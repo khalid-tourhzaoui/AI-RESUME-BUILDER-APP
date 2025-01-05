@@ -19,6 +19,7 @@ return new class extends Migration
             $table->longText('summary')->nullable();
             $table->string('theme_color', 255)->default('#7c3aed');
             $table->longText('thumbnail')->nullable();
+            $table->string('img', 255)->nullable();
             $table->integer('current_position')->default(1);
             $table->enum('status', ['archived', 'private', 'public'])->default('private');
             $table->timestamps();

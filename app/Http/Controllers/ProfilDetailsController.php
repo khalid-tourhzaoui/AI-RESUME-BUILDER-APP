@@ -7,6 +7,7 @@ use App\Models\Language;
 use App\Models\Document;
 use App\Models\SocialMedia;
 use App\Models\Skill;
+use Illuminate\Support\Facades\Storage;
 class ProfilDetailsController extends Controller
 {
     public function store(Request $request, $document_id)
@@ -79,7 +80,7 @@ class ProfilDetailsController extends Controller
         foreach ($data as $item) {
             $existingRecord = $model::where('document_id', $document_id)
             ->where('name', $item['name'])
-            // ->where($model === Skill::class ? 'rating' : ($model === SocialMedia::class ? 'link' : 
+            // ->where($model === Skill::class ? 'rating' : ($model === SocialMedia::class ? 'link' :
             //        ($model===Language::class ? 'level':null)))
             ->where($model === Skill::class ? 'rating' : ($model === SocialMedia::class ? 'link' : 'level'), $item['rating'] ?? $item['link'] ?? $item['level'] ?? null)
             ->first();
@@ -235,6 +236,33 @@ private function updateEntity($request, $rules, $model, $document_id)
         }
     }
 }
+    //-----------------------------------------------------------------------------------------
+    public function upload(Request $request, $document_id)
+    {
+        $document = Document::find($document_id);
+
+        if (!$document) {
+            return response()->json(['message' => 'Document not found'], 404);
+        }
+        return $request->all();
+
+        // $request->validate([
+        //     'profile_image_name' => 'required|file|image|mimes:jpg,jpeg,png,bmp,gif,svg,webp|max:2048',
+        // ]);
+
+        // $file = $request->file('profile_image_name');
+        // $imageName = time() . '_' . $file->getClientOriginalName();
+        // $file->move(public_path('uploads'), $imageName);
+
+        // $document->img = 'uploads/' . $imageName;
+        // $document->save();
+
+        // return response()->json([
+        //     'message' => 'Image uploaded successfully',
+        //     'image_path' => asset($document->img),
+        // ]);
+    }
+
     //-----------------------------------------------------------------------------------------
     public function destroy(Request $request,$id)
     {
