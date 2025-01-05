@@ -11,7 +11,8 @@ class ExperienceController extends Controller
     public function store(ExperienceRequest $request, $document_id)
     {
         try {
-            $experienceData = $request->validated()['experience'];
+            // $experienceData = $request->validated()['experience'];
+            $experienceData=$request->experience;
             foreach ($experienceData as $experience) {
                 // Vérification si une expérience existe déjà pour le document donné
                 $existingRecord = Experience::where('document_id', $document_id)
@@ -62,8 +63,8 @@ class ExperienceController extends Controller
     public function update(ExperienceRequest $request, $document_id)
     {
         try {
-            $experienceData = $request->validated()['experience'];
-
+            // $experienceData = $request->validated()['experience'];
+            $experienceData=$request->experience;
             foreach ($experienceData as $experience) {
                 if (isset($experience['id'])) {
                     // Mise à jour de l'expérience si l'ID existe

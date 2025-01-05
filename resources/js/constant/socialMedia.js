@@ -14,4 +14,5 @@ export const socialMediaListData = [
   { id: 13, name: 'Telegram', url: 'https://telegram.org', icon: 'telegram' },
   { id: 14, name: 'Medium', url: 'https://medium.com', icon: 'medium' },
   { id: 15, name: 'Dribbble', url: 'https://dribbble.com', icon: 'dribbble' },
+  { id:16,name:'Portfolio',url:'https://www.luckymedia.dev',icon:'portfolio'}
 ];

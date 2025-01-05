@@ -356,7 +356,7 @@ const ExperienceForm = ({ handleNext, document }) => {
                                 <Button
                                     variant="secondary"
                                     type="button"
-                                    className="size-[20px] text-center rounded-full absolute -top-3 -right-5 text-white"
+                                    className="size-[20px] text-center rounded-full absolute -top-3 -right-5"
                                     size="icon"
                                     onClick={() => removeExperience(index, item.id)}
                                 >

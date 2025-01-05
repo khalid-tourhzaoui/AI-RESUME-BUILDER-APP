@@ -1,10 +1,9 @@
 import { INITIAL_THEME_COLOR } from "@/lib/helper";
-import { Globe, Mail, MapPin, Phone, Send } from "lucide-react";
+import { Mail, MapPin, Phone} from "lucide-react";
 import React from "react";
-import { socialMediaListData } from "@/constant/socialMedia";
 import { SocialIcon } from "react-social-icons";
 import "/node_modules/flag-icons/css/flag-icons.min.css";
-
+import { languages } from "@/constant/languages";
 function PersonalInfoPreview({ document, isLoading }) {
     const themeColor = document?.theme_color || INITIAL_THEME_COLOR;
     console.log(document);
@@ -12,122 +11,141 @@ function PersonalInfoPreview({ document, isLoading }) {
         return <SkeletonLoader />;
     }
     return (
-        // <div className="w-full min-h-14">
-        //     <h2 className="font-bold text-xl text-center"style={{color: themeColor,}}>
-        //         {document?.personal_info?.first_name || "First Name"}{" "}
-        //         {document?.personal_info?.last_name || "Last Name"}
-        //     </h2>
-        //     <h5 className="text-center text-sm font-medium">
-        //         {document?.personal_info?.job_title || "Job Title"}
-        //     </h5>
-        //     <p className="text-center font-normal text-[13px]">
-        //         {document?.personal_info?.address || "House Address"}
-        //     </p>
-
-        //     <div className="flex items-center justify-between pt-3">
-        //         <h5 className="font-normal text-[13px]">
-        //             {document?.personal_info?.phone || "Phone number"}
-        //         </h5>
-        //         <h5 className="font-normal text-[13px]">
-        //             {document?.personal_info?.email || "Email address"}
-        //         </h5>
-        //     </div>
-
-        //     <hr className="border-[1.5px] my-2"style={{borderColor: themeColor,}}/>
-        // </div>
-        //---------------------------------------------------------------------------
-
-        <>
-            <div className="space-y-6">
-                <div className="aspect-square w-full overflow-hidden rounded-2xl bg-gray-100">
+        <div className="w-full lg:w-1/3 space-y-2">
+            <div className="space-y-4">
+                <div className="max-w-[240px] mx-auto lg:mx-0 aspect-square overflow-hidden rounded-2xl bg-gray-100">
                     <img
-                    src="https://preline.co/assets/svg/examples/polygon-bg-element.svg"
-                    alt="Profile"
-                    className="w-full h-full object-cover"
+                        src="https://preline.co/assets/svg/examples/polygon-bg-element.svg"
+                        alt="Profile"
+                        className="w-full h-full object-cover"
                     />
                 </div>
-                <div>
-                    <h1 className="text-md font-bold text-gray-800">
-                        {document?.personal_info?.first_name+" "+document?.personal_info?.last_name || "John Doe"}
+                <div className="text-center lg:text-left">
+                    <h1 className="text-xl font-medium text-gray-800">
+                        {document?.personal_info?.first_name +
+                            " " +
+                            document?.personal_info?.last_name || "John Doe"}
                     </h1>
-                    <h2 className="text-lg" style={{color: themeColor}}>
-                        {document?.personal_info?.job_title || "Full-Stack Designer"}
-
+                    <h2 className="text-lg text-purple-500">
+                        {document?.personal_info?.job_title ||
+                            "Full-Stack Designer"}
                     </h2>
                 </div>
             </div>
-            <hr className="border-[1.5px]"style={{borderColor: themeColor,}}/>
+            <hr
+                className="border-[1.5px]"
+                style={{ borderColor: themeColor }}
+            />
             <div>
-                <h3 className="font-semibold text-gray-800 mb-2">Personal Details</h3>
+                <h3 className="font-semibold text-gray-800 mb-2">
+                    Personal Details
+                </h3>
                 <div className="space-y-3">
+                    <div className="flex flex-wrap items-center gap-3 text-gray-600">
+                        <Mail className="w-5 h-5 shrink-0" />
+                        <span className="break-all">
+                            {document?.personal_info?.email ||
+                                "john.doe@gmail.com"}
+                        </span>
+                    </div>
+                    {/* <div className="flex flex-wrap items-center gap-3 text-gray-600">
+                        <Globe className="w-5 h-5 shrink-0" />
+                        <span className="break-all">
+                            https://www.luckymedia.dev
+                        </span>
+                    </div> */}
                     <div className="flex items-center gap-3 text-gray-600">
-                        <Mail className="w-5 h-5" /> <span>{document?.personal_info?.email || "john.doe@gmail.com"}</span>
+                        <Phone className="w-5 h-5 shrink-0" />
+                        <span>
+                            {document?.personal_info?.phone ||
+                                "(+39) 333 0123 765"}
+                        </span>
                     </div>
                     <div className="flex items-center gap-3 text-gray-600">
-                        <Globe className="w-5 h-5" /> <span>{document?.personal_info?.email || "john.doe@gmail.com"}</span>
-                    </div>
-                    <div className="flex items-center gap-3 text-gray-600">
-                        <Phone className="w-5 h-5" /> <span>{document?.personal_info?.phone || "(+212) 766-56-24-12"}</span>
-                    </div>
-                    <div className="flex items-center gap-3 text-gray-600">
-                        <MapPin className="w-5 h-5" /> <span>{document?.personal_info?.address || "Los Angeles, California"}</span>
+                        <MapPin className="w-5 h-5 shrink-0" />
+                        <span>
+                            {document?.personal_info?.address ||
+                                "Los Angeles, California"}
+                        </span>
                     </div>
                 </div>
             </div>
-            <hr className="border-[1.5px] my-2"style={{borderColor: themeColor}}/>
-            {/* Socials */}
+            <hr
+                className="border-[1.5px]"
+                style={{ borderColor: themeColor }}
+            />
             <div>
-                <h3 className="font-semibold text-gray-800 mb-4">Social</h3>
+                <h3 className="font-semibold text-gray-800 mb-2">Social Medias</h3>
                 <div className="space-y-3">
-                {
-                    document?.social_medias?.map((item, index) => {
-                        // const flagClass = `fi fi-${item.code}`;
-                        const flagClass = `fi fi-fr`;
-                        return (
-                        <div className="flex items-center gap-1" key={index}>
+                    {document?.social_medias?.map((social, index) => (
+                        <div key={index} className="flex items-center gap-3">
+                            <SocialIcon
+                                className="w-6 h-6 rounded-full mr-2"
+                                url={social.link}
+                                style={{ height: 30, width: 30 }}
+                            />
                             <div>
-                                {/* <span className={`w-full h-full ${flagClass} object-cover`}></span> */}
-                                <SocialIcon className="mr-2" url={item.link} style={{height: 30,width: 30,}}/>
-                            </div>
-                            <div>
-                                <div className="text-gray-800">{item.name}</div>
-                                <a href={item.link} target="_blank" className="text-sm text-gray-500">
-                                    {document?.personal_info?.first_name}'s {item.name}
+                                <div className="text-gray-800">
+                                    {social.name || "Instagram"}
+                                </div>
+                                <a
+                                    href={
+                                        social.link ||
+                                        "https://www.instagram.com/"
+                                    }
+                                    target="_blank"
+                                    className="text-sm text-gray-500"
+                                >
+                                    {document?.personal_info?.first_name ||
+                                        "John Doe"}
+                                    's {social.name || "Instagram"}
                                 </a>
                             </div>
                         </div>
-                        );
-                    })
-                }
+                    ))}
                 </div>
             </div>
-            <hr className="border-[1.5px] my-2"style={{borderColor: themeColor}}/>
-            {/* Langues */}
+            <hr
+                className="border-[1.5px]"
+                style={{ borderColor: themeColor }}
+            />
             <div>
-                <h3 className="font-semibold text-gray-800 mb-4">Languages</h3>
-                <div className="space-y-3">
-                {
-                    document?.languages?.map((item, index) => {
-                        // const flagClass = `fi fi-${item.code}`;
-                        const flagClass = `fi fi-fr`;
-                        return (
-                        <div className="flex items-center gap-3" key={index}>
-                            <div>
-                                <span className={`${flagClass} object-cover`}></span>
-                            </div>
-                            <div>
-                                <div className="text-gray-800">{item.name}</div>
-                                <div className="text-sm text-gray-500">{item.level}</div>
-                            </div>
-                        </div>
+                <h3 className="font-semibold text-gray-800 mb-2">Languages</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3">
+                    {document?.languages?.map((language, index) => {
+                        const languageData = languages.find(
+                            (l) => l.name === language.name
                         );
-                    })
-                }
+                        const flagClass = languageData
+                            ? languageData.flagClass
+                            : "fi fi-un";
+                        console.log(languageData);
+                        return (
+                            <div
+                                key={index}
+                                className="flex items-center gap-3"
+                            >
+                                <div className="rounded-md overflow-hidden">
+                                    <span
+                                        className={`w-full h-full ${flagClass}`}
+                                    ></span>
+                                </div>
+                                <div>
+                                    <div className="text-gray-800">
+                                        {language.name || "English"}
+                                    </div>
+                                    <div className="text-sm text-gray-500">
+                                        {language.level || "Native"}
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
-        </>
+        </div>
+
     );
 }
-
 
 export default PersonalInfoPreview;
