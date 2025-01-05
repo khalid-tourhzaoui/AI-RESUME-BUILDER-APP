@@ -4,6 +4,7 @@ import React from "react";
 import { SocialIcon } from "react-social-icons";
 import "/node_modules/flag-icons/css/flag-icons.min.css";
 import { languages } from "@/constant/languages";
+import { socialMediaListData } from "@/constant/socialMedia";
 function PersonalInfoPreview({ document, isLoading }) {
     const themeColor = document?.theme_color || INITIAL_THEME_COLOR;
     console.log(document);
@@ -22,9 +23,9 @@ function PersonalInfoPreview({ document, isLoading }) {
                 </div>
                 <div className="text-center lg:text-left">
                     <h1 className="text-xl font-medium text-gray-800">
-                        {document?.personal_info?.first_name +
-                            " " +
-                            document?.personal_info?.last_name || "John Doe"}
+                        {document?.personal_info?.first_name && document?.personal_info?.last_name
+                            ? `${document.personal_info.first_name} ${document.personal_info.last_name}` : "John Doe"
+                        }
                     </h1>
                     <h2 className="text-lg text-purple-500">
                         {document?.personal_info?.job_title ||
@@ -77,28 +78,26 @@ function PersonalInfoPreview({ document, isLoading }) {
             <div>
                 <h3 className="font-semibold text-gray-800 mb-2">Social Medias</h3>
                 <div className="space-y-3">
-                    {document?.social_medias?.map((social, index) => (
+                    {(document.social_medias && document.social_medias.length > 0
+                        ? document.social_medias
+                        : socialMediaListData.slice(0,3)
+                    ).map((social, index) => (
                         <div key={index} className="flex items-center gap-3">
                             <SocialIcon
-                                className="w-6 h-6 rounded-full mr-2"
-                                url={social.link}
+                                className="w-6 h-6 rounded-full"
+                                url={social.link || social.url}
                                 style={{ height: 30, width: 30 }}
+                                title={social.name}
                             />
                             <div>
-                                <div className="text-gray-800">
-                                    {social.name || "Instagram"}
-                                </div>
+                                <div className="text-gray-800">{social.name}</div>
                                 <a
-                                    href={
-                                        social.link ||
-                                        "https://www.instagram.com/"
-                                    }
+                                    href={social.link}
                                     target="_blank"
+                                    rel="noopener noreferrer"
                                     className="text-sm text-gray-500"
                                 >
-                                    {document?.personal_info?.first_name ||
-                                        "John Doe"}
-                                    's {social.name || "Instagram"}
+                                    {document?.personal_info?.first_name || "User"}'s {social.name}
                                 </a>
                             </div>
                         </div>
@@ -112,7 +111,8 @@ function PersonalInfoPreview({ document, isLoading }) {
             <div>
                 <h3 className="font-semibold text-gray-800 mb-2">Languages</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3">
-                    {document?.languages?.map((language, index) => {
+                    {(document.languages && document.languages.length >0 ?
+                    document.languages : languages.slice(0,3)).map((language, index) => {
                         const languageData = languages.find(
                             (l) => l.name === language.name
                         );
