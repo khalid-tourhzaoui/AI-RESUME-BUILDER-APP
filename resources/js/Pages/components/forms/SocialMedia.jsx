@@ -49,10 +49,7 @@ function SocialMedia({ document, handleNext }) {
 
     const socialMediaSchema = Yup.object().shape({
         name: Yup.string().required("Social Media name is required"),
-        link: Yup.string().required("Social media link is required").matches(
-            /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/,
-            "Invalid URL"
-        ),
+        link: Yup.string().required("Social media link is required")
     });
 
     //-------------------------------------------------------------------------------------------------------------------------

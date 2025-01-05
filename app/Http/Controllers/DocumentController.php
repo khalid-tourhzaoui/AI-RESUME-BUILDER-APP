@@ -42,12 +42,7 @@ class DocumentController extends Controller
         try{
             return Inertia::render('components/AddResume');
         }catch (\Exception $ex) {
-            // Vérifier si l'exception est due à une connexion refusée
-            if ($ex->getCode() == 'HY000') {
-                 return Inertia::render('components/errors/Error');
-            } else {
-                 return Inertia::render('components/errors/Error');
-            }
+            return redirect()->back()->with('error', 'An error occurred while loading the form. Please try again.');
         }
     }
 
@@ -66,22 +61,15 @@ class DocumentController extends Controller
             return redirect()->route('documents.edit', ['document_id' => $document->document_id])
                 ->with('success', 'Document created successfully. You can now edit it.');
         } catch (\Exception $ex) {
-            if ($ex->getCode() === 'HY000') {
-
-                return Inertia::render('components/errors/Error', [
-                    'message' => 'Unable to connect to the database. Please try again later.'
-                ]);
-            }
-
             return redirect()->back()->with('error', 'An error occurred while creating the document. Please try again.');
-            }
         }
+    }
         /*--------------------------------------------------------------------------------------------------*/
         public function updateThemeColor(Request $request, $id)
         {
             try{
                 $validated = $request->validate([
-                    'themeColor' => 'required|string|max:7', // Validation de la couleur hexadécimale
+                    'themeColor' => 'required|string|max:7',
                 ]);
 
                 $document = Document::findOrFail($id);
@@ -89,7 +77,7 @@ class DocumentController extends Controller
                 $document->save();
                 return redirect()->back()->with('success','Document theme color updated successfully');
             }catch (\Exception $ex) {
-                return redirect()->back()->with('error', 'An error occurred while updating the document. Please try again.');
+                return redirect()->back()->with('error', 'An error occurred while updating the theme color. Please try again.');
             }
 
         }
@@ -114,8 +102,6 @@ class DocumentController extends Controller
                 'socialMedia' =>$document->socialMedias,
                 'success' => session('success'),
                 'error' => session('error'),
-                'next' => session('next'),
-                'locale' => app()->getLocale(),
             ]);
         }catch (\Exception $ex) {
             return redirect()->route('dashboard')
@@ -173,25 +159,20 @@ class DocumentController extends Controller
                 return redirect()->back()->with('error', 'Invalid status.');
             }
 
-            // Retrieve the document by its ID
             $document = Document::findOrFail($id);
 
-            // Update the status of the document
             $document->status = $status;
             $document->save();
 
-            // Prepare the success message based on the status
             $statusMessages = [
                 'archived' => 'Document archived successfully.',
                 'private'  => 'Document restored successfully.',
                 'public'   => 'Document updated successfully.'
             ];
 
-            // Redirect to the document edit page with a success message
             return redirect()->back()->with('success', $statusMessages[$status]);
 
         } catch (\Exception $ex) {
-            // Handle any exceptions
             return redirect()->back()
                 ->with('error', 'An error occurred: ' . $ex->getMessage());
         }
@@ -218,12 +199,13 @@ class DocumentController extends Controller
                     'isLoading' => $isLoading,
                     'isSuccess' => $isSuccess,
                 ]);
-            }else{
-                return Inertia::render('components/errors/Error');
+            } else {
+                return response()->json(['error' => 'Document not found'], 404);
+                // return Inertia::render('components/errors/Error');
             }
 
         } catch (\Exception $e) {
-            return response()->json('You',404);
+            return response()->json(['error' => 'An error occurred while fetching the document'], 500);
         }
     }
 

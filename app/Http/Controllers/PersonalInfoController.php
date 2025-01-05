@@ -27,10 +27,8 @@ class PersonalInfoController extends Controller
             $validated = $request->validate($this->validationRules());
             $document = Document::where('document_id', $document_id)->firstOrFail();
 
-            // Créer les informations personnelles associées
             $document->personalInfo()->create($validated);
 
-            // Mettre à jour la miniature si elle est fournie
             if ($request->filled('thumbnail')) {
                 $document->thumbnail = $request->thumbnail;
                 $document->current_position=2;
@@ -51,14 +49,12 @@ class PersonalInfoController extends Controller
             $validated = $request->validate($this->validationRules());
             $document = Document::where('document_id', $document_id)->firstOrFail();
 
-            // Vérifiez si les informations personnelles existent avant de les mettre à jour
             if ($document->personalInfo) {
                 $document->personalInfo->update($validated);
             } else {
                 return redirect()->back()->with('error', 'Personal information not found.');
             }
 
-            // Mettre à jour la miniature si elle est fournie
             if ($request->filled('thumbnail')) {
                 $document->thumbnail = $request->thumbnail;
                 $document->current_position=2;

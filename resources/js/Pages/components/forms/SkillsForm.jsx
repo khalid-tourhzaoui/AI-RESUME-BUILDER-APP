@@ -81,7 +81,9 @@ const SkillsForm = ({ document, handleNext }) => {
                 try {
                     const thumbnail = await generateThumbnail();
                     setData({ skills: list, thumbnail });
-                    await Promise.all(list.map((exp) => skillSchema.validate(exp)));
+                    await Promise.all(
+                        list.map((exp) => skillSchema.validate(exp))
+                    );
                     setIsFormValid(true);
                 } catch (err) {
                     setIsFormValid(false);
@@ -313,7 +315,6 @@ const SkillsForm = ({ document, handleNext }) => {
                                         <Plus size="15px" />{" "}
                                         {t("Add_More_Skills")}
                                     </Button>
-                                    
                                 )}
                         </div>
                     ))}
@@ -326,7 +327,9 @@ const SkillsForm = ({ document, handleNext }) => {
                     {processing && (
                         <Loader size="15px" className="animate-spin" />
                     )}
-                    <><Send/> {t("Save_Changes")}</>
+                    <>
+                        <Send /> {t("Save_Changes")}
+                    </>
                 </Button>
             </form>
         </div>

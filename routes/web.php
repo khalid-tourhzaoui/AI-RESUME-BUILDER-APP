@@ -9,7 +9,6 @@ use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\PersonalInfoController;
 use App\Http\Controllers\EducationController;
-use App\Http\Controllers\SkillController;
 use App\Http\Controllers\ExperienceController;
 use App\Http\Controllers\ProfilDetailsController;
 use App\Models\Document;

@@ -78,7 +78,7 @@ function ExperiencePreview({ document, isLoading }) {
                                     </div>
                                 </div>
                                 <p
-                                    className="text-gray-500 exp-preview"
+                                    className="text-gray-500 exp-preview text-sm"
                                     dangerouslySetInnerHTML={{
                                         __html:
                                             item?.work_summary ||

@@ -119,5 +119,6 @@
     "delete_text":"Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.",
     "Delete_Account": "Delete Account",
     "Cancel": "Cancel",
-    "Are_you_sure_you_want_to_delete_your_account?": "Are you sure you want to delete your account?"
+    "Are_you_sure_you_want_to_delete_your_account?": "Are you sure you want to delete your account?",
+    "Enter_Name_of_skill": "Enter Name of skill"
 }
