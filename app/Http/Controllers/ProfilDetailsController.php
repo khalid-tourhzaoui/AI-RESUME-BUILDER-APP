@@ -239,28 +239,25 @@ private function updateEntity($request, $rules, $model, $document_id)
     //-----------------------------------------------------------------------------------------
     public function upload(Request $request, $document_id)
     {
+        // return $request->all()===>{"profile_image_name":"qr-code (1).png"}
+        // return $request->all();
         $document = Document::find($document_id);
 
         if (!$document) {
             return response()->json(['message' => 'Document not found'], 404);
         }
-        return $request->all();
 
-        // $request->validate([
-        //     'profile_image_name' => 'required|file|image|mimes:jpg,jpeg,png,bmp,gif,svg,webp|max:2048',
-        // ]);
+        $image = $request->profile_image_name;
+        $imageName = time() . '.' . $image->getClientOriginalExtension();
+        $image->move(public_path('uploads'), $imageName);
 
-        // $file = $request->file('profile_image_name');
-        // $imageName = time() . '_' . $file->getClientOriginalName();
-        // $file->move(public_path('uploads'), $imageName);
+        $document->img = 'uploads/' . $imageName;
+        $document->save();
 
-        // $document->img = 'uploads/' . $imageName;
-        // $document->save();
-
-        // return response()->json([
-        //     'message' => 'Image uploaded successfully',
-        //     'image_path' => asset($document->img),
-        // ]);
+        return response()->json([
+            'message' => 'Image uploaded successfully',
+            'image_path' => asset($document->img),
+        ]);
     }
 
     //-----------------------------------------------------------------------------------------

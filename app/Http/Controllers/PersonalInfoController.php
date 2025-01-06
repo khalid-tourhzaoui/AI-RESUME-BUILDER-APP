@@ -23,49 +23,51 @@ class PersonalInfoController extends Controller
 
     public function store(Request $request, $document_id)
     {
-        try {
-            $validated = $request->validate($this->validationRules());
-            $document = Document::where('document_id', $document_id)->firstOrFail();
+        return $request->all();
+        // try {
+        //     $validated = $request->validate($this->validationRules());
+        //     $document = Document::where('document_id', $document_id)->firstOrFail();
 
-            $document->personalInfo()->create($validated);
+        //     $document->personalInfo()->create($validated);
 
-            if ($request->filled('thumbnail')) {
-                $document->thumbnail = $request->thumbnail;
-                $document->current_position=2;
-                $document->save();
-            }
+        //     if ($request->filled('thumbnail')) {
+        //         $document->thumbnail = $request->thumbnail;
+        //         $document->current_position=2;
+        //         $document->save();
+        //     }
 
-            return redirect()->route('documents.edit', $document->document_id)
-                ->with('success', 'Personal information created successfully.');
-        } catch (\Exception $e) {
-            Log::error("Error storing personal info: " . $e->getMessage());
-            return redirect()->back()->with('error',$e->getMessage());
-        }
+        //     return redirect()->route('documents.edit', $document->document_id)
+        //         ->with('success', 'Personal information created successfully.');
+        // } catch (\Exception $e) {
+        //     Log::error("Error storing personal info: " . $e->getMessage());
+        //     return redirect()->back()->with('error',$e->getMessage());
+        // }
     }
 
     public function update(Request $request, $document_id)
     {
-        try {
-            $validated = $request->validate($this->validationRules());
-            $document = Document::where('document_id', $document_id)->firstOrFail();
+        return $request->all();
+        // try {
+        //     $validated = $request->validate($this->validationRules());
+        //     $document = Document::where('document_id', $document_id)->firstOrFail();
 
-            if ($document->personalInfo) {
-                $document->personalInfo->update($validated);
-            } else {
-                return redirect()->back()->with('error', 'Personal information not found.');
-            }
+        //     if ($document->personalInfo) {
+        //         $document->personalInfo->update($validated);
+        //     } else {
+        //         return redirect()->back()->with('error', 'Personal information not found.');
+        //     }
 
-            if ($request->filled('thumbnail')) {
-                $document->thumbnail = $request->thumbnail;
-                $document->current_position=2;
-                $document->save();
-            }
+        //     if ($request->filled('thumbnail')) {
+        //         $document->thumbnail = $request->thumbnail;
+        //         $document->current_position=2;
+        //         $document->save();
+        //     }
 
-            return redirect()->route('documents.edit', $document->document_id)
-                ->with('success', 'Personal information updated successfully.');
-        } catch (\Exception $e) {
-            Log::error("Error updating personal info: " . $e->getMessage());
-            return redirect()->back()->with('error', $e->getMessage());
-        }
+        //     return redirect()->route('documents.edit', $document->document_id)
+        //         ->with('success', 'Personal information updated successfully.');
+        // } catch (\Exception $e) {
+        //     Log::error("Error updating personal info: " . $e->getMessage());
+        //     return redirect()->back()->with('error', $e->getMessage());
+        // }
     }
 }

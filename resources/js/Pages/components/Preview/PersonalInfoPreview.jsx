@@ -1,5 +1,5 @@
 import { INITIAL_THEME_COLOR } from "@/lib/helper";
-import { Mail, MapPin, Phone, Trash2, Upload } from "lucide-react";
+import { Mail, MapPin, Phone, Save, Trash2, Upload } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { SocialIcon } from "react-social-icons";
 import "/node_modules/flag-icons/css/flag-icons.min.css";
@@ -87,7 +87,7 @@ function PersonalInfoPreview({ document }) {
                                     alt="Uploaded Preview"
                                     className="w-full h-full object-cover"
                                 />
-                                <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+                                <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-around">
                                     <button
                                         type="button"
                                         onClick={handleDeleteImage}
@@ -95,6 +95,13 @@ function PersonalInfoPreview({ document }) {
                                         title="Delete Image"
                                     >
                                         <Trash2 className="w-5 h-5 text-white" />
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="p-2 bg-blue-500 rounded-full hover:bg-blue-600 transition-colors duration-200"
+                                        title="Delete Image"
+                                    >
+                                        <Save className="w-5 h-5 text-white" />
                                     </button>
                                 </div>
                             </>
