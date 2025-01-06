@@ -18,7 +18,6 @@ class Document extends Model
         'summary',
         'theme_color',
         'thumbnail',
-        'img',
         'current_position',
         'status',
 

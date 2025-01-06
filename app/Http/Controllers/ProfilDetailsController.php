@@ -8,6 +8,8 @@ use App\Models\Document;
 use App\Models\SocialMedia;
 use App\Models\Skill;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+
 class ProfilDetailsController extends Controller
 {
     public function store(Request $request, $document_id)
@@ -239,26 +241,58 @@ private function updateEntity($request, $rules, $model, $document_id)
     //-----------------------------------------------------------------------------------------
     public function upload(Request $request, $document_id)
     {
-        // return $request->all()===>{"profile_image_name":"qr-code (1).png"}
-        // return $request->all();
-        $document = Document::find($document_id);
-
-        if (!$document) {
-            return response()->json(['message' => 'Document not found'], 404);
-        }
-
-        $image = $request->profile_image_name;
-        $imageName = time() . '.' . $image->getClientOriginalExtension();
-        $image->move(public_path('uploads'), $imageName);
-
-        $document->img = 'uploads/' . $imageName;
-        $document->save();
-
-        return response()->json([
-            'message' => 'Image uploaded successfully',
-            'image_path' => asset($document->img),
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
+
+        try {
+            $image = $request->file('image');
+
+            // Generate a clean, readable filename
+            $originalName = $image->getClientOriginalName();
+            $extension = $image->getClientOriginalExtension();
+            $cleanFileName = Str::slug(pathinfo($originalName, PATHINFO_FILENAME)) .
+                           '_' .
+                           time() .
+                           '.' .
+                           $extension;
+
+            // Store directly in the public disk's profile-images directory
+            // This will save to: storage/app/public/profile-images/filename.jpg
+            $path = $image->storeAs('profile-images', $cleanFileName, 'public');
+
+            // Get the public URL
+            $url = Storage::disk('public')->url($path);
+
+            $document=Document::find($document_id);
+            $document->personalInfo->img=$path;
+            $document->personalInfo->save();
+
+
+            return response()->json([
+                'success' => true,
+                'path' => $url,
+                'stored_path' => $path
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to upload image: ' . $e->getMessage()
+            ], 500);
+        }
     }
+
+    // Optional: Add a cleanup method to remove old images
+    private function cleanupOldImage($document_id)
+    {
+        // Get the document's current image path and delete it if it exists
+        $document = Document::find($document_id);
+        if ($document && $document->personalInfo->img) {
+            Storage::disk('public')->delete($document->personalInfo->img);
+        }
+    }
+
 
     //-----------------------------------------------------------------------------------------
     public function destroy(Request $request,$id)

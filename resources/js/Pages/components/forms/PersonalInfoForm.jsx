@@ -16,6 +16,7 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 import * as Yup from "yup";
 import { useTranslation } from "react-i18next";
 import { debounce } from "lodash";
+import { generateThumbnail } from "@/lib/helper";
 
 function PersonalInfoForm({ handleNext, document }) {
     const [personalInfo, setPersonalInfo] = useState({
@@ -73,6 +74,11 @@ function PersonalInfoForm({ handleNext, document }) {
                     return;
                 }
                 try {
+                    const thumbnail = await generateThumbnail();
+                    setPersonalInfo((prev) => ({
+                        ...prev,
+                        thumbnail,
+                    }));
                     await personalInfoSchema.validate(personalInfo, { abortEarly: false });
                     setErrors({});
                 } catch (err) {
