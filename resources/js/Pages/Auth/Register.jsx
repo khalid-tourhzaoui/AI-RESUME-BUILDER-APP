@@ -8,6 +8,7 @@ import { Head, Link, useForm } from "@inertiajs/react";
 import { Loader, User, Mail, EyeOff, Eye, Lock } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import logo from "../../assets/logo.png";
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -60,7 +61,7 @@ export default function Register() {
                 <div className="mb-1">
                     <h3 className="text-3xl font-extrabold">
                         <Link href="/">
-                            <ApplicationAiLogo className="h-20 w-40 fill-current text-gray-500 mx-auto" />
+                            <img src={logo} className="h-50 w-52 fill-current text-gray-500 mx-auto" />
                         </Link>
                     </h3>
                 </div>

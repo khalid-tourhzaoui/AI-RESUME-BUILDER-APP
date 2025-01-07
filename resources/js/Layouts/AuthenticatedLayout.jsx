@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, usePage } from "@inertiajs/react";
 import { LogOut, User } from "lucide-react";
 import { useState } from "react";
+import logo from "../assets/logo.png"
 export default function AuthenticatedLayout({ header, children }) {
     const user = usePage().props.auth.user;
     const [showingNavigationDropdown, setShowingNavigationDropdown] =useState(false);
@@ -22,11 +23,11 @@ export default function AuthenticatedLayout({ header, children }) {
         <div className="min-h-screen bg-gray-100">
             <nav className="border-b border-gray-100 bg-white">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div className="flex h-16 justify-between">
+                    <div className="flex h-20 justify-between">
                         <div className="flex">
                             <div className="flex shrink-0 items-center">
                                 <Link href="/">
-                                    <ApplicationAiLogo className="block h-9 w-auto fill-current text-gray-800" />
+                                    <img src={logo} className="block h-16 w-auto fill-current text-gray-800" />
                                 </Link>
                             </div>
 

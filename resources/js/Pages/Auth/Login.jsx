@@ -9,7 +9,7 @@ import { Eye, EyeOff, Loader, Mail } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import InputLabel from "@/Components/InputLabel";
-
+import logo from "../../assets/logo.png";
 export default function Login({ status, canResetPassword }) {
     const { data, setData, post, processing, errors, reset } = useForm({
         email: "",
@@ -39,7 +39,7 @@ export default function Login({ status, canResetPassword }) {
                 >
                     <div className="mb-5 text-center">
                         <Link href="/">
-                            <ApplicationAiLogo className="h-20 w-40 fill-current text-gray-500 mx-auto" />
+                            <img src={logo} className="h-50 w-52 fill-current text-gray-500 mx-auto" />
                         </Link>
                     </div>
                     {status && (

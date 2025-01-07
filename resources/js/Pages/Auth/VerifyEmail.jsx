@@ -4,6 +4,7 @@ import GuestLayout from "@/Layouts/GuestLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
 import { Loader } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import logo from "../../assets/logo.png";
 
 export default function VerifyEmail({ status }) {
     const { post, processing } = useForm({});
@@ -24,7 +25,7 @@ export default function VerifyEmail({ status }) {
                 >
                     <div className="mb-5 text-center">
                         <Link href="/">
-                            <ApplicationAiLogo className="h-20 w-40 fill-current text-gray-500 mx-auto" />
+                            <img src={logo} className="h-50 w-52 fill-current text-gray-500 mx-auto" />
                         </Link>
                     </div>
                     <div className="mb-4 text-sm text-gray-600">
