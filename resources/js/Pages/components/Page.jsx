@@ -25,7 +25,7 @@ function Page({ document }) {
       id: 2,
       title: t("Number_of_public_resumes"),
       description: t("Currently_active_resumes"),
-      count: document.filter((item) => item.status === "public").length,
+      count: document.filter((item) => item.status == "public").length,
       status: t("public"),
       icon: CheckCircle,
       backgroundColor: "bg-gradient-to-r from-green-500 to-green-700",
@@ -35,7 +35,7 @@ function Page({ document }) {
       id: 3,
       title: t("Number_of_private_resumes"),
       description: t("Resumes_marked_as_private"),
-      count: document.filter((item) => item.status === "private").length,
+      count: document.filter((item) => item.status == "private").length,
       status: t("private"),
       icon: Lock,
       backgroundColor: "bg-gradient-to-r from-yellow-500 to-yellow-700",
@@ -45,7 +45,7 @@ function Page({ document }) {
       id: 4,
       title: t("Number_of_archived_resumes"),
       description: t("Archived_resumes_for_later_use"),
-      count: document.filter((item) => item.status === "archived").length,
+      count: document.filter((item) => item.status == "archived").length,
       status: t("archived"),
       icon: Archive,
       backgroundColor: "bg-gradient-to-r from-purple-500 to-purple-700",
@@ -57,7 +57,7 @@ function Page({ document }) {
     ? document.filter((item) => item.status === filter)
     : document;
 
-  console.log(filteredDocuments);
+  console.log(filteredDocuments,filter);
 
   return (
     <div className="w-full mx-auto max-w-12xl">
