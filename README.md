@@ -1,66 +1,201 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# AI Resume Builder 📄
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+### ❤️ Support
+If you find this project helpful, please consider giving this repository a ⭐️ on GitHub, and don't forget to **like**, **share**, and **subscribe** to support our journey!
 
-## About Laravel
+## **Table of Contents**
+- [About the Project](#about-the-project)
+- [Features](#features)
+- [Components](#components)
+- [Technologies Used](#technologies-used)
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Usage Examples](#example-use-cases)
+- [Contact](#contact)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## About the Project
+Welcome to the **AI Resume Builder** repository! This innovative project combines Laravel and React Inertia to revolutionize the way resumes are created and managed. By leveraging AI capabilities, our platform offers intelligent suggestions and professional formatting while maintaining an intuitive user experience. Built with modern web technologies, this application streamlines the resume creation process for users worldwide.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🌟 Features
+- 🔐 **Authentication System**
+  - Social login integration (Google, GitHub, Facebook)
+  - Secure user authentication with Laravel Breeze
+  - Protected resume management
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- ➕ **Create Multiple Resumes**
+  - Start from scratch or use templates
+  - Import existing resumes
+  - Save multiple versions
 
-## Learning Laravel
+- ✏️ **Edit Resumes in Real-Time**
+  - Live preview while editing
+  - Auto-save functionality
+  - Collaborative editing support
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- 🎨 **Customizable Themes**
+  - Multiple color schemes
+  - Professional layout options
+  - Custom formatting settings
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- 📄 **Download Resumes in PDF Format**
+  - High-quality PDF export
+  - Multiple paper size options
+  - Custom header and footer options
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- 🗂️ **Manage Resumes with Folder Structure**
+  - Organize by categories
+  - Create custom folders
+  - Easy drag-and-drop organization
 
-## Laravel Sponsors
+- 🔗 **Share Resumes via Public Links**
+  - Generate shareable links
+  - Password protection option
+  - Expiry date setting
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- 🤖 **AI-Powered Resume Suggestions**
+  - Smart content recommendations
+  - Professional writing assistance
+  - Keyword optimization
 
-### Premium Partners
+- 🌐 **Multi-Language Support**
+  - English interface
+  - French interface
+  - Arabic interface
+  - Easy language switching
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+## Components
+- **User Authentication Module**
+  - Social login integration
+  - User profile management
+  - Session handling
 
-## Contributing
+- **Resume Builder Core**
+  - Template engine
+  - Section manager
+  - Real-time preview
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- **AI Integration**
+  - Content suggestion engine
+  - Writing assistant
+  - Format optimization
 
-## Code of Conduct
+- **File Management**
+  - PDF generation
+  - File storage
+  - Version control
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Technologies Used
+### Backend
+- Laravel 10
+- MySQL Database
+- Laravel Breeze
+- Inertia.js
 
-## Security Vulnerabilities
+### Frontend
+- React.js
+- TailwindCSS
+- Aceternity UI Pro
+- Font Awesome Icons
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Authentication
+- Laravel Breeze
+- Social OAuth (Google, GitHub, Facebook)
 
-## License
+## ⚙️ Installation
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+1. Clone the repository:
+```bash
+git clone https://github.com/khalid-tourhzaoui/AI-RESUME-BUILDER-APP.git
+cd AI-RESUME-BUILDER-APP
+```
+
+2. Install dependencies:
+```bash
+composer install
+npm install
+```
+
+3. Configure environment:
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+
+4. Set up database:
+```bash
+php artisan migrate
+```
+
+5. Start development servers:
+```bash
+php artisan serve
+npm run dev
+```
+
+## Usage
+### Example Use Cases
+1. **Creating a New Resume**
+   - Log in to your account
+   - Click "Create New Resume"
+   - Fill in your information
+   - Save and export
+
+2. **Editing Existing Resume**
+   - Access your dashboard
+   - Select the resume to edit
+   - Make changes in real-time
+   - Save automatically
+
+3. **Sharing Your Resume**
+   - Generate a public link
+   - Set privacy options
+   - Share with recruiters
+
+## 🔑 Environment Configuration
+```plaintext
+APP_NAME="AI Resume Builder"
+APP_URL=http://localhost:8000
+
+# Database
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=resume_builder
+DB_USERNAME=root
+DB_PASSWORD=
+
+# OAuth
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
+FACEBOOK_CLIENT_ID=
+FACEBOOK_CLIENT_SECRET=
+
+# AI Configuration
+AI_API_KEY=
+```
+
+## 🌐 Localization
+Support for multiple languages:
+
+```php
+// resources/lang/en/resume.php, fr/resume.php, ar/resume.php
+return [
+    'welcome' => 'Welcome to AI Resume Builder',
+    'create' => 'Create Resume',
+    // ... other translations
+];
+```
+
+## 🤝 Contributing
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## Contact
+- **Email:** [khalidtourhzaoui@gmail.com](mailto:khalidtourhzaoui@gmail.com)
+- **LinkedIn:** [LinkedIn Profile](https://www.linkedin.com/in/khalid-tourhzaoui/)
+- **My website:** [Contact me](https://khalid-tourhzaoui.vercel.app/contactme)
