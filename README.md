@@ -1,152 +1,148 @@
-# AI Resume Builder 📄
+# 📄 AI Resume Builder
 
 ### ❤️ Support
 If you find this project helpful, please consider giving this repository a ⭐️ on GitHub, and don't forget to **like**, **share**, and **subscribe** to support our journey!
 
-## **Table of Contents**
-- [About the Project](#about-the-project)
-- [Features](#features)
-- [Components](#components)
-- [Technologies Used](#technologies-used)
-- [Installation](#installation)
-- [Usage](#usage)
-  - [Usage Examples](#example-use-cases)
-- [Contact](#contact)
+## 📋 **Table of Contents**
+- [📌 About the Project](#about-the-project)
+- [🌟 Features](#features)
+- [🧩 Components](#components)
+- [💻 Technologies Used](#technologies-used)
+- [⚙️ Installation](#installation)
+- [📱 Usage](#usage)
+  - [💡 Usage Examples](#example-use-cases)
+- [📞 Contact](#contact)
 
-## About the Project
-Welcome to the **AI Resume Builder** repository! This innovative project combines Laravel and React Inertia to revolutionize the way resumes are created and managed. By leveraging AI capabilities, our platform offers intelligent suggestions and professional formatting while maintaining an intuitive user experience. Built with modern web technologies, this application streamlines the resume creation process for users worldwide.
+## 📌 About the Project
+Welcome to the **AI Resume Builder** repository! This innovative project combines Laravel and React Inertia to revolutionize the way resumes are created and managed. By leveraging AI capabilities, our platform offers intelligent suggestions and professional formatting while maintaining an intuitive user experience.
 
 ## 🌟 Features
 - 🔐 **Authentication System**
-  - Social login integration (Google, GitHub, Facebook)
-  - Secure user authentication with Laravel Breeze
-  - Protected resume management
+  - <i class="fab fa-google"></i> Google login integration
+  - <i class="fab fa-github"></i> GitHub login
+  - <i class="fab fa-facebook"></i> Facebook login
+  - <i class="fas fa-shield-alt"></i> Secure authentication
 
 - ➕ **Create Multiple Resumes**
-  - Start from scratch or use templates
-  - Import existing resumes
-  - Save multiple versions
+  - <i class="fas fa-file-alt"></i> Start from scratch
+  - <i class="fas fa-copy"></i> Use templates
+  - <i class="fas fa-save"></i> Save multiple versions
 
 - ✏️ **Edit Resumes in Real-Time**
-  - Live preview while editing
-  - Auto-save functionality
-  - Collaborative editing support
+  - <i class="fas fa-eye"></i> Live preview
+  - <i class="fas fa-cloud"></i> Auto-save
+  - <i class="fas fa-users"></i> Collaborative editing
 
 - 🎨 **Customizable Themes**
-  - Multiple color schemes
-  - Professional layout options
-  - Custom formatting settings
+  - <i class="fas fa-palette"></i> Color schemes
+  - <i class="fas fa-th"></i> Layout options
+  - <i class="fas fa-paint-brush"></i> Custom formatting
 
-- 📄 **Download Resumes in PDF Format**
-  - High-quality PDF export
-  - Multiple paper size options
-  - Custom header and footer options
+- 📄 **Download Options**
+  - <i class="fas fa-file-pdf"></i> PDF export
+  - <i class="fas fa-ruler-combined"></i> Multiple sizes
+  - <i class="fas fa-cog"></i> Custom settings
 
-- 🗂️ **Manage Resumes with Folder Structure**
-  - Organize by categories
-  - Create custom folders
-  - Easy drag-and-drop organization
+- 🗂️ **Folder Management**
+  - <i class="fas fa-folders"></i> Categories
+  - <i class="fas fa-folder-plus"></i> Custom folders
+  - <i class="fas fa-arrows-alt"></i> Drag-and-drop
 
-- 🔗 **Share Resumes via Public Links**
-  - Generate shareable links
-  - Password protection option
-  - Expiry date setting
+- 🔗 **Sharing Features**
+  - <i class="fas fa-link"></i> Public links
+  - <i class="fas fa-lock"></i> Password protection
+  - <i class="fas fa-clock"></i> Expiry settings
 
-- 🤖 **AI-Powered Resume Suggestions**
-  - Smart content recommendations
-  - Professional writing assistance
-  - Keyword optimization
+- 🌐 **Languages**
+  - <i class="fas fa-language"></i> English
+  - <i class="fas fa-language"></i> French
+  - <i class="fas fa-language"></i> Arabic
 
-- 🌐 **Multi-Language Support**
-  - English interface
-  - French interface
-  - Arabic interface
-  - Easy language switching
-
-## Components
-- **User Authentication Module**
+## 🧩 Components
+- <i class="fas fa-user-shield"></i> **User Authentication Module**
   - Social login integration
   - User profile management
   - Session handling
 
-- **Resume Builder Core**
+- <i class="fas fa-tools"></i> **Resume Builder Core**
   - Template engine
   - Section manager
   - Real-time preview
 
-- **AI Integration**
-  - Content suggestion engine
-  - Writing assistant
+- <i class="fas fa-robot"></i> **AI Integration**
+  - Content suggestions
+  - Writing assistance
   - Format optimization
 
-- **File Management**
+- <i class="fas fa-file-archive"></i> **File Management**
   - PDF generation
   - File storage
   - Version control
 
-## Technologies Used
-### Backend
-- Laravel 10
-- MySQL Database
-- Laravel Breeze
-- Inertia.js
+## 💻 Technologies Used
+### <i class="fas fa-server"></i> Backend
+- <i class="fab fa-laravel"></i> Laravel 10
+- <i class="fas fa-database"></i> MySQL
+- <i class="fas fa-shield-alt"></i> Laravel Breeze
+- <i class="fas fa-sync"></i> Inertia.js
 
-### Frontend
-- React.js
-- TailwindCSS
-- Aceternity UI Pro
-- Font Awesome Icons
+### <i class="fas fa-desktop"></i> Frontend
+- <i class="fab fa-react"></i> React.js
+- <i class="fab fa-css3"></i> TailwindCSS
+- <i class="fas fa-paint-brush"></i> Aceternity UI Pro
+- <i class="fab fa-font-awesome"></i> Font Awesome Icons
 
-### Authentication
-- Laravel Breeze
-- Social OAuth (Google, GitHub, Facebook)
+### <i class="fas fa-lock"></i> Authentication
+- <i class="fas fa-key"></i> Laravel Breeze
+- <i class="fas fa-users"></i> Social OAuth
 
 ## ⚙️ Installation
 
-1. Clone the repository:
+1. <i class="fas fa-download"></i> Clone the repository:
 ```bash
-git clone https://github.com/khalid-tourhzaoui/AI-RESUME-BUILDER-APP.git
-cd AI-RESUME-BUILDER-APP
+git clone https://github.com/yourusername/ai-resume-builder.git
+cd ai-resume-builder
 ```
 
-2. Install dependencies:
+2. <i class="fas fa-box-open"></i> Install dependencies:
 ```bash
 composer install
 npm install
 ```
 
-3. Configure environment:
+3. <i class="fas fa-cogs"></i> Configure environment:
 ```bash
 cp .env.example .env
 php artisan key:generate
 ```
 
-4. Set up database:
+4. <i class="fas fa-database"></i> Set up database:
 ```bash
 php artisan migrate
 ```
 
-5. Start development servers:
+5. <i class="fas fa-play"></i> Start development servers:
 ```bash
 php artisan serve
 npm run dev
 ```
 
-## Usage
-### Example Use Cases
-1. **Creating a New Resume**
+## 📱 Usage
+### 💡 Example Use Cases
+1. <i class="fas fa-file-plus"></i> **Creating a New Resume**
    - Log in to your account
    - Click "Create New Resume"
+   - Choose a template
    - Fill in your information
    - Save and export
 
-2. **Editing Existing Resume**
+2. <i class="fas fa-edit"></i> **Editing Existing Resume**
    - Access your dashboard
    - Select the resume to edit
    - Make changes in real-time
    - Save automatically
 
-3. **Sharing Your Resume**
+3. <i class="fas fa-share-alt"></i> **Sharing Your Resume**
    - Generate a public link
    - Set privacy options
    - Share with recruiters
@@ -189,13 +185,16 @@ return [
 ```
 
 ## 🤝 Contributing
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+1. <i class="fas fa-code-branch"></i> Fork the repository
+2. <i class="fas fa-code"></i> Create your feature branch
+3. <i class="fas fa-upload"></i> Commit your changes
+4. <i class="fas fa-push"></i> Push to the branch
+5. <i class="fas fa-check-circle"></i> Open a Pull Request
 
-## Contact
-- **Email:** [khalidtourhzaoui@gmail.com](mailto:khalidtourhzaoui@gmail.com)
-- **LinkedIn:** [LinkedIn Profile](https://www.linkedin.com/in/khalid-tourhzaoui/)
-- **My website:** [Contact me](https://khalid-tourhzaoui.vercel.app/contactme)
+## 📞 Contact
+- <i class="fas fa-envelope"></i> **Email:** [khalidtourhzaoui@gmail.com](mailto:khalidtourhzaoui@gmail.com)
+- <i class="fab fa-linkedin"></i> **LinkedIn:** [LinkedIn Profile](https://www.linkedin.com/in/khalid-tourhzaoui/)
+- <i class="fas fa-globe"></i> **My website:** [Contact me](https://khalid-tourhzaoui.vercel.app/contactme)
+
+## 📝 License
+<i class="fas fa-balance-scale"></i> This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
