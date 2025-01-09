@@ -143,7 +143,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                             method="post"
                                             as="button"
                                         >
-                                            <LogOut size="20px" className="inline-flex"/> Log Out
+                                            <LogOut size="20px" className="inline-flex"/> {t("Log_Out")}
                                         </Dropdown.Link>
                                     </Dropdown.Content>
                                 </Dropdown>
@@ -205,9 +205,10 @@ export default function AuthenticatedLayout({ header, children }) {
                             href={route("dashboard")}
                             active={route().current("dashboard")}
                         >
-                            Dashboard
+                            {t('dashboard')}
                         </ResponsiveNavLink>
                     </div>
+
 
                     <div className="border-t border-gray-200 pb-1 pt-4">
                         <div className="px-4">
@@ -221,15 +222,33 @@ export default function AuthenticatedLayout({ header, children }) {
 
                         <div className="mt-3 space-y-1">
                             <ResponsiveNavLink href={route("profile.edit")}>
-                                Profile
+                                {t("Profile")}
                             </ResponsiveNavLink>
                             <ResponsiveNavLink
                                 method="post"
                                 href={route("logout")}
                                 as="button"
                             >
-                                Log Out
+                                {t("Log_Out")}
                             </ResponsiveNavLink>
+                        </div>
+                        <div className="border-t border-gray-200 pt-1 mx-2">
+                            <div className="flex flex-col space-y-2">
+                                <button
+                                    onClick={() => handleLanguageChange('en')}
+                                    className="inline-flex items-center justify-center rounded-md border border-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-100"
+                                >
+                                    <span className="fi fi-us"></span>
+                                    <span className="ml-2">{t('english')}</span>
+                                </button>
+                                <button
+                                    onClick={() => handleLanguageChange('fr')}
+                                    className="inline-flex items-center justify-center rounded-md border border-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-100"
+                                >
+                                    <span className="fi fi-fr"></span>
+                                    <span className="ml-2">{t('frensh')}</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
