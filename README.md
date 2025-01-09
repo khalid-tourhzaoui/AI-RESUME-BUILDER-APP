@@ -195,6 +195,3 @@ return [
 - <i class="fas fa-envelope"></i> **Email:** [khalidtourhzaoui@gmail.com](mailto:khalidtourhzaoui@gmail.com)
 - <i class="fab fa-linkedin"></i> **LinkedIn:** [LinkedIn Profile](https://www.linkedin.com/in/khalid-tourhzaoui/)
 - <i class="fas fa-globe"></i> **My website:** [Contact me](https://khalid-tourhzaoui.vercel.app/contactme)
-
-## 📝 License
-<i class="fas fa-balance-scale"></i> This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
