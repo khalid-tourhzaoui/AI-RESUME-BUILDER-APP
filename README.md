@@ -100,8 +100,8 @@ Welcome to the **AI Resume Builder** repository! This innovative project combine
 
 1. <i class="fas fa-download"></i> Clone the repository:
 ```bash
-git clone https://github.com/yourusername/ai-resume-builder.git
-cd ai-resume-builder
+git clone https://github.com/khalid-tourhzaoui/AI-RESUME-BUILDER-APP.git
+cd AI-RESUME-BUILDER-APP
 ```
 
 2. <i class="fas fa-box-open"></i> Install dependencies:
