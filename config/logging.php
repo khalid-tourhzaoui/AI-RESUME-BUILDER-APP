@@ -6,7 +6,7 @@ use Monolog\Handler\SyslogUdpHandler;
 use Monolog\Processor\PsrLogMessageProcessor;
 
 return [
-
+    'api_token' => env('LOGGING_API_TOKEN', 'default-token-if-not-set'),
     /*
     |--------------------------------------------------------------------------
     | Default Log Channel
