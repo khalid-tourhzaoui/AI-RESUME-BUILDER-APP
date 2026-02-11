@@ -40,7 +40,6 @@ function EditResume() {
         <AuthenticatedLayout
             header={
                 <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
-                    {/* Composant InfiniteMovingCards */}
                     <div className="w-full">
                         <InfiniteMovingCards
                             items={colors}
@@ -54,29 +53,67 @@ function EditResume() {
         >
             <Head title="Update Resume" />
 
-            <div className="py-2">
-                <div className="mx-auto max-w-12xl sm:px-6 lg:px-8">
-                    <div
-                        className="overflow-hidden shadow-sm sm:rounded-lg p-5 border-black border-4
-                        bg-[url('https://c4.wallpaperflare.com/wallpaper/332/110/571/polygon-material-design-abstract-3d-wallpaper-preview.jpg')]"
-                    >
-                        <div className="relative z-10 w-full">
-                            <div className="w-full mx-auto max-w-12xl">
+            <div className="py-2 sm:py-4 md:py-6 lg:py-8">
+                <div className="mx-auto max-w-screen-2xl px-3 sm:px-6 lg:px-8">
+                    <div className="relative overflow-hidden rounded-xl sm:rounded-2xl md:rounded-3xl border-4 sm:border-6 md:border-8 border-zinc-800 shadow-[rgba(0,0,0,0.9)_0px_8px_0px_0px] sm:shadow-[rgba(0,0,0,0.9)_0px_12px_0px_0px] md:shadow-[rgba(0,0,0,0.9)_0px_16px_0px_0px]">
+                        {/* Background with gradient overlay */}
+                        <div
+                            className="absolute inset-0 bg-cover bg-center opacity-30"
+                            style={{
+                                backgroundImage: "url('https://c4.wallpaperflare.com/wallpaper/332/110/571/polygon-material-design-abstract-3d-wallpaper-preview.jpg')"
+                            }}
+                        />
+                        <div
+                            className="absolute inset-0"
+                            style={{
+                                background: "linear-gradient(135deg, rgba(16, 185, 129, 0.95) 0%, rgba(5, 150, 105, 0.95) 50%, rgba(4, 120, 87, 0.95) 100%)"
+                            }}
+                        />
+
+                        {/* Decorative blobs */}
+                        <div
+                            className="absolute w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 opacity-20 blur-3xl rounded-full -left-12 -top-12 sm:-left-16 sm:-top-16"
+                            style={{
+                                background: "radial-gradient(closest-side, rgb(255, 206, 0), rgba(0, 0, 0, 0))"
+                            }}
+                        />
+                        <div
+                            className="absolute w-56 h-56 sm:w-72 sm:h-72 md:w-96 md:h-96 lg:w-[448px] lg:h-[448px] opacity-20 blur-3xl rounded-full -right-12 -bottom-12 sm:-right-16 sm:-bottom-16"
+                            style={{
+                                background: "radial-gradient(closest-side, rgb(255, 126, 0), rgba(0, 0, 0, 0))"
+                            }}
+                        />
+
+                        {/* Content */}
+                        <div className="relative z-10 p-3 sm:p-4 md:p-6 lg:p-8 xl:p-10">
+                            <div className="w-full mx-auto max-w-screen-2xl">
                                 <TopSection
                                     document={document}
                                     locale={locale}
                                     translations={translations}
                                 />
-                                <div className="w-full mt-1">
-                                    <div className="flex flex-col lg:flex-row items-start w-full py-3 gap-10">
-                                        {/* {Form Section} */}
-                                        <ResumeForm document={document} />
-                                        {/* {Preview Section} */}
-                                        <ResumePreview document={document} />
+                                <div className="w-full mt-4 sm:mt-6 md:mt-8">
+                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8 lg:gap-10">
+                                        {/* Form Section */}
+                                        <div className="w-full">
+                                            <ResumeForm document={document} />
+                                        </div>
+                                        {/* Preview Section */}
+                                        <div className="w-full">
+                                            <ResumePreview document={document} />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+                        {/* Scan line effect */}
+                        <div
+                            className="absolute inset-0 pointer-events-none"
+                            style={{
+                                backgroundImage: 'repeating-linear-gradient(0deg, rgba(0,0,0,0.03) 0px, rgba(0,0,0,0.03) 2px, transparent 2px, transparent 4px)'
+                            }}
+                        />
                     </div>
                 </div>
             </div>
