@@ -2,7 +2,6 @@ import React, { useMemo } from "react";
 import { format } from "date-fns";
 import { Archive, FileText, Globe, Lock, Trash } from "lucide-react";
 import { Link } from "@inertiajs/react";
-import styled from "styled-components";
 
 function Card({
     title,
@@ -18,266 +17,152 @@ function Card({
         return formattedDate;
     }, [updatedAt]);
 
+    const getStatusConfig = () => {
+        switch (status) {
+            case "private":
+                return { icon: Lock, label: "Private", color: "text-orange" };
+            case "public":
+                return { icon: Globe, label: "Public", color: "text-orange" };
+            default:
+                return { icon: Archive, label: "Archive", color: "text-orange" };
+        }
+    };
+
+    const statusConfig = getStatusConfig();
+    const StatusIcon = statusConfig.icon;
+
     return (
-        <StyledWrapper>
-            <div className="card">
-                <button className="mail">
-                    {status === "private" ? (
-                        <>
-                            <Lock size="20px" className="inline-flex" /> Private
-                        </>
-                    ) : status === "public" ? (
-                        <>
-                            <Globe size="20px" className="inline-flex" /> Public
-                        </>
-                    ) : (
-                        <>
-                            <Archive size="20px" className="inline-flex" /> Archive
-                        </>
-                    )}
+        <div className="w-[280px] sm:w-[300px] md:w-[320px] mx-auto px-2 sm:px-4 md:px-5 animate-fade-in">
+            <div className="group relative w-full h-[230px] sm:h-[250px] bg-white rounded-[32px] p-[3px] shadow-card-hover transition-all duration-500 ease-smooth hover:rounded-tl-[55px]">
+                {/* Status Badge */}
+                <button className="absolute right-6 sm:right-8 top-5 sm:top-6 z-10 bg-transparent border-none flex items-center gap-1.5 text-orange transition-all duration-300 hover:text-orange-hover">
+                    <StatusIcon className="w-5 h-5 stroke-[3px]" />
+                    <span className="hidden sm:inline text-sm font-semibold">{statusConfig.label}</span>
                 </button>
-                <div className="profile-pic">
-                    {thumbnail ? (
-                        <img
-                            src={thumbnail}
-                            alt={title}
-                            className="w-full h-full object-cover rounded-t-lg"
-                        />
-                    ) : (
-                        <FileText size="15px" />
-                    )}
-                </div>
-                <div className="bottom">
-                    <div className="content">
-                        <span className="name">{title}</span>
-                        <span className="about-me">Last Update: {docDate}</span>
+
+                {/* Profile Picture / Thumbnail */}
+                <div className="absolute w-[calc(100%-6px)] h-[calc(100%-6px)] top-[3px] left-[3px] rounded-[29px] z-[1] border-0 overflow-hidden transition-all duration-500 ease-smooth delay-200 group-hover:w-[100px] group-hover:h-[100px] group-hover:top-[10px] group-hover:left-[10px] group-hover:rounded-full group-hover:z-[3] group-hover:border-[7px] group-hover:border-orange group-hover:shadow-card-inset group-hover:delay-100">
+                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-50 to-orange-100 group-hover:bg-orange-100">
+                        {thumbnail ? (
+                            <img
+                                src={thumbnail}
+                                alt={title}
+                                className="w-full h-full object-cover object-center transition-all duration-500 ease-smooth group-hover:scale-[2.5] group-hover:object-[0px_25px] group-hover:delay-500"
+                            />
+                        ) : (
+                            <FileText className="w-[60%] h-[80%] text-orange-400 transition-all duration-500 ease-smooth group-hover:scale-[2.5] group-hover:delay-500" />
+                        )}
                     </div>
-                    <div className="bottom-bottom">
-                        <div className="social-links-container">
-                            {status === "private" ? (
+
+                    {/* Hover effect on profile pic */}
+                    <div className="absolute inset-0 hover:scale-[1.3] hover:rounded-none transition-transform duration-300"></div>
+                </div>
+
+                {/* Bottom Content Section */}
+                <div className="absolute bottom-[-3px] left-[3px] right-[3px] top-[80%] bg-orange rounded-[29px] z-[2] shadow-card-inset overflow-hidden transition-all duration-500 ease-smooth group-hover:top-[20%] group-hover:rounded-tl-[80px] group-hover:rounded-tr-[29px] group-hover:rounded-bl-[29px] group-hover:rounded-br-[29px] group-hover:delay-200">
+                    {/* Content */}
+                    <div className="absolute bottom-0 left-6 right-6 h-[160px] flex flex-col justify-end pb-12 sm:pb-14">
+                        <span className="block text-base sm:text-lg md:text-xl text-white mt-11 font-bold leading-tight line-clamp-2">
+                            {title}
+                        </span>
+                        <span className="block text-sm sm:text-base text-white/90 mt-1">
+                            Last Update: {docDate}
+                        </span>
+                    </div>
+
+                    {/* Bottom Actions */}
+                    <div className="absolute bottom-2 left-6 right-6 flex items-center justify-between">
+                        {/* Social Links / Action Icons */}
+                        <div className="flex gap-3 sm:gap-4">
+                            {status === "private" && (
                                 <>
-                                    <Link method="delete" href={route("documents.delete", id)}>
-                                        <Trash size="20px" className="inline-flex" />
+                                    <Link
+                                        method="delete"
+                                        href={route("documents.delete", id)}
+                                        className="group/icon"
+                                    >
+                                        <Trash className="h-5 w-5 fill-white drop-shadow-md transition-all duration-300 group-hover/icon:fill-orange-hover group-hover/icon:scale-110" />
                                     </Link>
-                                    <Link method="get" href={route("documents.updateStatus", { id, status: 'public' })}>
-                                        <Globe size="20px" className="inline-flex" />
+                                    <Link
+                                        method="get"
+                                        href={route("documents.updateStatus", { id, status: 'public' })}
+                                        className="group/icon"
+                                    >
+                                        <Globe className="h-5 w-5 fill-white drop-shadow-md transition-all duration-300 group-hover/icon:fill-orange-hover group-hover/icon:scale-110" />
                                     </Link>
-                                    <Link method="get" href={route("documents.updateStatus", { id, status: 'archived' })}>
-                                        <Archive size="20px" className="inline-flex" />
+                                    <Link
+                                        method="get"
+                                        href={route("documents.updateStatus", { id, status: 'archived' })}
+                                        className="group/icon"
+                                    >
+                                        <Archive className="h-5 w-5 fill-white drop-shadow-md transition-all duration-300 group-hover/icon:fill-orange-hover group-hover/icon:scale-110" />
                                     </Link>
                                 </>
-                            ) : status === "public" ? (
+                            )}
+                            {status === "public" && (
                                 <>
-                                    <Link method="delete" href={route("documents.delete", id)}>
-                                        <Trash size="20px" className="inline-flex" />
+                                    <Link
+                                        method="delete"
+                                        href={route("documents.delete", id)}
+                                        className="group/icon"
+                                    >
+                                        <Trash className="h-5 w-5 fill-white drop-shadow-md transition-all duration-300 group-hover/icon:fill-orange-hover group-hover/icon:scale-110" />
                                     </Link>
-                                    <Link method="get">
-                                        <Lock size="20px" className="inline-flex" />
+                                    <Link
+                                        method="get"
+                                        href={route("documents.updateStatus", { id, status: 'private' })}
+                                        className="group/icon"
+                                    >
+                                        <Lock className="h-5 w-5 fill-white drop-shadow-md transition-all duration-300 group-hover/icon:fill-orange-hover group-hover/icon:scale-110" />
                                     </Link>
-                                    <Link method="get" href={route("documents.updateStatus", { id, status: 'archived' })}>
-                                        <Archive size="20px" className="inline-flex" />
+                                    <Link
+                                        method="get"
+                                        href={route("documents.updateStatus", { id, status: 'archived' })}
+                                        className="group/icon"
+                                    >
+                                        <Archive className="h-5 w-5 fill-white drop-shadow-md transition-all duration-300 group-hover/icon:fill-orange-hover group-hover/icon:scale-110" />
                                     </Link>
                                 </>
-                            ) : (
+                            )}
+                            {status === "archived" && (
                                 <>
-                                    <Link method="delete" href={route("documents.delete", id)}>
-                                        <Trash size="20px" className="inline-flex" />
+                                    <Link
+                                        method="delete"
+                                        href={route("documents.delete", id)}
+                                        className="group/icon"
+                                    >
+                                        <Trash className="h-5 w-5 fill-white drop-shadow-md transition-all duration-300 group-hover/icon:fill-orange-hover group-hover/icon:scale-110" />
                                     </Link>
-                                    <Link method="get" href={route("documents.updateStatus", { id, status: 'public' })}>
-                                        <Globe size="20px" className="inline-flex" />
+                                    <Link
+                                        method="get"
+                                        href={route("documents.updateStatus", { id, status: 'public' })}
+                                        className="group/icon"
+                                    >
+                                        <Globe className="h-5 w-5 fill-white drop-shadow-md transition-all duration-300 group-hover/icon:fill-orange-hover group-hover/icon:scale-110" />
                                     </Link>
-                                    <Link method="get" href={route("documents.updateStatus", { id, status: 'private' })}>
-                                        <Lock size="20px" className="inline-flex" />
+                                    <Link
+                                        method="get"
+                                        href={route("documents.updateStatus", { id, status: 'private' })}
+                                        className="group/icon"
+                                    >
+                                        <Lock className="h-5 w-5 fill-white drop-shadow-md transition-all duration-300 group-hover/icon:fill-orange-hover group-hover/icon:scale-110" />
                                     </Link>
                                 </>
                             )}
                         </div>
-                        <Link href={route("documents.edit", documentId)} className="button">
+
+                        {/* Edit Button */}
+                        <Link
+                            href={route("documents.edit", documentId)}
+                            className="bg-white text-orange border-none rounded-full text-sm sm:text-base font-semibold px-2.5 py-1.5 sm:px-3 sm:py-2 shadow-md transition-all duration-300 hover:bg-orange-50 hover:scale-105 active:scale-95"
+                        >
                             Edit Me
                         </Link>
                     </div>
                 </div>
             </div>
-        </StyledWrapper>
+        </div>
     );
 }
-
-const StyledWrapper = styled.div`
-    .card {
-        width: 280px;
-        height: 230px;
-        background: white;
-        border-radius: 32px;
-        padding: 3px;
-        position: relative;
-        left: -0.5rem;
-        margin: 0 1.2rem;
-        box-shadow: #604b4a30 0px 70px 30px -50px;
-        transition: all 0.5s ease-in-out;
-    }
-
-    .card .mail {
-        position: absolute;
-        right: 2rem;
-        top: 1.4rem;
-        background: transparent;
-        border: none;
-    }
-
-    .card .mail svg {
-        stroke: #f68c09;
-        stroke-width: 3px;
-    }
-
-    .card .mail svg:hover {
-        stroke: #f55d56;
-    }
-
-    .card .profile-pic {
-        position: absolute;
-        width: calc(100% - 6px);
-        height: calc(100% - 6px);
-        top: 3px;
-        left: 3px;
-        border-radius: 29px;
-        z-index: 1;
-        border: 0px solid;
-        overflow: hidden;
-        transition: all 0.5s ease-in-out 0.2s, z-index 0.5s ease-in-out 0.2s;
-    }
-
-    .card .profile-pic img {
-        -o-object-fit: cover;
-        object-fit: cover;
-        width: 100%;
-        height: 100%;
-        -o-object-position: 0px 0px;
-        object-position: 0px 0px;
-        transition: all 0.5s ease-in-out 0s;
-    }
-
-    .card .profile-pic svg {
-        width: 60%;
-        height: 80%;
-        -o-object-fit: cover;
-        object-fit: cover;
-        -o-object-position: 0px 0px;
-        object-position: 0px 0px;
-        transform-origin: 45% 20%;
-        transition: all 0.5s ease-in-out 0s;
-    }
-
-    .card .bottom {
-        position: absolute;
-        bottom: -3px;
-        left: 3px;
-        right: 3px;
-        background: #f68c09;
-        top: 80%;
-        border-radius: 29px;
-        z-index: 2;
-        box-shadow: rgba(96, 75, 74, 0.1882352941) 0px 5px 5px 0px inset;
-        overflow: hidden;
-        transition: all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1) 0s;
-    }
-
-    .card .bottom .content {
-        position: absolute;
-        bottom: 0;
-        left: 1.5rem;
-        right: 1.5rem;
-        height: 160px;
-    }
-
-    .card .bottom .content .name {
-        display: block;
-        font-size: 1.2rem;
-        color: white;
-        margin-top: 2.7rem;
-        font-weight: bold;
-    }
-
-    .card .bottom .content .about-me {
-        display: block;
-        font-size: 0.9rem;
-        color: white;
-    }
-
-    .card .bottom .bottom-bottom {
-        position: absolute;
-        bottom: 0.5rem;
-        left: 1.5rem;
-        right: 1.5rem;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .card .bottom .bottom-bottom .social-links-container {
-        display: flex;
-        gap: 1rem;
-    }
-
-    .card .bottom .bottom-bottom .social-links-container svg {
-        height: 20px;
-        fill: white;
-        filter: drop-shadow(0 5px 5px rgba(165, 132, 130, 0.1333333333));
-    }
-
-    .card .bottom .bottom-bottom .social-links-container svg:hover {
-        fill: #f55d56;
-        transform: scale(1.2);
-    }
-
-    .card .bottom .bottom-bottom .button {
-        background: white;
-        color: #f68c09;
-        border: none;
-        border-radius: 20px;
-        font-size: 1rem;
-        padding: 0.4rem 0.6rem;
-        box-shadow: rgba(165, 132, 130, 0.1333333333) 0px 5px 5px 0px;
-    }
-
-    .card:hover {
-        border-top-left-radius: 55px;
-    }
-
-    .card:hover .bottom {
-        top: 20%;
-        border-radius: 80px 29px 29px 29px;
-        transition: all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1) 0.2s;
-    }
-
-    .card:hover .profile-pic {
-        width: 100px;
-        height: 100px;
-        aspect-ratio: 1;
-        top: 10px;
-        left: 10px;
-        border-radius: 50%;
-        z-index: 3;
-        border: 7px solid #f68c09;
-        box-shadow: rgba(96, 75, 74, 0.1882352941) 0px 5px 5px 0px;
-        transition: all 0.5s ease-in-out, z-index 0.5s ease-in-out 0.1s;
-    }
-
-    .card:hover .profile-pic:hover {
-        transform: scale(1.3);
-        border-radius: 0px;
-    }
-
-    .card:hover .profile-pic img {
-        transform: scale(2.5);
-        -o-object-position: 0px 25px;
-        object-position: 0px 25px;
-        transition: all 0.5s ease-in-out 0.5s;
-    }
-
-    .card:hover .profile-pic svg {
-        transform: scale(2.5);
-        transition: all 0.5s ease-in-out 0.5s;
-    }
-`;
 
 export default Card;
