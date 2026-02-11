@@ -5,12 +5,12 @@ import Checkbox from "@/Components/Checkbox";
 import PrimaryButton from "@/Components/PrimaryButton";
 import GuestLayout from "@/Layouts/GuestLayout";
 import { Head, Link, useForm, usePage } from "@inertiajs/react";
-import { Eye, EyeOff, Loader, Mail, Lock, LogIn, UserPlus, FileText, Sparkles, CheckCircle, Zap } from "lucide-react";
+import { Eye, EyeOff, Loader, Mail, Lock, LogIn, UserPlus } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import InputLabel from "@/Components/InputLabel";
 import logo from "../../assets/logo.png";
-
+import logoLogin from "../../assets/LoginImage.png";
 export default function Login({ status, canResetPassword }) {
     const user = usePage().props.auth.user;
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -148,7 +148,7 @@ export default function Login({ status, canResetPassword }) {
                                     {canResetPassword && (
                                         <Link
                                             href={route("password.request")}
-                                            className="text-xs font-black text-blue-600 hover:text-blue-800 uppercase tracking-wide transition-colors hover:underline whitespace-nowrap"
+                                            className="text-xs font-black text-zinc-700 hover:text-blue-800 uppercase tracking-wide transition-colors hover:underline whitespace-nowrap"
                                         >
                                             Mot de passe oublié?
                                         </Link>
@@ -181,7 +181,7 @@ export default function Login({ status, canResetPassword }) {
                                     </p>
                                     <Link
                                         href={route("register")}
-                                        className="font-black text-blue-600 hover:text-blue-800 text-xs uppercase tracking-wide transition-colors hover:underline inline-flex items-center gap-1 whitespace-nowrap"
+                                        className="font-black text-zinc-700 hover:text-blue-800 text-xs uppercase tracking-wide transition-colors hover:underline inline-flex items-center gap-1 whitespace-nowrap"
                                     >
                                         <UserPlus className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                                         <span>INSCRIVEZ-VOUS</span>
@@ -306,69 +306,20 @@ export default function Login({ status, canResetPassword }) {
                         )}
                     </div>
 
-                    {/* RIGHT SIDE - Illustration */}
-                    <div className="hidden lg:flex bg-gradient-to-br from-orange-400 to-orange-500 p-6 lg:p-8 flex-col items-center justify-center relative overflow-hidden border-l-[6px] border-zinc-800">
-                        {/* Decorative Pattern */}
-                        <div
-                            className="absolute inset-0 opacity-10"
-                            style={{
-                                backgroundImage: "repeating-linear-gradient(45deg, rgba(0,0,0,0.5) 0px, rgba(0,0,0,0) 2px, rgba(0,0,0,0) 10px)",
-                            }}
-                        />
-
-                        {/* Content */}
-                        <div className="relative z-10 text-center text-white space-y-4 lg:space-y-6">
-                            <div className="flex items-center justify-center gap-2 mb-3 lg:mb-4">
-                                <Sparkles className="w-6 h-6 lg:w-8 lg:h-8" strokeWidth={2.5} />
-                                <h2
-                                    className="text-3xl lg:text-4xl font-extrabold uppercase tracking-tight"
-                                    style={{
-                                        textShadow: "3px 3px 0px rgba(0,0,0,0.3)",
-                                    }}
-                                >
-                                    AI RESUME
-                                </h2>
-                                <Sparkles className="w-6 h-6 lg:w-8 lg:h-8" strokeWidth={2.5} />
-                            </div>
-
-                            {/* Illustration */}
-                            <div className="flex items-center justify-center mb-4 lg:mb-6">
-                                <div className="relative w-40 h-40 lg:w-48 lg:h-48">
-                                    <div className="absolute inset-0 bg-white rounded-2xl border-4 border-zinc-800 shadow-[6px_6px_0px_0px_rgba(0,0,0,0.3)] p-5 lg:p-6 flex flex-col items-center justify-center">
-                                        <FileText className="w-20 h-20 lg:w-24 lg:h-24 text-orange-500 mb-2 lg:mb-3" strokeWidth={1.5} />
-                                        <div className="w-full space-y-1 lg:space-y-1.5">
-                                            <div className="h-1.5 lg:h-2 bg-orange-200 rounded-full"></div>
-                                            <div className="h-1.5 lg:h-2 bg-orange-300 rounded-full w-4/5"></div>
-                                            <div className="h-1.5 lg:h-2 bg-orange-200 rounded-full w-3/5"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Features */}
-                            <div className="space-y-2.5 lg:space-y-3 text-left max-w-xs mx-auto">
-                                <div className="flex items-start gap-2 lg:gap-2.5 bg-white/20 p-2.5 lg:p-3 rounded-xl border-2 border-white/30 backdrop-blur-sm">
-                                    <CheckCircle className="w-4 h-4 lg:w-5 lg:h-5 flex-shrink-0 mt-0.5" strokeWidth={2.5} />
-                                    <div>
-                                        <h3 className="font-black text-xs uppercase">AI-POWERED</h3>
-                                        <p className="text-xs font-medium text-white/90">Smart suggestions for your resume</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-start gap-2 lg:gap-2.5 bg-white/20 p-2.5 lg:p-3 rounded-xl border-2 border-white/30 backdrop-blur-sm">
-                                    <Zap className="w-4 h-4 lg:w-5 lg:h-5 flex-shrink-0 mt-0.5" strokeWidth={2.5} />
-                                    <div>
-                                        <h3 className="font-black text-xs uppercase">LIGHTNING FAST</h3>
-                                        <p className="text-xs font-medium text-white/90">Create resumes in minutes</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-start gap-2 lg:gap-2.5 bg-white/20 p-2.5 lg:p-3 rounded-xl border-2 border-white/30 backdrop-blur-sm">
-                                    <FileText className="w-4 h-4 lg:w-5 lg:h-5 flex-shrink-0 mt-0.5" strokeWidth={2.5} />
-                                    <div>
-                                        <h3 className="font-black text-xs uppercase">PROFESSIONAL</h3>
-                                        <p className="text-xs font-medium text-white/90">ATS-friendly templates</p>
-                                    </div>
-                                </div>
-                            </div>
+                    {/* RIGHT SIDE - Image générée */}
+                    <div className="hidden lg:flex bg-gradient-to-br from-orange-400 to-orange-500 p-0 flex-col items-center justify-center relative overflow-hidden border-l-[6px] border-zinc-800">
+                        {/* Image générée en plein écran */}
+                        <div className="relative z-10 w-full h-full flex items-center justify-center">
+                            <img
+                                src={logoLogin}
+                                alt="AI Resume Builder - Login Illustration"
+                                className="w-full h-full object-cover"
+                                onError={(e) => {
+                                    // Fallback si l'image n'existe pas encore
+                                    e.target.style.display = 'none';
+                                    e.target.parentElement.innerHTML = '<div class="text-white text-center p-8"><p class="text-2xl font-black uppercase mb-4">AI Resume Builder</p><p class="text-sm">Placez votre image générée dans:<br/><code class="bg-white/20 px-2 py-1 rounded">public/images/login-illustration.png</code></p></div>';
+                                }}
+                            />
                         </div>
                     </div>
                 </div>

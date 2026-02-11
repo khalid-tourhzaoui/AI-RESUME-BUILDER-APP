@@ -4,20 +4,20 @@ import NavLink from "@/Components/NavLink";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { useTranslation } from 'react-i18next';
 import { Link, usePage } from "@inertiajs/react";
-import { LogOut, User } from "lucide-react";
+import { LogOut, User, Menu, X } from "lucide-react";
 import { useState } from "react";
 import logo from "../assets/logo.png"
+
 export default function AuthenticatedLayout({ header, children }) {
     const user = usePage().props.auth.user;
-    const [showingNavigationDropdown, setShowingNavigationDropdown] =useState(false);
+    const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
-    const { i18n,t } = useTranslation();
+    const { i18n, t } = useTranslation();
 
     const handleLanguageChange = (language) => {
         i18n.changeLanguage(language);
         localStorage.setItem('language', language);
     };
-
 
     return (
         <div className="min-h-screen bg-gray-100">
@@ -42,17 +42,14 @@ export default function AuthenticatedLayout({ header, children }) {
                         </div>
 
                         <div className="hidden sm:ms-6 sm:flex sm:items-center">
-                            {/* <LangToggle locale={locale} /> */}
-                            {/* --------------------------------------------- */}
+                            {/* Language Dropdown */}
                             <div className="relative ms-3">
                                 <Dropdown>
                                     <Dropdown.Trigger>
                                         <span className="inline-flex rounded-md">
                                             <button
                                                 type="button"
-                                                className="inline-flex items-center rounded-md border border-transparent bg-black
-                                                 px-3 py-[6px] text-md font-medium leading-4 text-[#f68c09] transition duration-150
-                                                  ease-in-out hover:text-white hover:bg-[#f68c09] focus:outline-none"
+                                                className="inline-flex items-center rounded-lg border-2 border-zinc-800 bg-white px-4 py-2 text-sm font-bold leading-4 text-zinc-800 transition duration-150 ease-in-out hover:bg-orange-50 hover:border-orange-500 focus:outline-none shadow-[rgba(0,0,0,0.9)_2px_3px_0px_0px] hover:shadow-[rgba(0,0,0,0.9)_3px_4px_0px_0px] hover:scale-105"
                                             >
                                                 <svg
                                                     xmlns="http://www.w3.org/2000/svg"
@@ -103,16 +100,15 @@ export default function AuthenticatedLayout({ header, children }) {
                                     </Dropdown.Content>
                                 </Dropdown>
                             </div>
-                            {/* --------------------------------------------- */}
+
+                            {/* User Dropdown */}
                             <div className="relative ms-3">
                                 <Dropdown>
                                     <Dropdown.Trigger>
                                         <span className="inline-flex rounded-md">
                                             <button
                                                 type="button"
-                                                className="inline-flex items-center rounded-md border border-transparent bg-black
-                                                 px-3 py-[9px] text-md font-medium leading-4 text-[#f68c09] transition duration-150
-                                                  ease-in-out hover:text-white hover:bg-[#f68c09] focus:outline-none"
+                                                className="inline-flex items-center rounded-lg border-2 border-zinc-800 bg-orange-500 px-4 py-2 text-sm font-bold leading-4 text-white transition duration-150 ease-in-out hover:bg-orange-600 focus:outline-none shadow-[rgba(0,0,0,0.9)_3px_4px_0px_0px] hover:shadow-[rgba(0,0,0,0.9)_4px_5px_0px_0px] hover:scale-105"
                                             >
                                                 {user.name}
 

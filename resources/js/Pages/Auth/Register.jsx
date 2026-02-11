@@ -5,11 +5,11 @@ import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
 import GuestLayout from "@/Layouts/GuestLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
-import { Loader, User, Mail, EyeOff, Eye, Lock, UserPlus, FileText, Sparkles, CheckCircle, Zap, Shield } from "lucide-react";
+import { Loader, User, Mail, EyeOff, Eye, Lock, UserPlus, Shield } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import logo from "../../assets/logo.png";
-
+import RegisterImage from "../../assets/RegisterImage.png";
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({
         name: "",
@@ -201,31 +201,6 @@ export default function Register() {
                                 <InputError message={errors.password_confirmation} className="mt-1 font-bold text-xs" />
                             </div>
 
-                            {/* Conditions de mot de passe - Optionnel, décommenté si nécessaire */}
-                            {/* <div className="bg-orange-50 p-2.5 sm:p-3 rounded-lg border-[2px] border-zinc-800">
-                                <p className="text-xs font-black uppercase text-zinc-700 mb-1.5 sm:mb-2">
-                                    {t("Votre_mot_de_passe_doit_respecter_les_conditions_suivantes")} :
-                                </p>
-                                <ul className="space-y-1">
-                                    <li className={`text-xs font-bold flex items-center gap-1.5 ${passwordConditions.minLength ? "text-green-600" : "text-red-600"}`}>
-                                        <span className={`w-1.5 h-1.5 rounded-full ${passwordConditions.minLength ? "bg-green-600" : "bg-red-600"}`}></span>
-                                        {t("Au_moins_8_caractères")}
-                                    </li>
-                                    <li className={`text-xs font-bold flex items-center gap-1.5 ${passwordConditions.hasUpperCase ? "text-green-600" : "text-red-600"}`}>
-                                        <span className={`w-1.5 h-1.5 rounded-full ${passwordConditions.hasUpperCase ? "bg-green-600" : "bg-red-600"}`}></span>
-                                        {t("Contenir_au_moins_une_majuscule")}
-                                    </li>
-                                    <li className={`text-xs font-bold flex items-center gap-1.5 ${passwordConditions.hasLowerCase ? "text-green-600" : "text-red-600"}`}>
-                                        <span className={`w-1.5 h-1.5 rounded-full ${passwordConditions.hasLowerCase ? "bg-green-600" : "bg-red-600"}`}></span>
-                                        {t("Contenir_au_moins_une_minuscule")}
-                                    </li>
-                                    <li className={`text-xs font-bold flex items-center gap-1.5 ${passwordConditions.hasNumber ? "text-green-600" : "text-red-600"}`}>
-                                        <span className={`w-1.5 h-1.5 rounded-full ${passwordConditions.hasNumber ? "bg-green-600" : "bg-red-600"}`}></span>
-                                        {t("Contenir_au_moins_un_chiffre")}
-                                    </li>
-                                </ul>
-                            </div> */}
-
                             {/* Register Button */}
                             <PrimaryButton
                                 type="submit"
@@ -252,7 +227,7 @@ export default function Register() {
                                 </p>
                                 <Link
                                     href={route("login")}
-                                    className="font-black text-blue-600 hover:text-blue-800 text-xs uppercase tracking-wide transition-colors hover:underline inline-flex items-center gap-1 whitespace-nowrap"
+                                    className="font-black text-zinc-700 hover:text-blue-800 text-xs uppercase tracking-wide transition-colors hover:underline inline-flex items-center gap-1 whitespace-nowrap"
                                 >
                                     <span>Se connecter</span>
                                 </Link>
@@ -260,69 +235,19 @@ export default function Register() {
                         </form>
                     </div>
 
-                    {/* RIGHT SIDE - Illustration */}
-                    <div className="hidden lg:flex bg-gradient-to-br from-orange-400 to-orange-500 p-6 lg:p-8 flex-col items-center justify-center relative overflow-hidden border-l-[6px] border-zinc-800">
-                        {/* Decorative Pattern */}
-                        <div
-                            className="absolute inset-0 opacity-10"
-                            style={{
-                                backgroundImage: "repeating-linear-gradient(45deg, rgba(0,0,0,0.5) 0px, rgba(0,0,0,0) 2px, rgba(0,0,0,0) 10px)",
-                            }}
-                        />
-
-                        {/* Content */}
-                        <div className="relative z-10 text-center text-white space-y-4 lg:space-y-6">
-                            <div className="flex items-center justify-center gap-2 mb-3 lg:mb-4">
-                                <Sparkles className="w-6 h-6 lg:w-8 lg:h-8" strokeWidth={2.5} />
-                                <h2
-                                    className="text-3xl lg:text-4xl font-extrabold uppercase tracking-tight"
-                                    style={{
-                                        textShadow: "3px 3px 0px rgba(0,0,0,0.3)",
-                                    }}
-                                >
-                                    AI RESUME
-                                </h2>
-                                <Sparkles className="w-6 h-6 lg:w-8 lg:h-8" strokeWidth={2.5} />
-                            </div>
-
-                            {/* Illustration */}
-                            <div className="flex items-center justify-center mb-4 lg:mb-6">
-                                <div className="relative w-40 h-40 lg:w-48 lg:h-48">
-                                    <div className="absolute inset-0 bg-white rounded-2xl border-4 border-zinc-800 shadow-[6px_6px_0px_0px_rgba(0,0,0,0.3)] p-5 lg:p-6 flex flex-col items-center justify-center">
-                                        <UserPlus className="w-20 h-20 lg:w-24 lg:h-24 text-orange-500 mb-2 lg:mb-3" strokeWidth={1.5} />
-                                        <div className="w-full space-y-1 lg:space-y-1.5">
-                                            <div className="h-1.5 lg:h-2 bg-orange-200 rounded-full"></div>
-                                            <div className="h-1.5 lg:h-2 bg-orange-300 rounded-full w-4/5"></div>
-                                            <div className="h-1.5 lg:h-2 bg-orange-200 rounded-full w-3/5"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Features */}
-                            <div className="space-y-2.5 lg:space-y-3 text-left max-w-xs mx-auto">
-                                <div className="flex items-start gap-2 lg:gap-2.5 bg-white/20 p-2.5 lg:p-3 rounded-xl border-2 border-white/30 backdrop-blur-sm">
-                                    <CheckCircle className="w-4 h-4 lg:w-5 lg:h-5 flex-shrink-0 mt-0.5" strokeWidth={2.5} />
-                                    <div>
-                                        <h3 className="font-black text-xs uppercase">FREE TO START</h3>
-                                        <p className="text-xs font-medium text-white/90">No credit card required</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-start gap-2 lg:gap-2.5 bg-white/20 p-2.5 lg:p-3 rounded-xl border-2 border-white/30 backdrop-blur-sm">
-                                    <Zap className="w-4 h-4 lg:w-5 lg:h-5 flex-shrink-0 mt-0.5" strokeWidth={2.5} />
-                                    <div>
-                                        <h3 className="font-black text-xs uppercase">INSTANT ACCESS</h3>
-                                        <p className="text-xs font-medium text-white/90">Start building immediately</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-start gap-2 lg:gap-2.5 bg-white/20 p-2.5 lg:p-3 rounded-xl border-2 border-white/30 backdrop-blur-sm">
-                                    <FileText className="w-4 h-4 lg:w-5 lg:h-5 flex-shrink-0 mt-0.5" strokeWidth={2.5} />
-                                    <div>
-                                        <h3 className="font-black text-xs uppercase">UNLIMITED RESUMES</h3>
-                                        <p className="text-xs font-medium text-white/90">Create as many as you need</p>
-                                    </div>
-                                </div>
-                            </div>
+                    {/* RIGHT SIDE - Image générée */}
+                    <div className="hidden lg:flex bg-gradient-to-br from-orange-400 to-orange-500 p-0 flex-col items-center justify-center relative overflow-hidden border-l-[6px] border-zinc-800">
+                        {/* Image générée en plein écran */}
+                        <div className="relative z-10 w-full h-full flex items-center justify-center">
+                            <img
+                                src={RegisterImage}
+                                alt="AI Resume Builder - Register Illustration"
+                                className="w-full h-full object-cover"
+                                onError={(e) => {
+                                    e.target.style.display = 'none';
+                                    e.target.parentElement.innerHTML = '<div class="text-white text-center p-8"><p class="text-2xl font-black uppercase mb-4">AI Resume Builder</p><p class="text-sm">Placez votre image générée dans:<br/><code class="bg-white/20 px-2 py-1 rounded">public/images/register-illustration.png</code></p></div>';
+                                }}
+                            />
                         </div>
                     </div>
                 </div>
