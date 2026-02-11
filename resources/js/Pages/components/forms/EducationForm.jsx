@@ -10,30 +10,24 @@ import { useTranslation } from "react-i18next";
 import { generateThumbnail } from "@/lib/helper";
 import * as Yup from "yup";
 
-//---------------------------------------------------------------------------------------------------------
-
 const FormField = React.memo(({ label, icon, error, children, required }) => (
     <div className="col-span-1">
-        <Label className="text-md font-semibold">
+        <Label className="text-xs sm:text-sm font-black uppercase text-zinc-700 flex items-center gap-1.5 mb-1.5">
+            {icon}
             {label}
-            {required && <span className="text-red-500 ml-1">*</span>}
-            {icon && (
-                <span className="text-[#f68c09] mx-1">
-                    ({React.cloneElement(icon, { size: 20, className: "inline-flex" })})
-                </span>
-            )}
-            :
+            {required && <span className="text-red-600 ml-1">*</span>}
         </Label>
         {children}
         {error && (
-            <p className="text-red-500 text-sm mt-3">
-                (<AlertCircle size={20} className="inline-flex" />): {error}
-            </p>
+            <div className="bg-red-100 border-[2px] border-zinc-800 rounded-lg mt-2 p-2 flex items-center gap-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,0.2)]">
+                <AlertCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-700 flex-shrink-0" />
+                <p className="text-red-700 font-bold text-xs uppercase">
+                    {error}
+                </p>
+            </div>
         )}
     </div>
 ));
-
-//---------------------------------------------------------------------------------------------------------
 
 function EducationForm({ handleNext, document }) {
     const { t } = useTranslation();
@@ -216,20 +210,20 @@ function EducationForm({ handleNext, document }) {
             setLoading(false);
         }
     };
-    //---------------------------------------------------------------------------------------------------------
+
     const renderFormFields = useCallback((item, index) => (
         <>
             <div className="col-span-2 sm:col-span-2 md:col-span-2">
                 <FormField
                     label={t("University_Name")}
-                    icon={<GraduationCap />}
+                    icon={<GraduationCap size={16} />}
                     error={errors[index]?.university_name}
                 >
                     <Input
                         name="university_name"
                         placeholder={t("Enter_University_Name")}
                         required
-                        className="mt-2 w-full"
+                        className="w-full px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm rounded-lg border-[2px] border-zinc-800 shadow-[3px_3px_0px_0px_rgba(0,0,0,0.2)] focus:shadow-[1px_1px_0px_0px_rgba(0,0,0,0.2)] focus:translate-x-[2px] focus:translate-y-[2px] transition-all duration-200 font-medium"
                         value={item.university_name || ""}
                         onChange={(e) =>
                             handleChange(index, e.target.name, e.target.value)
@@ -240,14 +234,14 @@ function EducationForm({ handleNext, document }) {
             <div className="col-span-2 sm:col-span-2 md:col-span-1">
                 <FormField
                     label={t("Degree")}
-                    icon={<Medal />}
+                    icon={<Medal size={16} />}
                     error={errors[index]?.degree}
                 >
                     <Input
                         name="degree"
                         placeholder={t("Enter_the_Degree")}
                         required
-                        className="mt-2 w-full"
+                        className="w-full px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm rounded-lg border-[2px] border-zinc-800 shadow-[3px_3px_0px_0px_rgba(0,0,0,0.2)] focus:shadow-[1px_1px_0px_0px_rgba(0,0,0,0.2)] focus:translate-x-[2px] focus:translate-y-[2px] transition-all duration-200 font-medium"
                         value={item.degree || ""}
                         onChange={(e) =>
                             handleChange(index, e.target.name, e.target.value)
@@ -258,14 +252,14 @@ function EducationForm({ handleNext, document }) {
             <div className="col-span-2 sm:col-span-2 md:col-span-1">
                 <FormField
                     label={t("Major")}
-                    icon={<FlaskConical />}
+                    icon={<FlaskConical size={16} />}
                     error={errors[index]?.major}
                 >
                     <Input
                         name="major"
                         placeholder={t("Enter_the_Major")}
                         required
-                        className="mt-2 w-full"
+                        className="w-full px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm rounded-lg border-[2px] border-zinc-800 shadow-[3px_3px_0px_0px_rgba(0,0,0,0.2)] focus:shadow-[1px_1px_0px_0px_rgba(0,0,0,0.2)] focus:translate-x-[2px] focus:translate-y-[2px] transition-all duration-200 font-medium"
                         value={item.major || ""}
                         onChange={(e) =>
                             handleChange(index, e.target.name, e.target.value)
@@ -276,14 +270,14 @@ function EducationForm({ handleNext, document }) {
             <div className="col-span-2 sm:col-span-2 md:col-span-1">
                 <FormField
                     label={t("Start_Date")}
-                    icon={<Calendar />}
+                    icon={<Calendar size={16} />}
                     error={errors[index]?.start_date}
                 >
                     <Input
                         name="start_date"
                         type="date"
                         required
-                        className="mt-2 w-full"
+                        className="w-full px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm rounded-lg border-[2px] border-zinc-800 shadow-[3px_3px_0px_0px_rgba(0,0,0,0.2)] focus:shadow-[1px_1px_0px_0px_rgba(0,0,0,0.2)] focus:translate-x-[2px] focus:translate-y-[2px] transition-all duration-200 font-medium"
                         value={item.start_date || ""}
                         onChange={(e) =>
                             handleChange(index, e.target.name, e.target.value)
@@ -294,14 +288,14 @@ function EducationForm({ handleNext, document }) {
             <div className="col-span-2 sm:col-span-2 md:col-span-1">
                 <FormField
                     label={t("End_Date")}
-                    icon={<Calendar />}
+                    icon={<Calendar size={16} />}
                     error={errors[index]?.end_date}
                 >
                     <Input
                         name="end_date"
                         type="date"
                         required
-                        className="mt-2 w-full"
+                        className="w-full px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm rounded-lg border-[2px] border-zinc-800 shadow-[3px_3px_0px_0px_rgba(0,0,0,0.2)] focus:shadow-[1px_1px_0px_0px_rgba(0,0,0,0.2)] focus:translate-x-[2px] focus:translate-y-[2px] transition-all duration-200 font-medium"
                         value={item.end_date || ""}
                         onChange={(e) =>
                             handleChange(index, e.target.name, e.target.value)
@@ -312,12 +306,12 @@ function EducationForm({ handleNext, document }) {
             <div className="col-span-2 sm:col-span-2 md:col-span-2">
                 <FormField
                     label={t("Description")}
-                    icon={<AlignLeft />}
+                    icon={<AlignLeft size={16} />}
                     error={errors[index]?.description}
                 >
                     <Textarea
                         name="description"
-                        className="w-full mt-2 text-black"
+                        className="w-full px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm rounded-lg border-[2px] border-zinc-800 shadow-[3px_3px_0px_0px_rgba(0,0,0,0.2)] focus:shadow-[1px_1px_0px_0px_rgba(0,0,0,0.2)] focus:translate-x-[2px] focus:translate-y-[2px] transition-all duration-200 font-medium min-h-[100px]"
                         placeholder={t("Enter_the_Description")}
                         value={item.description || ""}
                         onChange={(e) =>
@@ -326,67 +320,89 @@ function EducationForm({ handleNext, document }) {
                     />
                 </FormField>
             </div>
-
         </>
     ), [handleChange, errors, t]);
 
     return (
-        <div className="text-white">
-            <div className="w-full">
-                <h2 className="font-bold text-lg">
-                    {t("Education")} :
-                    <span className="text-lg mx-1 text-[#f68c09]">
-                        {t("Add_your_education_details")}
-                    </span>
-                </h2>
-            </div>
+        <div className="w-full max-w-full mx-auto">
+            {/* Header Section */}
+            {/* <div className="bg-gradient-to-br from-orange-400 to-orange-500 border-[3px] border-zinc-800 rounded-xl sm:rounded-2xl shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] p-4 sm:p-5 md:p-6 mb-4 sm:mb-5">
+                <div className="flex items-center gap-2 sm:gap-3 mb-1.5">
+                    <GraduationCap className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
+                    <h2 className="font-black text-lg sm:text-xl md:text-2xl uppercase text-white tracking-tight">
+                        {t("Education")}
+                    </h2>
+                </div>
+                <p className="text-xs sm:text-sm font-bold text-white/90 uppercase tracking-wide">
+                    {t("Add_your_education_details")}
+                </p>
+            </div> */}
+
             <form onSubmit={handleSubmit}>
-                <div className="border-2 w-full h-auto border-white divide-y-[2px] rounded-md px-3 pb-4 my-5">
+                {/* Education List Container */}
+                <div className="bg-white border-[3px] border-zinc-800 rounded-xl sm:rounded-2xl shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] overflow-hidden mb-4 sm:mb-5">
                     {educationList.map((item, index) => (
-                        <div key={index}>
-                            <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-5 mb-5 pt-4 relative">
+                        <div
+                            key={index}
+                            className={`relative p-4 sm:p-5 md:p-6 ${
+                                index !== educationList.length - 1 ? 'border-b-[3px] border-zinc-800' : ''
+                            }`}
+                        >
+                            <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 mb-4">
                                 {educationList.length > 1 && (
                                     <Button
                                         variant="secondary"
                                         type="button"
                                         disabled={loading}
-                                        className="size-[20px] text-center rounded-full absolute -top-3 -right-5 text-white"
-                                        size="icon"
+                                        className="absolute -top-2 -right-2 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-red-500 text-white border-[2px] border-zinc-800 shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,0.3)] hover:translate-x-[1px] hover:translate-y-[1px] transition-all p-0 flex items-center justify-center z-10"
                                         onClick={() =>
                                             removeEducation(index, item.id)
                                         }
                                     >
-                                        <X size="13px" />
+                                        <X className="w-4 h-4" />
                                     </Button>
                                 )}
                                 {renderFormFields(item, index)}
-                                {/* University Name */}
-
                             </div>
                             {index === educationList.length - 1 &&
                                 educationList.length < 5 && (
                                     <Button
-                                        className="gap-1 mt-1 text-[#f68c09] border-primary/50"
-                                        variant="outline"
                                         type="button"
                                         onClick={addNewEducation}
+                                        className="w-full sm:w-auto bg-blue-500 text-white border-[2px] border-zinc-800 rounded-lg shadow-[3px_3px_0px_0px_rgba(0,0,0,0.2)] px-4 sm:px-5 py-2 sm:py-2.5 flex items-center justify-center gap-2 font-black uppercase text-xs tracking-wide transition-all duration-200 hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,0.2)] hover:translate-x-[2px] hover:translate-y-[2px] active:shadow-none active:translate-x-[3px] active:translate-y-[3px] hover:bg-blue-600"
                                     >
-                                        <Plus size="15px" />{" "}
-                                        {t("Add_More_Education")}
+                                        <Plus className="w-4 h-4" />
+                                        <span>{t("Add_More_Education")}</span>
                                     </Button>
                                 )}
                         </div>
                     ))}
                 </div>
-                <Button
-                    className="mt-4"
-                    type="submit"
-                >
-                    {loading && (
-                        <Loader size="15px" className="animate-spin" />
-                    )}{" "}
-                    <><Send/> {t("Save_Changes")}</>
-                </Button>
+
+                {/* Submit Button */}
+                <div className="flex items-center justify-start">
+                    <Button
+                        type="submit"
+                        disabled={!isFormValid || loading}
+                        className={`w-full sm:w-auto bg-gradient-to-br from-orange-400 to-orange-500 text-white border-[2px] border-zinc-800 rounded-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] px-6 sm:px-8 py-2.5 sm:py-3 flex items-center justify-center gap-2 font-black uppercase text-sm tracking-wide transition-all duration-200 ${
+                            !isFormValid || loading
+                                ? 'opacity-50 cursor-not-allowed'
+                                : 'hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] hover:translate-x-[2px] hover:translate-y-[2px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,0.3)] active:translate-x-[3px] active:translate-y-[3px]'
+                        }`}
+                    >
+                        {loading ? (
+                            <>
+                                <Loader className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" />
+                                <span className="hidden sm:inline">Saving...</span>
+                            </>
+                        ) : (
+                            <>
+                                <Send className="w-4 h-4 sm:w-5 sm:h-5" />
+                                <span>{t("Save_Changes")}</span>
+                            </>
+                        )}
+                    </Button>
+                </div>
             </form>
         </div>
     );

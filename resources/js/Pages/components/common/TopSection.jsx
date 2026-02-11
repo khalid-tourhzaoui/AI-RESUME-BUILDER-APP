@@ -26,10 +26,10 @@ const TopSection = ({ document, locale, translations }) => {
     };
 
     return (
-        <div className="relative">
+        <div className="relative mb-10">
             {/* Archived Alert Banner */}
             {isArchived && (
-                <div className="mb-4 sm:mb-6">
+                <div className="mb-2 sm:mb-3">
                     <div className="bg-red-400 border-4 border-zinc-800 rounded-xl sm:rounded-2xl shadow-[rgba(0,0,0,0.9)_0px_6px_0px_0px] sm:shadow-[rgba(0,0,0,0.9)_0px_8px_0px_0px] p-3 sm:p-4 flex items-center justify-center gap-2 sm:gap-3 flex-wrap">
                         <AlertCircle className="w-5 h-5 sm:w-6 sm:h-6 text-zinc-800 flex-shrink-0" />
                         <p className="text-xs sm:text-sm md:text-base font-black uppercase text-zinc-800 text-center">
@@ -87,21 +87,6 @@ const TopSection = ({ document, locale, translations }) => {
                         </div>
                     </div>
                 </div>
-
-                {/* Footer Bar */}
-                {/* <div className="bg-zinc-800 border-t-4 sm:border-t-6 border-zinc-800 px-3 sm:px-4 md:px-6 py-2 sm:py-3 flex items-center justify-between flex-wrap gap-2">
-                    <p className="text-white text-[10px] sm:text-xs font-mono flex items-center gap-2">
-                        <Zap className="w-3 h-3 sm:w-4 sm:h-4" />
-                        <span className="hidden sm:inline">Edit • Save • Download • Share</span>
-                        <span className="sm:hidden">Quick actions</span>
-                    </p>
-                    {!isArchived && (
-                        <div className="flex items-center gap-1.5 sm:gap-2">
-                            <div className="bg-green-500 h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full border-2 border-white animate-pulse"></div>
-                            <span className="text-white text-[10px] sm:text-xs font-mono">Active</span>
-                        </div>
-                    )}
-                </div> */}
             </div>
         </div>
     );
