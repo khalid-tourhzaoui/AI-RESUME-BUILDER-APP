@@ -104,7 +104,7 @@ const RichTextEditor = (props) => {
     return (
         <div>
             <div className="flex items-center justify-between flex-wrap">
-                <Label className="text-md font-semibold text-white">
+                <Label className="text-md font-semibold text-zinc-800">
                     {t("Work_Summary")}
                     <span className="text-[#f68c09] mx-1">({<AlignLeft size={20} className="inline-flex" />})</span> :</Label>
                 <Button

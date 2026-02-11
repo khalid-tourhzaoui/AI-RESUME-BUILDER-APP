@@ -5,7 +5,7 @@ import { TextGenerateEffect } from "@/Components/ui/text-generate-effect";
 import { Textarea } from "@/Components/ui/textarea";
 import { AIChatSession } from "@/lib/google-ai-model";
 import { useForm } from "@inertiajs/react";
-import { Book, FileText, Send, Sparkles, SparklesIcon, Zap } from "lucide-react";
+import { Book, Send, Sparkles, SparklesIcon, Zap, Loader } from "lucide-react";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import Swal from "sweetalert2";
@@ -21,7 +21,7 @@ const prompt = `Job Title: {jobTitle}. Based on the job title, please generate c
 function SummaryForm({ document, handleNext }) {
     const [loading, setLoading] = useState(false);
     const [aiGeneratedSummary, setAiGeneratedSummary] = useState(null);
-    const { data, setData, patch } = useForm({summary: document?.summary || ""});
+    const { data, setData, patch } = useForm({ summary: document?.summary || "" });
     const { t } = useTranslation();
 
     const GenerateSummaryFromAI = async () => {
@@ -66,25 +66,29 @@ function SummaryForm({ document, handleNext }) {
         <div className="w-full max-w-full mx-auto">
             <div>
                 <form onSubmit={handleSubmit}>
-                    <div className="bg-white border-[3px] border-zinc-800 rounded-xl sm:rounded-2xl shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] overflow-hidden p-4 sm:p-5 mb-4 sm:mb-5">
+                    <div className="bg-white border-[3px] border-zinc-800 rounded-xl sm:rounded-2xl shadow-brutal overflow-hidden p-4 sm:p-5 mb-4 sm:mb-5">
                         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
                             <Label className="text-xs sm:text-sm font-black uppercase text-zinc-700 flex items-center gap-1.5">
                                 <Book className="w-4 h-4 sm:w-5 sm:h-5" />
                                 {t("Add_Summary")}
                             </Label>
-                            <Button type="button" disabled={loading} onClick={GenerateSummaryFromAI}
-                                className={`w-full sm:w-auto bg-gradient-to-br from-purple-500 to-purple-600 text-white border-[2px] border-zinc-800 rounded-lg shadow-[3px_3px_0px_0px_rgba(0,0,0,0.2)] px-4 sm:px-5 py-2 sm:py-2.5 flex items-center justify-center gap-2 font-black uppercase text-xs tracking-wide transition-all duration-200 ${
-                                    loading ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,0.2)] hover:translate-x-[2px] hover:translate-y-[2px] active:shadow-none active:translate-x-[3px] active:translate-y-[3px]'
-                                }`}>
+                            <Button
+                                type="button"
+                                disabled={loading}
+                                onClick={GenerateSummaryFromAI}
+                                variant="generate"
+                                size="default"
+                                className="w-full sm:w-auto"
+                            >
                                 <SparklesIcon className="w-4 h-4" />
                                 <span className="hidden sm:inline">{t("Generate_with_AI")}</span>
                                 <span className="sm:hidden">AI Generate</span>
-                                {loading && <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />}
+                                {loading && <Loader className="w-3 h-3 animate-spin" />}
                             </Button>
                         </div>
 
                         <Textarea
-                            className="min-h-[160px] sm:min-h-[180px] border-[2px] border-zinc-800 rounded-lg shadow-[3px_3px_0px_0px_rgba(0,0,0,0.2)] focus:shadow-[1px_1px_0px_0px_rgba(0,0,0,0.2)] focus:translate-x-[2px] focus:translate-y-[2px] transition-all p-3 sm:p-4 text-xs sm:text-sm font-medium text-zinc-800"
+                            className="min-h-[160px] sm:min-h-[180px] border-[2px] border-zinc-800 rounded-lg shadow-[3px_3px_0px_0px_rgba(0,0,0,0.9)] focus:shadow-[1px_1px_0px_0px_rgba(0,0,0,0.9)] focus:translate-x-[2px] focus:translate-y-[2px] transition-all p-3 sm:p-4 text-xs sm:text-sm font-medium text-zinc-800"
                             required
                             placeholder={t("Add_summary_for_your_resume")}
                             maxLength={1000}
@@ -103,7 +107,7 @@ function SummaryForm({ document, handleNext }) {
 
                     {aiGeneratedSummary && (
                         <div className="mb-4 sm:mb-5">
-                            <div className="bg-gradient-to-br from-blue-500 to-blue-600 border-[3px] border-zinc-800 rounded-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] p-3 sm:p-4 mb-3 sm:mb-4">
+                            <div className="bg-gradient-to-br from-blue-500 to-blue-600 border-[3px] border-zinc-800 rounded-xl shadow-brutal p-3 sm:p-4 mb-3 sm:mb-4">
                                 <div className="flex items-center gap-2">
                                     <Sparkles className="w-5 h-5 text-yellow-300" />
                                     <h5 className="font-black text-sm sm:text-base uppercase text-white tracking-wide">
@@ -113,9 +117,11 @@ function SummaryForm({ document, handleNext }) {
                             </div>
                             <div className="grid grid-cols-1 gap-3">
                                 {aiGeneratedSummary?.summaries?.map((suggestion, index) => (
-                                    <Card key={index}
-                                        className="bg-white border-[3px] border-zinc-800 rounded-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] cursor-pointer hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,0.3)] hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all"
-                                        onClick={() => handleSelect(suggestion.summary)}>
+                                    <Card
+                                        key={index}
+                                        className="bg-white border-[3px] border-zinc-800 rounded-xl shadow-brutal cursor-pointer hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,0.9)] hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all"
+                                        onClick={() => handleSelect(suggestion.summary)}
+                                    >
                                         <CardHeader className="py-3 px-4 sm:px-5 border-b-[3px] border-zinc-800">
                                             <CardTitle className="font-black text-sm sm:text-base uppercase text-orange-500 flex items-center gap-2 tracking-wide">
                                                 <Zap className="w-4 h-4" />
@@ -132,13 +138,16 @@ function SummaryForm({ document, handleNext }) {
                     )}
 
                     <div className="flex items-center justify-start">
-                        <Button type="submit" disabled={loading || document?.status === "archived"}
-                            className={`w-full sm:w-auto bg-gradient-to-br from-green-500 to-green-600 text-white border-[2px] border-zinc-800 rounded-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] px-6 sm:px-8 py-2.5 sm:py-3 flex items-center justify-center gap-2 font-black uppercase text-sm tracking-wide transition-all duration-200 ${
-                                loading || document?.status === "archived" ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] hover:translate-x-[2px] hover:translate-y-[2px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,0.3)] active:translate-x-[3px] active:translate-y-[3px]'
-                            }`}>
+                        <Button
+                            type="submit"
+                            disabled={loading || document?.status === "archived"}
+                            variant="default"
+                            size="lg"
+                            className="w-full sm:w-auto"
+                        >
                             {loading ? (
                                 <>
-                                    <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                    <Loader className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" />
                                     <span className="hidden sm:inline">Processing...</span>
                                 </>
                             ) : (

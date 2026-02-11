@@ -3,17 +3,17 @@ import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
 import { useForm } from "@inertiajs/react";
-import { CheckCircle, Languages, Plus, Send, X } from "lucide-react";
+import { CheckCircle, Languages, Plus, Send, X, Loader } from "lucide-react";
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { generateThumbnail } from "@/lib/helper";
 import * as Yup from "yup";
-import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue} from "@/Components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/Components/ui/select";
 import { languages } from "@/constant/languages";
 import { useTranslation } from "react-i18next";
 import { debounce } from "lodash";
 
 const initialState = { name: "", level: "", thumbnail: "" };
-const LanguageLevel = {NATIVE: "Native",ADVANCED: "Advanced",INTERMEDIATE: "Intermediate"};
+const LanguageLevel = { NATIVE: "Native", ADVANCED: "Advanced", INTERMEDIATE: "Intermediate" };
 
 const languageSchema = Yup.object().shape({
     name: Yup.string().required("Language name is required").min(3, "Must be at least 3 characters"),
@@ -24,9 +24,9 @@ function LanguageForm({ document, handleNext }) {
     const [languageList, setLanguageList] = useState(
         document?.languages?.length ? document.languages : [initialState]
     );
-    const { t } =useTranslation();
+    const { t } = useTranslation();
     const [search, setSearch] = useState("");
-    const {put,post,delete: destroy,setData,processing} = useForm({ languages: languageList });
+    const { put, post, delete: destroy, setData, processing } = useForm({ languages: languageList });
     const [errors, setErrors] = useState([]);
     const [isFormValid, setIsFormValid] = useState(false);
 
@@ -51,7 +51,7 @@ function LanguageForm({ document, handleNext }) {
     const debouncedFieldValidation = useMemo(() =>
         debounce(async (index, field, value) => {
             try {
-                await languageSchema.validateAt(field, {[field]: value});
+                await languageSchema.validateAt(field, { [field]: value });
                 setErrors((prev) => {
                     const newErrors = [...prev];
                     if (newErrors[index]) delete newErrors[index][field];
@@ -60,7 +60,7 @@ function LanguageForm({ document, handleNext }) {
             } catch (err) {
                 setErrors((prev) => {
                     const newErrors = [...prev];
-                    newErrors[index] = {...(newErrors[index] || {}),[field]: err.message};
+                    newErrors[index] = { ...(newErrors[index] || {}), [field]: err.message };
                     return newErrors;
                 });
             }
@@ -82,7 +82,7 @@ function LanguageForm({ document, handleNext }) {
         setLanguageList((prev) => prev.filter((_, i) => i !== index));
         if (id) {
             try {
-                await destroy(route("profile-details.delete", id), {data: { language: [{ id }] }});
+                await destroy(route("profile-details.delete", id), { data: { language: [{ id }] } });
             } catch (error) {
                 console.error("Failed to delete language", error);
             }
@@ -112,14 +112,14 @@ function LanguageForm({ document, handleNext }) {
 
         try {
             if (toUpdate.length) {
-                await put(route("profile-details.update", document.id), {languages: toUpdate});
+                await put(route("profile-details.update", document.id), { languages: toUpdate });
             }
             if (toAdd.length) {
-                await post(route("profile-details.store", document.id), {languages: toAdd});
+                await post(route("profile-details.store", document.id), { languages: toAdd });
             }
             if (toDelete.length) {
                 await Promise.all(toDelete.map(async (item) => {
-                    await destroy(route("profile-details.delete", item.id), {data: { languages: [item] }});
+                    await destroy(route("profile-details.delete", item.id), { data: { languages: [item] } });
                 }));
             }
             if (handleNext) handleNext();
@@ -139,30 +139,25 @@ function LanguageForm({ document, handleNext }) {
 
     return (
         <div className="w-full max-w-full mx-auto">
-            {/* <div className="bg-gradient-to-br from-orange-400 to-orange-500 border-[3px] border-zinc-800 rounded-xl sm:rounded-2xl shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] p-4 sm:p-5 md:p-6 mb-4 sm:mb-5">
-                <div className="flex items-center gap-2 sm:gap-3 mb-1.5">
-                    <Languages className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
-                    <h2 className="font-black text-lg sm:text-xl md:text-2xl uppercase text-white tracking-tight">
-                        {t("Languages ")}
-                    </h2>
-                </div>
-                <p className="text-xs sm:text-sm font-bold text-white/90 uppercase tracking-wide">
-                    {t("Add_your_language_information")}
-                </p>
-            </div> */}
-
             <form onSubmit={handleSubmit}>
-                <div className="bg-white border-[3px] border-zinc-800 rounded-xl sm:rounded-2xl shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] overflow-hidden mb-4 sm:mb-5">
+                <div className="bg-white border-[3px] border-zinc-800 rounded-xl sm:rounded-2xl shadow-brutal overflow-hidden mb-4 sm:mb-5">
                     {languageList.map((item, index) => (
-                        <div key={index} className={`relative p-4 sm:p-5 md:p-6 ${
-                            index !== languageList.length - 1 ? 'border-b-[3px] border-zinc-800' : ''
-                        }`}>
+                        <div
+                            key={index}
+                            className={`relative p-4 sm:p-5 md:p-6 ${
+                                index !== languageList.length - 1 ? 'border-b-[3px] border-zinc-800' : ''
+                            }`}
+                        >
                             <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
                                 {languageList.length > 1 && (
-                                    <Button variant="secondary" type="button"
-                                        className="absolute -top-2 -right-2 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-red-500 text-white border-[2px] border-zinc-800 shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,0.3)] hover:translate-x-[1px] hover:translate-y-[1px] transition-all p-0 flex items-center justify-center z-10"
+                                    <Button
+                                        variant="destructive"
+                                        size="iconSm"
+                                        type="button"
+                                        className="absolute -top-2 -right-2 rounded-full"
                                         disabled={processing}
-                                        onClick={() => removeLanguage(index, item.id)}>
+                                        onClick={() => removeLanguage(index, item.id)}
+                                    >
                                         <X className="w-4 h-4" />
                                     </Button>
                                 )}
@@ -172,16 +167,22 @@ function LanguageForm({ document, handleNext }) {
                                         <Languages size={16} />
                                         {t("Name")}
                                     </Label>
-                                    <Select value={item.name || ""} onValueChange={(value) => handleChange(index, "name", value)}>
-                                        <SelectTrigger className="w-full px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm rounded-lg border-[2px] border-zinc-800 shadow-[3px_3px_0px_0px_rgba(0,0,0,0.2)]">
+                                    <Select
+                                        value={item.name || ""}
+                                        onValueChange={(value) => handleChange(index, "name", value)}
+                                    >
+                                        <SelectTrigger className="w-full px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm rounded-lg border-[2px] border-zinc-800 shadow-[3px_3px_0px_0px_rgba(0,0,0,0.9)]">
                                             <SelectValue placeholder="Select language" />
                                         </SelectTrigger>
                                         <SelectContent>
                                             <div className="px-2 py-1">
-                                                <Input type="text" placeholder="Search languages..."
+                                                <Input
+                                                    type="text"
+                                                    placeholder="Search languages..."
                                                     className="w-full p-2 border rounded"
                                                     value={search}
-                                                    onChange={(e) => setSearch(e.target.value)} />
+                                                    onChange={(e) => setSearch(e.target.value)}
+                                                />
                                             </div>
                                             {filteredLanguages.map((language) => {
                                                 const isDisabled = languageList.some((item) => item.name === language.name);
@@ -197,7 +198,9 @@ function LanguageForm({ document, handleNext }) {
                                         </SelectContent>
                                     </Select>
                                     {errors.find((error) => error.index === index && error.field === "name") && (
-                                        <p className="text-red-600 text-xs mt-1">{errors.find((error) => error.index === index && error.field === "name")?.message}</p>
+                                        <p className="text-red-600 text-xs mt-1">
+                                            {errors.find((error) => error.index === index && error.field === "name")?.message}
+                                        </p>
                                     )}
                                 </div>
 
@@ -206,8 +209,11 @@ function LanguageForm({ document, handleNext }) {
                                         <CheckCircle size={16} />
                                         {t("Proficiency")}
                                     </Label>
-                                    <Select value={item.level || ""} onValueChange={(value) => handleChange(index, "level", value)}>
-                                        <SelectTrigger className="w-full px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm rounded-lg border-[2px] border-zinc-800 shadow-[3px_3px_0px_0px_rgba(0,0,0,0.2)]">
+                                    <Select
+                                        value={item.level || ""}
+                                        onValueChange={(value) => handleChange(index, "level", value)}
+                                    >
+                                        <SelectTrigger className="w-full px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm rounded-lg border-[2px] border-zinc-800 shadow-[3px_3px_0px_0px_rgba(0,0,0,0.9)]">
                                             <SelectValue placeholder="Select proficiency" />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -217,14 +223,22 @@ function LanguageForm({ document, handleNext }) {
                                         </SelectContent>
                                     </Select>
                                     {errors.find((error) => error.index === index && error.field === "level") && (
-                                        <p className="text-red-600 text-xs mt-1">{errors.find((error) => error.index === index && error.field === "level")?.message}</p>
+                                        <p className="text-red-600 text-xs mt-1">
+                                            {errors.find((error) => error.index === index && error.field === "level")?.message}
+                                        </p>
                                     )}
                                 </div>
                             </div>
 
                             {index === languageList.length - 1 && languageList.length < 15 && (
-                                <Button type="button" disabled={processing} onClick={addNewLanguage}
-                                    className="w-full sm:w-auto bg-blue-500 text-white border-[2px] border-zinc-800 rounded-lg shadow-[3px_3px_0px_0px_rgba(0,0,0,0.2)] px-4 sm:px-5 py-2 sm:py-2.5 flex items-center justify-center gap-2 font-black uppercase text-xs tracking-wide transition-all duration-200 hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,0.2)] hover:translate-x-[2px] hover:translate-y-[2px] active:shadow-none active:translate-x-[3px] active:translate-y-[3px] hover:bg-blue-600 mt-4">
+                                <Button
+                                    type="button"
+                                    variant="secondary"
+                                    size="default"
+                                    disabled={processing}
+                                    onClick={addNewLanguage}
+                                    className="w-full sm:w-auto mt-4"
+                                >
                                     <Plus size={16} />
                                     {t("Add_More_Languages")}
                                 </Button>
@@ -233,12 +247,15 @@ function LanguageForm({ document, handleNext }) {
                     ))}
                 </div>
 
-                <Button type="submit" disabled={!isFormValid || processing}
-                    className={`w-full sm:w-auto bg-gradient-to-br from-orange-400 to-orange-500 text-white border-[2px] border-zinc-800 rounded-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] px-6 sm:px-8 py-2.5 sm:py-3 flex items-center justify-center gap-2 font-black uppercase text-sm tracking-wide transition-all duration-200 ${
-                        !isFormValid || processing ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] hover:translate-x-[2px] hover:translate-y-[2px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,0.3)] active:translate-x-[3px] active:translate-y-[3px]'
-                    }`}>
-                    {processing && <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />}
-                    <Send size={16}/>
+                <Button
+                    type="submit"
+                    disabled={!isFormValid || processing}
+                    variant="default"
+                    size="lg"
+                    className="w-full sm:w-auto"
+                >
+                    {processing && <Loader className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" />}
+                    <Send size={16} />
                     {t("Save_Changes")}
                 </Button>
             </form>

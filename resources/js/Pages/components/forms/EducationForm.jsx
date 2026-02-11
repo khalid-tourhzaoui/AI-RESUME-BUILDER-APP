@@ -19,7 +19,7 @@ const FormField = React.memo(({ label, icon, error, children, required }) => (
         </Label>
         {children}
         {error && (
-            <div className="bg-red-100 border-[2px] border-zinc-800 rounded-lg mt-2 p-2 flex items-center gap-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,0.2)]">
+            <div className="bg-red-100 border-[2px] border-zinc-800 rounded-lg mt-2 p-2 flex items-center gap-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,0.9)]">
                 <AlertCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-700 flex-shrink-0" />
                 <p className="text-red-700 font-bold text-xs uppercase">
                     {error}
@@ -223,7 +223,7 @@ function EducationForm({ handleNext, document }) {
                         name="university_name"
                         placeholder={t("Enter_University_Name")}
                         required
-                        className="w-full px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm rounded-lg border-[2px] border-zinc-800 shadow-[3px_3px_0px_0px_rgba(0,0,0,0.2)] focus:shadow-[1px_1px_0px_0px_rgba(0,0,0,0.2)] focus:translate-x-[2px] focus:translate-y-[2px] transition-all duration-200 font-medium"
+                        className="w-full px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm rounded-lg border-[2px] border-zinc-800 shadow-[3px_3px_0px_0px_rgba(0,0,0,0.9)] focus:shadow-[1px_1px_0px_0px_rgba(0,0,0,0.9)] focus:translate-x-[2px] focus:translate-y-[2px] transition-all duration-200 font-medium"
                         value={item.university_name || ""}
                         onChange={(e) =>
                             handleChange(index, e.target.name, e.target.value)
@@ -241,7 +241,7 @@ function EducationForm({ handleNext, document }) {
                         name="degree"
                         placeholder={t("Enter_the_Degree")}
                         required
-                        className="w-full px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm rounded-lg border-[2px] border-zinc-800 shadow-[3px_3px_0px_0px_rgba(0,0,0,0.2)] focus:shadow-[1px_1px_0px_0px_rgba(0,0,0,0.2)] focus:translate-x-[2px] focus:translate-y-[2px] transition-all duration-200 font-medium"
+                        className="w-full px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm rounded-lg border-[2px] border-zinc-800 shadow-[3px_3px_0px_0px_rgba(0,0,0,0.9)] focus:shadow-[1px_1px_0px_0px_rgba(0,0,0,0.9)] focus:translate-x-[2px] focus:translate-y-[2px] transition-all duration-200 font-medium"
                         value={item.degree || ""}
                         onChange={(e) =>
                             handleChange(index, e.target.name, e.target.value)
@@ -259,7 +259,7 @@ function EducationForm({ handleNext, document }) {
                         name="major"
                         placeholder={t("Enter_the_Major")}
                         required
-                        className="w-full px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm rounded-lg border-[2px] border-zinc-800 shadow-[3px_3px_0px_0px_rgba(0,0,0,0.2)] focus:shadow-[1px_1px_0px_0px_rgba(0,0,0,0.2)] focus:translate-x-[2px] focus:translate-y-[2px] transition-all duration-200 font-medium"
+                        className="w-full px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm rounded-lg border-[2px] border-zinc-800 shadow-[3px_3px_0px_0px_rgba(0,0,0,0.9)] focus:shadow-[1px_1px_0px_0px_rgba(0,0,0,0.9)] focus:translate-x-[2px] focus:translate-y-[2px] transition-all duration-200 font-medium"
                         value={item.major || ""}
                         onChange={(e) =>
                             handleChange(index, e.target.name, e.target.value)
@@ -277,7 +277,7 @@ function EducationForm({ handleNext, document }) {
                         name="start_date"
                         type="date"
                         required
-                        className="w-full px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm rounded-lg border-[2px] border-zinc-800 shadow-[3px_3px_0px_0px_rgba(0,0,0,0.2)] focus:shadow-[1px_1px_0px_0px_rgba(0,0,0,0.2)] focus:translate-x-[2px] focus:translate-y-[2px] transition-all duration-200 font-medium"
+                        className="w-full px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm rounded-lg border-[2px] border-zinc-800 shadow-[3px_3px_0px_0px_rgba(0,0,0,0.9)] focus:shadow-[1px_1px_0px_0px_rgba(0,0,0,0.9)] focus:translate-x-[2px] focus:translate-y-[2px] transition-all duration-200 font-medium"
                         value={item.start_date || ""}
                         onChange={(e) =>
                             handleChange(index, e.target.name, e.target.value)
@@ -295,7 +295,7 @@ function EducationForm({ handleNext, document }) {
                         name="end_date"
                         type="date"
                         required
-                        className="w-full px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm rounded-lg border-[2px] border-zinc-800 shadow-[3px_3px_0px_0px_rgba(0,0,0,0.2)] focus:shadow-[1px_1px_0px_0px_rgba(0,0,0,0.2)] focus:translate-x-[2px] focus:translate-y-[2px] transition-all duration-200 font-medium"
+                        className="w-full px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm rounded-lg border-[2px] border-zinc-800 shadow-[3px_3px_0px_0px_rgba(0,0,0,0.9)] focus:shadow-[1px_1px_0px_0px_rgba(0,0,0,0.9)] focus:translate-x-[2px] focus:translate-y-[2px] transition-all duration-200 font-medium"
                         value={item.end_date || ""}
                         onChange={(e) =>
                             handleChange(index, e.target.name, e.target.value)
@@ -311,7 +311,7 @@ function EducationForm({ handleNext, document }) {
                 >
                     <Textarea
                         name="description"
-                        className="w-full px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm rounded-lg border-[2px] border-zinc-800 shadow-[3px_3px_0px_0px_rgba(0,0,0,0.2)] focus:shadow-[1px_1px_0px_0px_rgba(0,0,0,0.2)] focus:translate-x-[2px] focus:translate-y-[2px] transition-all duration-200 font-medium min-h-[100px]"
+                        className="w-full px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm rounded-lg border-[2px] border-zinc-800 shadow-[3px_3px_0px_0px_rgba(0,0,0,0.9)] focus:shadow-[1px_1px_0px_0px_rgba(0,0,0,0.9)] focus:translate-x-[2px] focus:translate-y-[2px] transition-all duration-200 font-medium min-h-[100px]"
                         placeholder={t("Enter_the_Description")}
                         value={item.description || ""}
                         onChange={(e) =>
@@ -325,22 +325,9 @@ function EducationForm({ handleNext, document }) {
 
     return (
         <div className="w-full max-w-full mx-auto">
-            {/* Header Section */}
-            {/* <div className="bg-gradient-to-br from-orange-400 to-orange-500 border-[3px] border-zinc-800 rounded-xl sm:rounded-2xl shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] p-4 sm:p-5 md:p-6 mb-4 sm:mb-5">
-                <div className="flex items-center gap-2 sm:gap-3 mb-1.5">
-                    <GraduationCap className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
-                    <h2 className="font-black text-lg sm:text-xl md:text-2xl uppercase text-white tracking-tight">
-                        {t("Education")}
-                    </h2>
-                </div>
-                <p className="text-xs sm:text-sm font-bold text-white/90 uppercase tracking-wide">
-                    {t("Add_your_education_details")}
-                </p>
-            </div> */}
-
             <form onSubmit={handleSubmit}>
                 {/* Education List Container */}
-                <div className="bg-white border-[3px] border-zinc-800 rounded-xl sm:rounded-2xl shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] overflow-hidden mb-4 sm:mb-5">
+                <div className="bg-white border-[3px] border-zinc-800 rounded-xl sm:rounded-2xl shadow-brutal overflow-hidden mb-4 sm:mb-5">
                     {educationList.map((item, index) => (
                         <div
                             key={index}
@@ -351,10 +338,11 @@ function EducationForm({ handleNext, document }) {
                             <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 mb-4">
                                 {educationList.length > 1 && (
                                     <Button
-                                        variant="secondary"
+                                        variant="destructive"
+                                        size="iconSm"
                                         type="button"
                                         disabled={loading}
-                                        className="absolute -top-2 -right-2 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-red-500 text-white border-[2px] border-zinc-800 shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,0.3)] hover:translate-x-[1px] hover:translate-y-[1px] transition-all p-0 flex items-center justify-center z-10"
+                                        className="absolute -top-2 -right-2 rounded-full"
                                         onClick={() =>
                                             removeEducation(index, item.id)
                                         }
@@ -368,8 +356,10 @@ function EducationForm({ handleNext, document }) {
                                 educationList.length < 5 && (
                                     <Button
                                         type="button"
+                                        variant="secondary"
+                                        size="default"
                                         onClick={addNewEducation}
-                                        className="w-full sm:w-auto bg-blue-500 text-white border-[2px] border-zinc-800 rounded-lg shadow-[3px_3px_0px_0px_rgba(0,0,0,0.2)] px-4 sm:px-5 py-2 sm:py-2.5 flex items-center justify-center gap-2 font-black uppercase text-xs tracking-wide transition-all duration-200 hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,0.2)] hover:translate-x-[2px] hover:translate-y-[2px] active:shadow-none active:translate-x-[3px] active:translate-y-[3px] hover:bg-blue-600"
+                                        className="w-full sm:w-auto"
                                     >
                                         <Plus className="w-4 h-4" />
                                         <span>{t("Add_More_Education")}</span>
@@ -384,11 +374,9 @@ function EducationForm({ handleNext, document }) {
                     <Button
                         type="submit"
                         disabled={!isFormValid || loading}
-                        className={`w-full sm:w-auto bg-gradient-to-br from-orange-400 to-orange-500 text-white border-[2px] border-zinc-800 rounded-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] px-6 sm:px-8 py-2.5 sm:py-3 flex items-center justify-center gap-2 font-black uppercase text-sm tracking-wide transition-all duration-200 ${
-                            !isFormValid || loading
-                                ? 'opacity-50 cursor-not-allowed'
-                                : 'hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] hover:translate-x-[2px] hover:translate-y-[2px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,0.3)] active:translate-x-[3px] active:translate-y-[3px]'
-                        }`}
+                        variant="default"
+                        size="lg"
+                        className="w-full sm:w-auto"
                     >
                         {loading ? (
                             <>

@@ -3,17 +3,11 @@ import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
 import { useForm } from "@inertiajs/react";
-import { Link, Network, Plus, Send, X } from "lucide-react";
+import { Link, Network, Plus, Send, X, Loader } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { generateThumbnail } from "@/lib/helper";
 import * as Yup from "yup";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/Components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/Components/ui/select";
 import { socialMediaListData } from "@/constant/socialMedia";
 import { SocialIcon } from "react-social-icons";
 import { useTranslation } from "react-i18next";
@@ -22,9 +16,7 @@ const initialState = { name: "", link: "", thumbnail: "" };
 
 function SocialMedia({ document, handleNext }) {
     const [SocialMediaList, setSocialMediaList] = useState(() =>
-        document?.social_medias?.length
-            ? document.social_medias
-            : [initialState],
+        document?.social_medias?.length ? document.social_medias : [initialState],
     );
     const [search, setSearch] = useState("");
     const { t } = useTranslation();
@@ -33,14 +25,7 @@ function SocialMedia({ document, handleNext }) {
     );
     const [errors, setErrors] = useState([]);
     const [isFormValid, setIsFormValid] = useState(false);
-    const {
-        put,
-        post,
-        delete: destroy,
-        data,
-        setData,
-        processing,
-    } = useForm({ social_medias: SocialMediaList });
+    const { put, post, delete: destroy, data, setData, processing } = useForm({ social_medias: SocialMediaList });
 
     const socialMediaSchema = Yup.object().shape({
         name: Yup.string().required("Social Media name is required"),
@@ -126,6 +111,7 @@ function SocialMedia({ document, handleNext }) {
             const existingSocialMedia = document.social_medias || [];
             const toUpdate = [];
             const toAdd = [];
+            const toDelete = [];
 
             SocialMediaList.forEach((item) => {
                 const existingItem = existingSocialMedia.find(
@@ -176,20 +162,8 @@ function SocialMedia({ document, handleNext }) {
 
     return (
         <div className="w-full max-w-full mx-auto">
-            {/* <div className="bg-gradient-to-br from-orange-400 to-orange-500 border-[3px] border-zinc-800 rounded-xl sm:rounded-2xl shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] p-4 sm:p-5 md:p-6 mb-4 sm:mb-5">
-                <div className="flex items-center gap-2 sm:gap-3 mb-1.5">
-                    <Network className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
-                    <h2 className="font-black text-lg sm:text-xl md:text-2xl uppercase text-white tracking-tight">
-                        {t("Social_Medias")}
-                    </h2>
-                </div>
-                <p className="text-xs sm:text-sm font-bold text-white/90 uppercase tracking-wide">
-                    {t("Add_your_social_medias_information")}
-                </p>
-            </div> */}
-
             <form onSubmit={handleSubmit}>
-                <div className="bg-white border-[3px] border-zinc-800 rounded-xl sm:rounded-2xl shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] overflow-hidden mb-4 sm:mb-5">
+                <div className="bg-white border-[3px] border-zinc-800 rounded-xl sm:rounded-2xl shadow-brutal overflow-hidden mb-4 sm:mb-5">
                     {SocialMediaList.map((item, index) => (
                         <div
                             key={index}
@@ -202,9 +176,10 @@ function SocialMedia({ document, handleNext }) {
                             <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
                                 {SocialMediaList?.length > 1 && (
                                     <Button
-                                        variant="secondary"
+                                        variant="destructive"
+                                        size="iconSm"
                                         type="button"
-                                        className="absolute -top-2 -right-2 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-red-500 text-white border-[2px] border-zinc-800 shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,0.3)] hover:translate-x-[1px] hover:translate-y-[1px] transition-all p-0 flex items-center justify-center z-10"
+                                        className="absolute -top-2 -right-2 rounded-full"
                                         disabled={processing}
                                         onClick={() =>
                                             removeSocialMedia(index, item.id)
@@ -225,7 +200,7 @@ function SocialMedia({ document, handleNext }) {
                                             handleChange(index, "name", value)
                                         }
                                     >
-                                        <SelectTrigger className="w-full px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm rounded-lg border-[2px] border-zinc-800 shadow-[3px_3px_0px_0px_rgba(0,0,0,0.2)]">
+                                        <SelectTrigger className="w-full px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm rounded-lg border-[2px] border-zinc-800 shadow-[3px_3px_0px_0px_rgba(0,0,0,0.9)]">
                                             <SelectValue
                                                 placeholder={item.name}
                                             />
@@ -299,7 +274,7 @@ function SocialMedia({ document, handleNext }) {
                                         name="link"
                                         placeholder="www.example.com"
                                         required
-                                        className="w-full px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm rounded-lg border-[2px] border-zinc-800 shadow-[3px_3px_0px_0px_rgba(0,0,0,0.2)] focus:shadow-[1px_1px_0px_0px_rgba(0,0,0,0.2)] focus:translate-x-[2px] focus:translate-y-[2px] transition-all duration-200 font-medium"
+                                        className="w-full px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm rounded-lg border-[2px] border-zinc-800 shadow-[3px_3px_0px_0px_rgba(0,0,0,0.9)] focus:shadow-[1px_1px_0px_0px_rgba(0,0,0,0.9)] focus:translate-x-[2px] focus:translate-y-[2px] transition-all duration-200 font-medium"
                                         autoComplete="off"
                                         value={item.link || ""}
                                         onChange={(e) =>
@@ -322,9 +297,11 @@ function SocialMedia({ document, handleNext }) {
                                 SocialMediaList.length < 15 && (
                                     <Button
                                         type="button"
+                                        variant="secondary"
+                                        size="default"
                                         disabled={processing}
                                         onClick={addNewLanguage}
-                                        className="w-full sm:w-auto bg-blue-500 text-white border-[2px] border-zinc-800 rounded-lg shadow-[3px_3px_0px_0px_rgba(0,0,0,0.2)] px-4 sm:px-5 py-2 sm:py-2.5 flex items-center justify-center gap-2 font-black uppercase text-xs tracking-wide transition-all duration-200 hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,0.2)] hover:translate-x-[2px] hover:translate-y-[2px] active:shadow-none active:translate-x-[3px] active:translate-y-[3px] hover:bg-blue-600 mt-4"
+                                        className="w-full sm:w-auto mt-4"
                                     >
                                         <Plus size={16} />
                                         {t("Add_More_Social_Media")}
@@ -337,14 +314,12 @@ function SocialMedia({ document, handleNext }) {
                 <Button
                     type="submit"
                     disabled={!isFormValid || processing}
-                    className={`w-full sm:w-auto bg-gradient-to-br from-orange-400 to-orange-500 text-white border-[2px] border-zinc-800 rounded-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] px-6 sm:px-8 py-2.5 sm:py-3 flex items-center justify-center gap-2 font-black uppercase text-sm tracking-wide transition-all duration-200 ${
-                        !isFormValid || processing
-                            ? "opacity-50 cursor-not-allowed"
-                            : "hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] hover:translate-x-[2px] hover:translate-y-[2px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,0.3)] active:translate-x-[3px] active:translate-y-[3px]"
-                    }`}
+                    variant="default"
+                    size="lg"
+                    className="w-full sm:w-auto"
                 >
                     {processing && (
-                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        <Loader className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" />
                     )}
                     <Send size={16} />
                     {t("Save_Changes")}
