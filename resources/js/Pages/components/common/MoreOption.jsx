@@ -39,7 +39,7 @@ function MoreOption({ document, isLoading }) {
                         <MoreHorizontal className="w-5 h-5 sm:w-6 sm:h-6" />
                     </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="bg-yellow-50 border-4 border-zinc-800 rounded-xl shadow-[rgba(0,0,0,0.9)_0px_8px_0px_0px] p-2 min-w-[200px]">
+                <DropdownMenuContent className="bg-yellow-50 border-4 mt-2 border-zinc-800 rounded-xl shadow-[rgba(0,0,0,0.9)_0px_8px_0px_0px] p-2 min-w-[200px]">
                     <DropdownMenuItem asChild className="p-0">
                         {document.status === "archived" ? (
                             <button

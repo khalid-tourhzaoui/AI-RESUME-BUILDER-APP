@@ -96,7 +96,30 @@ body {
   list-style: decimal;
   padding-left: 2em;
 }
+.custom-scrollbar::-webkit-scrollbar {
+  width: 10px;
+}
 
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #e4e4e7;
+  border: 2px solid #27272a;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #a1a1aa;
+  border: 2px solid #27272a;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #71717a;
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #a1a1aa #e4e4e7;
+}
 
 @layer base {
   * {

@@ -25,8 +25,8 @@ function PreviewModal({document, isLoading}) {
                         <span className="hidden sm:inline">Preview</span>
                     </Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-4xl p-0 w-full max-h-[90vh] lg:max-h-[95vh] overflow-hidden border-4 border-zinc-800 rounded-xl sm:rounded-2xl shadow-[rgba(0,0,0,0.9)_0px_12px_0px_0px] bg-zinc-100">
-                    <DialogHeader className="!pb-0 !m-0 sticky top-0 backdrop-blur bg-white dark:bg-zinc-900/80 z-10 border-b-4 border-zinc-800">
+                <DialogContent className="sm:max-w-7xl p-0 w-full max-h-[90vh] lg:max-h-[95vh] flex flex-col border-4 border-zinc-800 rounded-xl sm:rounded-2xl shadow-[rgba(0,0,0,0.9)_0px_12px_0px_0px] bg-zinc-100">
+                    <DialogHeader className="!pb-0 !m-0 flex-shrink-0 backdrop-blur bg-white dark:bg-zinc-900/80 z-10 border-b-4 border-zinc-800">
                         <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4">
                             <DialogTitle className="flex items-center gap-2 sm:gap-3 text-base sm:text-lg md:text-xl font-black opacity-100">
                                 <div className="flex items-center gap-1.5">
@@ -43,7 +43,7 @@ function PreviewModal({document, isLoading}) {
                             </div>
                         </div>
                     </DialogHeader>
-                    <div className="w-full h-full overflow-y-auto px-2 sm:px-4 pb-4">
+                    <div className="flex-1 overflow-y-auto px-2 sm:px-4 pb-4 custom-scrollbar">
                         <div className="py-2">
                             <ResumePreview document={document} isLoading={isLoading} />
                         </div>

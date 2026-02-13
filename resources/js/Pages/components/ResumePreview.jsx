@@ -8,11 +8,11 @@ function ResumePreview({ document, isLoading }) {
         <div
             id="resume-preview-id"
             className={cn(
-                ` shadow-lg !font-open-sansdark:border w-full flex-[1.02] h-full !font-open-sansdark:border flex gap-8 max-w-5xl mx-auto p-4 sm:p-8 bg-white min-h-screen`
+                "shadow-lg !font-open-sans dark:border w-full h-auto flex gap-8 max-w-full mx-auto p-4 sm:p-8 bg-white"
             )}
             style={{ borderTop: `13px solid ${document?.theme_color}` }}
         >
-            <div className="flex flex-col lg:flex-row gap-8">
+            <div className="flex flex-col lg:flex-row gap-8 w-full">
                 <PersonalInfoPreview
                     isLoading={isLoading}
                     document={document}
